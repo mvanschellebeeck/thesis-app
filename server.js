@@ -1,15 +1,20 @@
 const express = require('express');
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded());
 
-app.get('/api/customers', (req, res) => {
-  const customers = [
-    {id: 1, firstName: 'John', lastName: 'Doe'},
-    {id: 2, firstName: 'Brad', lastName: 'Traversy'},
-    {id: 3, firstName: 'Mary', lastName: 'Swanson'},
-  ];
 
-  res.json(customers);
+app.post('/api/customers', (req, res) => {
+  const plant = req.body.plant;
+  const data = {
+    'Victorian Desalination Plant': {
+      'name': 'Victorian Desalination Plant',
+      'properties': [{'property': 'capacity', 'value': '500GL'}, {'property': 'energy usage', 'value': '20 something'}, {'property': 'skrr', 'value': 'dide'}]
+    }
+  }
+
+  res.json(data[plant]);
 });
 
 const port = 5000;

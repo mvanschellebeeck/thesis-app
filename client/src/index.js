@@ -14,8 +14,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       title: '',
-      description: '',
-      icon:''
+      description: ''
     }
   }
 
@@ -31,7 +30,7 @@ export default class App extends React.Component {
             coordinates: [145.526288, -38.588381]
           },
           properties: {
-            title: 'Victorian Desalination plant',
+            title: 'Victorian Desalination Plant',
             description: 'Add short description for this desalination plant',
             icon: 'monument'
           }
@@ -103,7 +102,11 @@ export default class App extends React.Component {
     });
 
     map.on('click', DESALINATION_PLANTS, (e) => {
-      this.setState(this.currentlyHoveredFeatures);
+      console.log(this.currentlyHoveredFeatures.title)
+      this.setState({
+        title: this.currentlyHoveredFeatures.title,
+        description: this.currentlyHoveredFeatures.description
+      })
     });
 
   }
@@ -116,7 +119,7 @@ export default class App extends React.Component {
     return (
       <div>
         <div style={divStyle} ref={el => this.mapContainer = el} className="absolute top right left bottom" />
-        <Detail details={this.state}/>
+        <Detail title={this.state.title} description={this.state.description}/>
       </div>
     );
   }

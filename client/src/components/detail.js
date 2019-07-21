@@ -4,8 +4,28 @@ import 'react-table/react-table.css'
 
 export default class Detail extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: []
+    }
+  }
+
   componentDidMount() {
 
+  }
+
+  fetchDummy(title) {
+    const d = { plant: title };
+    fetch('/api/customers', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(d)
+    }).then(res => res.json())
+      .then(m => this.setState({ data: m.properties}))
   }
 
   render() {
@@ -14,20 +34,18 @@ export default class Detail extends Component {
       float: 'right',
       padding: '20px'
     }
-    const { title, description, icon } = this.props.details;
-    
-    //const { title, description, icon } = this.props.details;
-    const data = [{'property': 'capacity', 'value': '500GL'}, {'property': 'energy usage', 'value': '20 something'},
-    {'property': 'skrr', 'value': 'dide'}];
+
+    const { title, description } = this.props;
 
     if (title) {
+      this.fetchDummy(title);
       return (
         <div style={divStyle}>
           <h1><b>{title}</b></h1>
           <p>{description}</p>
           <div>
             <ReactTable
-              data={data}
+              data={this.state.data}
               columns={[
                 {
                   columns: [
