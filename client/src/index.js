@@ -14,34 +14,41 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       title: '',
-      description: ''
+      description: '',
+      plants: {}
     }
   }
 
-  fetchPlantCoordinates() {
+  fetchPlantCoordinates(data) {
     // temporarily hard-coded
-    const geojson = {
-      type: 'FeatureCollection',
-      features: [
+    const plants = [];
+    Object.keys(data).forEach( (key) => {
+      const val = data[key];
+      plants.push(
         {
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [145.526288, -38.588381]
+            coordinates: [val.Longitude, val.Latitude]
           },
           properties: {
-            title: 'Victorian Desalination Plant',
-            description: 'Add short description for this desalination plant',
+            title: key,
+            description: val.Description,
             icon: 'monument'
           }
         }
-      ]
+      );
+    });
+    console.log(plants);
+    return {
+      type: 'FeatureCollection',
+      features: plants
     }
-    return geojson;
   }
 
 
   componentDidMount() {
+
     this.currentlyHoveredFeatures = {};
 
     const map = new mapboxgl.Map({
@@ -52,27 +59,32 @@ export default class App extends React.Component {
       maxBounds: [[109.338953078, -45.6345972634], [158.569469029, -8.6681857235]],    
     });
 
-    const geojson = this.fetchPlantCoordinates();
     map.on('load', () => {
-      map.addLayer({
-        "id": "desalination-plants",
-        "type": "symbol",
-        "source": {
-          "type": "geojson",
-          "data": {
-            "type": "FeatureCollection",
-            "features": geojson.features
-          }
-        },
-        "layout": {
-          "icon-image": "{icon}-15",
-          "text-field": "{title}",
-          "text-offset": [0, 0.6],
-          "text-anchor": "top",
-          "text-size": 14,
-          "icon-allow-overlap": true
-        }
-      })
+
+      fetch('/api/plants')
+        .then(res => res.json())
+        .then(data => {
+          const geojson = this.fetchPlantCoordinates(data);
+          map.addLayer({
+            "id": "desalination-plants",
+            "type": "symbol",
+            "source": {
+              "type": "geojson",
+              "data": {
+                "type": "FeatureCollection",
+                "features": geojson.features
+              }
+            },
+            "layout": {
+              "icon-image": "{icon}-15",
+              "text-field": "{title}",
+              "text-offset": [0, 0.6],
+              "text-anchor": "top",
+              "text-size": 14,
+              "icon-allow-overlap": true
+            }
+          });
+        });
     });
 
     const popup = new mapboxgl.Popup({
@@ -102,14 +114,30 @@ export default class App extends React.Component {
     });
 
     map.on('click', DESALINATION_PLANTS, (e) => {
-      console.log(this.currentlyHoveredFeatures.title)
-      this.setState({
-        title: this.currentlyHoveredFeatures.title,
-        description: this.currentlyHoveredFeatures.description
-      })
+      const d = { plant: this.currentlyHoveredFeatures.title };
+      fetch('/api/customers', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(d)
+      }).then(res => res.json())
+        .then(m => 
+          this.setState({
+            title: this.currentlyHoveredFeatures.title,
+            description: this.currentlyHoveredFeatures.description,
+            plants: m
+          })
+        );
     });
 
   }
+
+  fetchDummy(title) {
+
+    }
+
 
   render() {
     const divStyle = {
@@ -119,7 +147,7 @@ export default class App extends React.Component {
     return (
       <div>
         <div style={divStyle} ref={el => this.mapContainer = el} className="absolute top right left bottom" />
-        <Detail title={this.state.title} description={this.state.description}/>
+        <Detail title={this.state.title} description={this.state.description} plants={this.state.plants}/>
       </div>
     );
   }

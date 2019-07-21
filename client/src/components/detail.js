@@ -11,22 +11,9 @@ export default class Detail extends Component {
     }
   }
 
-  componentDidMount() {
+  // componentDidMount() {
 
-  }
-
-  fetchDummy(title) {
-    const d = { plant: title };
-    fetch('/api/customers', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(d)
-    }).then(res => res.json())
-      .then(m => this.setState({ data: m.properties}))
-  }
+  // }
 
   render() {
     const divStyle = {
@@ -35,17 +22,24 @@ export default class Detail extends Component {
       padding: '20px'
     }
 
-    const { title, description } = this.props;
+    const { title, description , plants} = this.props;
+
+    var cleanPlants = [];
+
+    Object.keys(plants).forEach( (key) => {
+      cleanPlants.push({'property': key, 'value': plants[key]});
+    });
+    
+    console.log(cleanPlants);
 
     if (title) {
-      this.fetchDummy(title);
       return (
         <div style={divStyle}>
           <h1><b>{title}</b></h1>
           <p>{description}</p>
           <div>
             <ReactTable
-              data={this.state.data}
+              data={cleanPlants}
               columns={[
                 {
                   columns: [
