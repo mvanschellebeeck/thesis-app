@@ -14,8 +14,7 @@ export default class Detail extends Component {
       float: 'right',
       padding: '20px'
     }
-    const title = "Victorian Desalination Plant";
-    const description = "Some description";
+    const { title, description, icon } = this.props.details;
     
     //const { title, description, icon } = this.props.details;
     const data = [{'property': 'capacity', 'value': '500GL'}, {'property': 'energy usage', 'value': '20 something'},
