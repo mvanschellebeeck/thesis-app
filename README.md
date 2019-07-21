@@ -1,10 +1,12 @@
-# React Express Starter Pack
+# Desalination Map
 
-> Create full stack apps with React and Express. Run your client and server with a single command. 
+Queries [spreadsheet](https://docs.google.com/spreadsheets/d/1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U/edit#gid=0) for desalination
+plants and their locations/properties.
 
-### Redux Version
-This version does not include Redux
-[Click Here For Redux Version](https://github.com/bradtraversy/react_redux_express_starter) 
+Note:
+- Must contain only property and value columns
+- All plants must contain at least `Name`, `Longitude` and `Latitude` properties
+- In row iteration a new plant is identified once the `Name` field is read
 
 ## Quick Start
 
@@ -26,18 +28,3 @@ npm run client
 
 # Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
-
-## App Info
-
-### Author
-
-Brad Traversy
-[Traversy Media](http://www.traversymedia.com)
-
-### Version
-
-1.0.0
-
-### License
-
-This project is licensed under the MIT License
