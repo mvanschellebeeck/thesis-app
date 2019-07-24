@@ -5,6 +5,8 @@ import Detail from './components/detail'
 import registerServiceWorker from './registerServiceWorker';
 
 const DESALINATION_PLANTS = 'desalination-plants';
+
+// use login mapbox token and source environment variablw
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 export default class App extends React.Component {
