@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import mapboxgl from 'mapbox-gl'
 import Detail from './components/detail'
 import registerServiceWorker from './registerServiceWorker';
+import './index.css'
 
 const DESALINATION_PLANTS = 'desalination-plants';
 
@@ -142,13 +143,11 @@ export default class App extends React.Component {
 
 
   render() {
-    const divStyle = {
-      width: '60%'
-    }
+
 
     return (
       <div>
-        <div style={divStyle} ref={el => this.mapContainer = el} className="absolute top right left bottom" />
+        <div ref={el => this.mapContainer = el} className="mapContainer absolute top right left bottom" />
         <Detail title={this.state.title} description={this.state.description} plants={this.state.plants}/>
       </div>
     );
