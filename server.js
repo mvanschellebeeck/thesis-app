@@ -1,5 +1,4 @@
 const express = require("express");
-
 const app = express();
 var global_plants = {};
 app.use(express.json());
@@ -8,12 +7,6 @@ app.use(express.urlencoded());
 var GoogleSpreadsheet = require("google-spreadsheet");
 const defaultSpreadsheetId = "1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U";
 var doc = new GoogleSpreadsheet(defaultSpreadsheetId);
-
-// remove this api endponit!!
-app.post("/api/customers", (req, res) => {
-    const plant = req.body.plant;
-    res.json(global_plants[plant]);
-});
 
 function getSheet(sheet_name) {
     return new Promise((resolve, reject) => {

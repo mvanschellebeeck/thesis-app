@@ -26,11 +26,10 @@ export default class Detail extends Component {
     );
   }
 
-  fillTable() {
-    const { current_plant, all_plants } = this.props;
+  fillTable(current_plant) {
+    const { all_plants } = this.props;
     const plant = all_plants[current_plant.title];
     const plant_with_properties = [];
-
     Object.keys(plant).forEach(property => {
         plant_with_properties.push({
             'property': property, 
@@ -40,8 +39,8 @@ export default class Detail extends Component {
 
     return (
         <div>
-            <h1><b>{plant.title}</b></h1>
-            <p>{plant.description}</p>
+            <h1><b>{current_plant.title}</b></h1>
+            <p>{current_plant.description}</p>
             <div>
                 <ReactTable
                     data={plant_with_properties}
@@ -60,7 +59,7 @@ export default class Detail extends Component {
   render() {
     const { current_plant } = this.props;
     const detail = current_plant.title
-    ? this.fillTable()
+    ? this.fillTable(current_plant)
     : this.emptyTable();
 
     return (

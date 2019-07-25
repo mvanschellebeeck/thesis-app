@@ -12,7 +12,6 @@ const DESALINATION_PLANTS = 'desalination-plants';
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 export default class App extends React.Component {
-  tooltipContainer;
 
   constructor(props) {
     super(props);
@@ -22,20 +21,20 @@ export default class App extends React.Component {
     }
   }
 
-  plantsToMapFeatures(data) {
+  plantsToMapFeatures() {
     const plants = [];
-    Object.keys(data).forEach( (key) => {
-      const val = data[key];
+    Object.keys(this.state.plants).forEach(plant => {
+      const properties = this.state.plants[plant];
       plants.push(
         {
           type: 'Feature',
           geometry: {
             type: 'Point',
-            coordinates: [val.Longitude, val.Latitude]
+            coordinates: [properties.Longitude, properties.Latitude]
           },
           properties: {
-            title: key,
-            description: val.Description || 'No description provided',
+            title: plant,
+            description: properties.Description || 'No description provided',
             icon: 'monument'
           }
         }
@@ -44,10 +43,7 @@ export default class App extends React.Component {
     return plants;
   }
 
-
   componentDidMount() {
-
-    this.currentlyHoveredFeatures = {};
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
@@ -61,7 +57,7 @@ export default class App extends React.Component {
         axios.get('/api/plants')
             .then(plants => {
                 this.setState({ plants: plants.data });
-                const geojson_features = this.plantsToMapFeatures(plants.data);
+                const geojson_features = this.plantsToMapFeatures();
                 map.addLayer({
                     "id": "desalination-plants",
                     "type": "symbol",
@@ -95,7 +91,6 @@ export default class App extends React.Component {
 
       const coordinates = e.features[0].geometry.coordinates.slice();
       const description = e.features[0].properties.description;
-      this.currentlyHoveredFeatures = e.features[0].properties;
 
       while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
