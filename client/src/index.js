@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import mapboxgl from 'mapbox-gl'
 import Detail from './components/detail'
 import registerServiceWorker from './registerServiceWorker';
+import axios from 'axios'
 import './index.css'
 
 const DESALINATION_PLANTS = 'desalination-plants';
@@ -22,8 +23,7 @@ export default class App extends React.Component {
     }
   }
 
-  fetchPlantCoordinates(data) {
-    // temporarily hard-coded
+  plantsToMapFeatures(data) {
     const plants = [];
     Object.keys(data).forEach( (key) => {
       const val = data[key];
@@ -36,17 +36,13 @@ export default class App extends React.Component {
           },
           properties: {
             title: key,
-            description: val.Description,
+            description: val.Description || 'No description provided',
             icon: 'monument'
           }
         }
       );
     });
-    console.log(plants);
-    return {
-      type: 'FeatureCollection',
-      features: plants
-    }
+    return plants;
   }
 
 
@@ -63,31 +59,30 @@ export default class App extends React.Component {
     });
 
     map.on('load', () => {
-
-      fetch('/api/plants')
-        .then(res => res.json())
-        .then(data => {
-          const geojson = this.fetchPlantCoordinates(data);
-          map.addLayer({
-            "id": "desalination-plants",
-            "type": "symbol",
-            "source": {
-              "type": "geojson",
-              "data": {
-                "type": "FeatureCollection",
-                "features": geojson.features
-              }
-            },
-            "layout": {
-              "icon-image": "{icon}-15",
-              "text-field": "{title}",
-              "text-offset": [0, 0.6],
-              "text-anchor": "top",
-              "text-size": 14,
-              "icon-allow-overlap": true
-            }
-          });
-        });
+        axios.get('/api/plants')
+            .then(plants => {
+                const geojson_features = this.plantsToMapFeatures(plants.data);
+                map.addLayer({
+                    "id": "desalination-plants",
+                    "type": "symbol",
+                    "source": {
+                      "type": "geojson",
+                      "data": {
+                        "type": "FeatureCollection",
+                        "features": geojson_features
+                      }
+                    },
+                    "layout": {
+                      "icon-image": "{icon}-15",
+                      "text-field": "{title}",
+                      "text-offset": [0, 0.6],
+                      "text-anchor": "top",
+                      "text-size": 14,
+                      "icon-allow-overlap": true
+                    }
+                  });
+            })
+            .catch(e => { console.error(e) });
     });
 
     const popup = new mapboxgl.Popup({
@@ -117,34 +112,21 @@ export default class App extends React.Component {
     });
 
     map.on('click', DESALINATION_PLANTS, (e) => {
-      const d = { plant: this.currentlyHoveredFeatures.title };
-      fetch('/api/customers', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(d)
-      }).then(res => res.json())
-        .then(m => 
-          this.setState({
-            title: this.currentlyHoveredFeatures.title,
-            description: this.currentlyHoveredFeatures.description,
-            plants: m
-          })
-        );
+        const plant_properties = e.features[0].properties;
+        axios.get('api/plants', {
+            params: { plant: plant_properties.title }
+        })
+        .then(res => {
+            this.setState({
+                title: plant_properties.title,
+                description: plant_properties.description,
+                plants: res.data
+            })
+        });
     });
-
   }
 
-  fetchDummy(title) {
-
-    }
-
-
   render() {
-
-
     return (
       <div>
         <div ref={el => this.mapContainer = el} className="mapContainer absolute top right left bottom" />

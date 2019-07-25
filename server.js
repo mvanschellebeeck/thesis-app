@@ -9,6 +9,7 @@ var GoogleSpreadsheet = require("google-spreadsheet");
 const defaultSpreadsheetId = "1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U";
 var doc = new GoogleSpreadsheet(defaultSpreadsheetId);
 
+// remove this api endponit!!
 app.post("/api/customers", (req, res) => {
     const plant = req.body.plant;
     res.json(global_plants[plant]);
@@ -29,7 +30,7 @@ function getSheet(sheet_name) {
 }
 
 function getPlantProperties(sheet) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {98
         sheet.getRows({ offset: 1}, (err, rows) => {
             if (err) reject(err);
             const plants = {};
@@ -48,6 +49,7 @@ function getPlantProperties(sheet) {
 }
 
 function getPropertiesForPlant(plant, res) {
+    console.log(plant);
     if (!Object.keys(global_plants).length) {
         return res.status(400).json({
             error: 'global_plants variable not loaded yet'
@@ -65,13 +67,14 @@ function getPropertiesForPlant(plant, res) {
 
 app.get("/api/plants", async (req, res) => {
     const sheet_name = "Desalination Plants";
+    const params = req.query;
     // pass optional spreadsheetId as a GET parameter
-    if ('spreadsheetId' in req.body && req.body.spreadsheetId != defaultSpreadsheetId) {
-        doc = new GoogleSpreadsheet(req.body.spreadsheetId);
+    if ('spreadsheetId' in params && params.spreadsheetId != defaultSpreadsheetId) {
+        doc = new GoogleSpreadsheet(params.spreadsheetId);
     }
     // pass optional plant as GET parameter to obtain details for 1 plant only
-    if ('plant' in req.body) {
-        const plant = req.body.plant;
+    if ('plant' in params) {
+        const plant = params.plant;
         getPropertiesForPlant(plant, res);
     }
     else {
