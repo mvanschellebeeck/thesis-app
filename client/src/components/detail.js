@@ -9,7 +9,7 @@ export default class Detail extends Component {
     super(props);
   }
 
-  constructColumns(...cols) {
+  createColumns(...cols) {
     return cols.map(col => {
         return {
             Header: col,
@@ -18,35 +18,52 @@ export default class Detail extends Component {
     });
   }
 
-  componentDidMount() { }
+  emptyTable() {
+    return (
+        <div>
+            <p>Click a desalination plant for details</p>
+        </div>
+    );
+  }
 
-  render() {
-    const { title, description , plants } = this.props;
+  fillTable(title) {
+    const { description , plants } = this.props;
     const cleanPlants = [];
 
     Object.keys(plants).forEach( (key) => {
       cleanPlants.push({'property': key, 'value': plants[key]});
     });
 
-    if (title) {
-      return (
-        <div className="detailContainer">
-          <h1><b>{title}</b></h1>
-          <p>{description}</p>
-          <div>
-            <ReactTable
-              data={cleanPlants}
-              columns={this.constructColumns("Property", "Value")}
-              defaultPageSize={10}
-              className="-striped -highlight"
-            />
-            <br />
-          </div>  
+    return (
+        <div>
+            <h1><b>{title}</b></h1>
+            <p>{description}</p>
+            <div>
+                <ReactTable
+                    data={cleanPlants}
+                    columns={this.createColumns("Property", "Value")}
+                    defaultPageSize={10}
+                    className="-striped -highlight"
+                />
+                <br />
+            </div>
         </div>
-      );
-    }
-    else {
-      return (<div className="detailContainer"><p>Click a desalination plant for details</p></div>);
-    }
+    );
+  }
+
+  componentDidMount() { }
+
+  render() {
+    const { title } = this.props;
+
+    const detail = title
+    ? this.fillTable(title)
+    : this.emptyTable();
+
+    return (
+        <div className="detailContainer">
+            {detail}
+        </div>
+    );
   }
 }
