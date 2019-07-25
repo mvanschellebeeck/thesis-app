@@ -26,21 +26,25 @@ export default class Detail extends Component {
     );
   }
 
-  fillTable(title) {
-    const { description , plants } = this.props;
-    const cleanPlants = [];
+  fillTable() {
+    const { current_plant, all_plants } = this.props;
+    const plant = all_plants[current_plant.title];
+    const plant_with_properties = [];
 
-    Object.keys(plants).forEach( (key) => {
-      cleanPlants.push({'property': key, 'value': plants[key]});
+    Object.keys(plant).forEach(property => {
+        plant_with_properties.push({
+            'property': property, 
+            'value': plant[property]
+        });
     });
 
     return (
         <div>
-            <h1><b>{title}</b></h1>
-            <p>{description}</p>
+            <h1><b>{plant.title}</b></h1>
+            <p>{plant.description}</p>
             <div>
                 <ReactTable
-                    data={cleanPlants}
+                    data={plant_with_properties}
                     columns={this.createColumns("Property", "Value")}
                     defaultPageSize={10}
                     className="-striped -highlight"
@@ -54,10 +58,9 @@ export default class Detail extends Component {
   componentDidMount() { }
 
   render() {
-    const { title } = this.props;
-
-    const detail = title
-    ? this.fillTable(title)
+    const { current_plant } = this.props;
+    const detail = current_plant.title
+    ? this.fillTable()
     : this.emptyTable();
 
     return (

@@ -17,9 +17,8 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      description: '',
-      plants: {}
+      plants: {},
+      currentlySelectedPlant: {}
     }
   }
 
@@ -61,6 +60,7 @@ export default class App extends React.Component {
     map.on('load', () => {
         axios.get('/api/plants')
             .then(plants => {
+                this.setState({ plants: plants.data });
                 const geojson_features = this.plantsToMapFeatures(plants.data);
                 map.addLayer({
                     "id": "desalination-plants",
@@ -112,16 +112,12 @@ export default class App extends React.Component {
     });
 
     map.on('click', DESALINATION_PLANTS, (e) => {
-        const plant_properties = e.features[0].properties;
-        axios.get('api/plants', {
-            params: { plant: plant_properties.title }
-        })
-        .then(res => {
-            this.setState({
-                title: plant_properties.title,
-                description: plant_properties.description,
-                plants: res.data
-            })
+        const selected_plant = e.features[0].properties;
+        this.setState({
+            currentlySelectedPlant: {
+                title: selected_plant.title,
+                description: selected_plant.description
+            }
         });
     });
   }
@@ -130,7 +126,7 @@ export default class App extends React.Component {
     return (
       <div>
         <div ref={el => this.mapContainer = el} className="mapContainer absolute top right left bottom" />
-        <Detail title={this.state.title} description={this.state.description} plants={this.state.plants}/>
+        <Detail current_plant={this.state.currentlySelectedPlant} all_plants={this.state.plants}/>
       </div>
     );
   }
