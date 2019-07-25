@@ -7,9 +7,7 @@ import axios from 'axios'
 import './index.css'
 
 const DESALINATION_PLANTS = 'desalination-plants';
-
-// use login mapbox token and source environment variablw
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN
 
 export default class App extends React.Component {
 

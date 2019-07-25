@@ -5,10 +5,6 @@ import '../index.css'
 
 export default class Detail extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   createColumns(...cols) {
     return cols.map(col => {
         return {

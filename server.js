@@ -23,7 +23,7 @@ function getSheet(sheet_name) {
 }
 
 function getPlantProperties(sheet) {
-    return new Promise((resolve, reject) => {98
+    return new Promise((resolve, reject) => {
         sheet.getRows({ offset: 1}, (err, rows) => {
             if (err) reject(err);
             const plants = {};

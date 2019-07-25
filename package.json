@@ -20,7 +20,6 @@
     "concurrently": "^3.5.1",
     "express": "^4.16.2",
     "google-spreadsheet": "^2.0.7",
-    "googleapis": "^39.2.0",
     "mapbox-gl": "^1.1.1",
     "react-table": "^6.10.0"
   }
