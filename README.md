@@ -8,6 +8,27 @@ Note:
 - All plants must contain at least `Name`, `Longitude` and `Latitude` properties
 - In row iteration a new plant is identified once the `Name` field is read
 
+## ABS Boundary Data
+
+Latest boundary data (`.zip`) from [ABS Digital Boundaries](https://www.abs.gov.au/websitedbs/D3310114.nsf/home/Digital+Boundaries)
+
+[Volume 1](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.001July%202016?OpenDocument) – Main Structure and Greater Capital City Statistical Areas 
+
+[Volume 2](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.002July%202016?OpenDocument) - Indigenous Structure
+
+[Volume 3](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.003July%202018?OpenDocument) - Non ABS Structures
+
+[Volume 4](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.004July%202016?OpenDocument) – Significant Urban Areas, Urban Centres and Localities, Section of State
+
+[Volume 5](https://www.abs.gov.au/AUSSTATS/abs@.nsf/DetailsPage/1270.0.55.005July%202016?OpenDocument) - Remoteness Structure
+
+### Notes
+
+Formats:
+- `.csv`
+- `.gpkg`
+- ESRI shapefiles (`.shp`, `.shx`, `.dbf`)
+
 ## Quick Start
 
 ``` bash
