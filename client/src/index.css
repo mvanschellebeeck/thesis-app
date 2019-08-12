@@ -6,10 +6,23 @@ button[id*="mydropdown"] {
   margin-bottom: 30px;
 }
 
+
+
+.flowDiagramContainer {
+  width: 55%;
+  float: left;
+}
+
 .technologyTable {
   width: 50%;
 }
 
+.technologyRadarContainer {
+  width: 45%;
+  float: right;
+  margin-right: 11px;
+  font-size: 10px;
+}
 
 .flowDiagramContainer {
   float: left;

@@ -43,7 +43,11 @@ export default class FlowDiagram extends Component {
           currentType: "type1"
         },
         Desalination: {
-          types: ["Desalination-type1", "Desalination-type2"],
+          types: [
+            "Desalination-type1",
+            "Desalination-type2",
+            "Desalination-type3"
+          ],
           button: "success",
           currentType: "type1"
         },
@@ -69,7 +73,29 @@ export default class FlowDiagram extends Component {
     };
   }
 
+  getRandomInts = () => {
+    // 0 - 100
+    return {
+      social: Math.floor(Math.random() * 100),
+      environmental: Math.floor(Math.random() * 100),
+      economic: Math.floor(Math.random() * 100)
+    }
+  }
+
   handleClick(e) {
+    // generate random for now
+    const state_change = {
+      technologyCombinationValues: {
+        'Concentrate Management': this.getRandomInts(),
+        'Intake': this.getRandomInts(),
+        'Pre Treatment': this.getRandomInts(),
+        'Desalination': this.getRandomInts(),
+        'Post Treatment': this.getRandomInts()
+      }
+    };
+
+    this.props.setParentState(state_change);
+
     const text = e.target.innerText;
     const subprocess = text.split("-")[0];
     const type = text.split("-")[1];
@@ -82,7 +108,6 @@ export default class FlowDiagram extends Component {
     // state.graphDefinition = newGraph;
 
     this.setState(state);
-    //console.log(this.state);
   }
 
   createColumns(...cols) {
@@ -107,7 +132,7 @@ export default class FlowDiagram extends Component {
     console.log(plant_with_properties);
 
     return (
-      <div>
+      <div className="flowDiagramContainer">
         <ButtonToolbar>
           {Object.keys(this.state.subprocesses).map(subprocess => (
             <DropdownButton
@@ -127,7 +152,7 @@ export default class FlowDiagram extends Component {
         </ButtonToolbar>
         <div className="mermaid">{this.state.graphDefinition}</div>
         {/* Table */}
-        <div className="technologyTable">
+        <div>
           <h1>
             <b className="detailTitle">Selected Technologies</b>
           </h1>

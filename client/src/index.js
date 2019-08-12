@@ -13,15 +13,44 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import Map from "./components/map";
 import Detail from "./components/detail";
-import FlowDiagram from "./components/flowDiagram"
+import FlowDiagram from "./components/flowDiagram";
+import TechnologyRadarChart from "./components/radarChart";
 import "./index.css";
 
 export default class App extends React.Component {
-  constructor(props) {
+  constructor(props) {  
+
     super(props);
     this.state = {
       plants: {},
-      currentlySelectedPlant: {}
+      currentlySelectedPlant: {},
+      technologyCombinationValues: {
+        'Concentrate Management': {
+          social: 40, 
+          environmental: 60, 
+          economic: 80
+        },
+        'Pre Treatment': {
+          social: 10,
+          environmental: 40,
+          economic: 100
+        },
+        'Desalination': {
+          social: 40,
+          environmental: 30, 
+          economic: 60
+        },
+        'Post Treatment': { 
+          social: 40, 
+          economic: 80, 
+          environmental: 60
+        },
+        'Intake': {
+          social: 40,
+          environmental: 30,
+          economic: 60
+        }
+      }
     };
   }
 
@@ -77,7 +106,8 @@ export default class App extends React.Component {
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         /> */}
-        <FlowDiagram />
+        <FlowDiagram setParentState={this.setParentState}/>
+        <TechnologyRadarChart technologyCombinationValues={this.state.technologyCombinationValues}/>
       </div>
     );
   }
