@@ -57,7 +57,7 @@ export default class App extends React.Component {
             </NavDropdown>
 
             <Nav.Link href="#t5">Rainwater Harvesting</Nav.Link>
-            <Nav.Link href="#t6">Greywater Re-Use</Nav.Link>
+            <Nav.Link href="#t6">Greywater Reuse</Nav.Link>
           </Nav>
           <Form inline>
             <FormControl
@@ -73,10 +73,10 @@ export default class App extends React.Component {
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         /> */}
-        <Detail
+        {/* <Detail
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
-        />
+        /> */}
         <FlowDiagram />
       </div>
     );

@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
+
+button[id*="mydropdown"] {
+  margin: 5px;
+  margin-bottom: 30px;
+}
+
+
 .flowDiagramContainer {
   float: left;
 }
