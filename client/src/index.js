@@ -67,6 +67,7 @@ export default class App extends React.Component {
     return (
       <div>
         {/* <div id="output"></div> */}
+        <div id="x">
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="#home">WaterWorx</Navbar.Brand>
           <Nav className="mr-auto">
@@ -77,7 +78,7 @@ export default class App extends React.Component {
               <NavDropdown.Item href="#t2">Technologies</NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown
+            {/* <NavDropdown
               title="Water Use Reduction"
               id="basic-nav-dropdown"
             >
@@ -86,7 +87,7 @@ export default class App extends React.Component {
             </NavDropdown>
 
             <Nav.Link href="#t5">Rainwater Harvesting</Nav.Link>
-            <Nav.Link href="#t6">Greywater Reuse</Nav.Link>
+            <Nav.Link href="#t6">Greywater Reuse</Nav.Link> */}
           </Nav>
           <Form inline>
             <FormControl
@@ -97,15 +98,16 @@ export default class App extends React.Component {
             <Button variant="outline-info">Search</Button>
           </Form>
         </Navbar>
-        {/* <Map
+        <Map
           setParentState={this.setParentState}
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
-        /> */}
-        {/* <Detail
+        />
+        <Detail
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
-        /> */}
+        />
+        </div>
         <FlowDiagram setParentState={this.setParentState}/>
         <TechnologyRadarChart technologyCombinationValues={this.state.technologyCombinationValues}/>
       </div>

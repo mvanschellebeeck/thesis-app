@@ -6,7 +6,10 @@ button[id*="mydropdown"] {
   margin-bottom: 30px;
 }
 
-
+#x {
+  width: 100%;
+  height: 620px;
+}
 
 .flowDiagramContainer {
   width: 55%;
@@ -38,6 +41,7 @@ button[id*="mydropdown"] {
     width: 40%;
     float: right;
     padding: 5px;
+    margin-top: 0px;
 }
 
 .detailTitle {
