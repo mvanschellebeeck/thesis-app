@@ -6,6 +6,10 @@ button[id*="mydropdown"] {
   margin-bottom: 30px;
 }
 
+.technologyTable {
+  width: 50%;
+}
+
 
 .flowDiagramContainer {
   float: left;

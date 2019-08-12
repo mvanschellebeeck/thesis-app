@@ -31,7 +31,7 @@ export default class Detail extends Component {
         value: plant[property]
       });
     });
-
+    console.log(plant_with_properties)
     return (
       <div>
         <h1>
