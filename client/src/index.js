@@ -40,25 +40,25 @@ export default class App extends React.Component {
           <Nav className="mr-auto">
 
             <NavDropdown title="Desalination" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.2">
+              <NavDropdown.Item href="#t1">
                 Regional Analysis
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
+              <NavDropdown.Item href="#t2">
                 Technologies
               </NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title="Water Use Reduction" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.2">
+              <NavDropdown.Item href="#t3">
                 topic 1
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
+              <NavDropdown.Item href="#t4">
                 topic 2
               </NavDropdown.Item>
             </NavDropdown>
             
-            <Nav.Link href="#pricing">Rainwater Harvesting</Nav.Link>
-            <Nav.Link href="#pricing">Greywater Re-Use</Nav.Link>
+            <Nav.Link href="#t5">Rainwater Harvesting</Nav.Link>
+            <Nav.Link href="#t6">Greywater Re-Use</Nav.Link>
           </Nav>
           <Form inline>
             <FormControl
