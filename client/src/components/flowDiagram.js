@@ -19,30 +19,36 @@ export default class FlowDiagram extends Component {
     this.state = {
       // initial graph
       graphDefinition: `graph LR
-      A(Intake)-->B(Pre-Treatment)
+      A(Intake)-->B(Pre Treatment)
       B-->C(Desalination)
-      C-->D(Post-Treatment)
+      C-->D(Post Treatment)
       C-->E(Concentrate Management)`,
+
       subprocesses: {
         'Intake': {
-          types: ['intake-1', 'intake-2', 'intake-3'],
-          button: "primary"
+          types: ['Intake-type1', 'Intake-type2', 'Intake-type3'],
+          button: "primary",
+          currentType: 'intake-1'
         },
-        'Pre-Treatment': {
-          types: ['pre-1', 'pre-2', 'pre-3'],
-          button: "secondary"
+        'Pre Treatment': {
+          types: ['Pre Treatment-type1', 'Pre Treatment-type2', 'Pre Treatment-type3'],
+          button: "secondary",
+          currentType: 'pre-1'
         },
         'Desalination': { 
-          types: ['desal-1', 'desal-2'],
+          types: ['Desalination-type1', 'Desalination-type2'],
           button: "success",
+          currentType: 'desal-1'
         },
-        'Post-Treatment': { 
-          types: ['post-1', 'post-2', 'post-3'],
-          button: "warning"
+        'Post Treatment': { 
+          types: ['Post Treatment-type1', 'Post Treatment-type2', 'Post Treatment-type3'],
+          button: "warning",
+          currentType: 'post-1'
         },
         'Concentrate Management': { 
-          types: ['conc-1', 'conc-2', 'conc-3'],
-          button: "danger"
+          types: ['Concentrate Management-type1', 'Concentrate Management-type2', 'Concentrate Management-type3'],
+          button: "danger",
+          currentType: 'conc-1'
         }
       } 
     };
@@ -50,7 +56,22 @@ export default class FlowDiagram extends Component {
 
   }
 
+  handleClick(e) {
+    const text = e.target.innerText;
+    const subprocess = text.split("-")[0];
+    const type = text.split("-")[1];
+    const state = this.state;
+    state.subprocesses[subprocess].currentType = type;
 
+    
+    // update graph
+    const graph = this.state.graphDefinition;
+    const newGraph = graph.replace(subprocess, subprocess + ': ' + type);
+    state.graphDefinition = newGraph;
+
+    this.setState(state);
+    //console.log(this.state);
+  }
 
   componentDidMount() {}
 
@@ -70,7 +91,9 @@ export default class FlowDiagram extends Component {
               >
                 {this.state.subprocesses[subprocess].types.map(
                   subprocessType => (
-                    <Dropdown.Item>{subprocessType}</Dropdown.Item>
+                    <Dropdown.Item onClick={this.handleClick.bind(this)}>
+                      {subprocessType}
+                    </Dropdown.Item>
                   )
                 )}
               </DropdownButton> 
