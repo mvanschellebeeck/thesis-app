@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
+.flowDiagramContainer {
+  float: left;
+}
+
 .mapContainer {
     width: 60%;
     float: left;

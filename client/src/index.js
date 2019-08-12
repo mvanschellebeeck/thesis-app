@@ -11,9 +11,9 @@ import Button from 'react-bootstrap/Button';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 
-
 import Map from "./components/map";
 import Detail from "./components/detail";
+import FlowDiagram from "./components/flowDiagram"
 import "./index.css";
 
 export default class App extends React.Component {
@@ -30,33 +30,32 @@ export default class App extends React.Component {
     this.setState(dataFromChild);
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+
+  }
 
   render() {
     return (
       <div>
+        {/* <div id="output"></div> */}
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="#home">WaterWorx</Navbar.Brand>
           <Nav className="mr-auto">
-
             <NavDropdown title="Desalination" id="basic-nav-dropdown">
               <NavDropdown.Item href="#t1">
                 Regional Analysis
               </NavDropdown.Item>
-              <NavDropdown.Item href="#t2">
-                Technologies
-              </NavDropdown.Item>
+              <NavDropdown.Item href="#t2">Technologies</NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown title="Water Use Reduction" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#t3">
-                topic 1
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#t4">
-                topic 2
-              </NavDropdown.Item>
+            <NavDropdown
+              title="Water Use Reduction"
+              id="basic-nav-dropdown"
+            >
+              <NavDropdown.Item href="#t3">topic 1</NavDropdown.Item>
+              <NavDropdown.Item href="#t4">topic 2</NavDropdown.Item>
             </NavDropdown>
-            
+
             <Nav.Link href="#t5">Rainwater Harvesting</Nav.Link>
             <Nav.Link href="#t6">Greywater Re-Use</Nav.Link>
           </Nav>
@@ -69,15 +68,16 @@ export default class App extends React.Component {
             <Button variant="outline-info">Search</Button>
           </Form>
         </Navbar>
-        <Map
+        {/* <Map
           setParentState={this.setParentState}
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
-        />
+        /> */}
         <Detail
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         />
+        <FlowDiagram />
       </div>
     );
   }
