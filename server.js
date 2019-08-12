@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+
+// temporary gross global variable stored on the server until some sort of databse is used
 var global_plants = {};
 app.use(express.json());
 app.use(express.urlencoded());
