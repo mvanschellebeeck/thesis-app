@@ -34,7 +34,8 @@ button[id*="mydropdown"] {
 .mapContainer {
     width: 60%;
     float: left;
-    margin-top: 5%;
+    margin-top: 4%;
+    height: 620px;
 }
 
 .detailContainer {
