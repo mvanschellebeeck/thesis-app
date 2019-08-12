@@ -35,7 +35,7 @@ export default class Detail extends Component {
     return (
       <div>
         <h1>
-          <b>{current_plant.title}</b>
+          <b className="detailTitle">{current_plant.title}</b>
         </h1>
         <p>{current_plant.description}</p>
         <div>
