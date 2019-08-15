@@ -2,11 +2,6 @@ import React, { Component } from "react";
 import "../index.css";
 import mermaid from "mermaid";
 
-import ReactTable from "react-table";
-import "react-table/react-table.css";
-
-import { Dropdown, DropdownButton, ButtonToolbar } from "react-bootstrap";
-
 export default class FlowDiagram extends Component {
   constructor(props) {
     super(props);
