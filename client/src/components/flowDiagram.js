@@ -22,7 +22,7 @@ export default class FlowDiagram extends Component {
     this.state = {
       // initial graph
       graphDefinition: `graph LR
-      A(Intake)-->B(Pre Treatment)
+      A(1. Intake)-->B(2. Pre Treatment)
       B-->C(Desalination)
       C-->D(Post Treatment)
       C-->E(Concentrate Management)`,

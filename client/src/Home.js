@@ -1,11 +1,14 @@
-import React from 'react';
-import './index.css'
+import React from "react";
+import "./index.css";
 
-function Home() {
+import Map from "./components/map";
+import Detail from "./components/detail";
+import FlowDiagram from "./components/flowDiagram";
+import TechnologyRadarChart from "./components/radarChart";
 
-  return (
-    <div> Home Page </div>
-  )
+export default class Home extends React.Component {
+
+  render() {
+    return <div> Home Page </div>;
+  }
 }
-
-export default Home;

@@ -2,60 +2,57 @@ import React from "react";
 import ReactDOM from "react-dom";
 import registerServiceWorker from "./registerServiceWorker";
 
-
-import Map from "./components/map";
-import Detail from "./components/detail";
-import FlowDiagram from "./components/flowDiagram";
-import TechnologyRadarChart from "./components/radarChart";
 import "./index.css";
 
 import Technologies from './Technologies';
 import Australia from './Australia';
 import Navigation from './Navigation';
 import Home from './Home';
+import PageNotFound from './PageNotFound';
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 export default class App extends React.Component {
-  constructor(props) {  
+  // constructor(props) {  
 
-    super(props);
-    this.state = {
-      plants: {},
-      currentlySelectedPlant: {},
-      technologyCombinationValues: {
-        'Concentrate Management': {
-          social: 40, 
-          environmental: 60, 
-          economic: 80
-        },
-        'Pre Treatment': {
-          social: 10,
-          environmental: 40,
-          economic: 100
-        },
-        'Desalination': {
-          social: 40,
-          environmental: 30, 
-          economic: 60
-        },
-        'Post Treatment': { 
-          social: 40, 
-          economic: 80, 
-          environmental: 60
-        },
-        'Intake': {
-          social: 40,
-          environmental: 30,
-          economic: 60
-        }
-      }
-    };
-  }
+  //   super(props);
+  //   this.state = {
+  //     plants: {},
+  //     currentlySelectedPlant: {},
+  //     technologyCombinationValues: {
+  //       'Concentrate Management': {
+  //         social: 40, 
+  //         environmental: 60, 
+  //         economic: 80
+  //       },
+  //       'Pre Treatment': {
+  //         social: 10,
+  //         environmental: 40,
+  //         economic: 100
+  //       },
+  //       'Desalination': {
+  //         social: 40,
+  //         environmental: 30, 
+  //         economic: 60
+  //       },
+  //       'Post Treatment': { 
+  //         social: 40, 
+  //         economic: 80, 
+  //         environmental: 60
+  //       },
+  //       'Intake': {
+  //         social: 40,
+  //         environmental: 30,
+  //         economic: 60
+  //       }
+  //     }
+  //   };
+  // }
 
-  setParentState = dataFromChild => {
-    // child is currently either Map or Detail
-    this.setState(dataFromChild);
-  };
+  // setParentState = dataFromChild => {
+  //   // child is currently either Map or Detail
+  //   this.setState(dataFromChild);
+  // };
 
   componentDidMount() {
 
@@ -70,6 +67,7 @@ export default class App extends React.Component {
             <Route path="/" exact component={Home}/>
             <Route path="/technologies" component={Technologies}/>
             <Route path="/australia" component={Australia}/>
+            <Route component={PageNotFound}/>
           </Switch>
         </div>
       </Router>
