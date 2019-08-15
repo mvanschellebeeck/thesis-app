@@ -14,5 +14,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:5000",
-  "devDependencies": {}
+  "devDependencies": {
+    "react-router-dom": "^5.0.1"
+  }
 }
