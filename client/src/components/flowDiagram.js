@@ -119,7 +119,9 @@ export default class FlowDiagram extends Component {
     });
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    mermaid.contentLoaded();
+  }
 
   render() {
     const plant_with_properties = [];
