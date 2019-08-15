@@ -2,7 +2,6 @@
 
 button[id*="mydropdown"] {
   margin: 5px;
-  margin-bottom: 30px;
 }
 
 #x {
@@ -10,24 +9,21 @@ button[id*="mydropdown"] {
   height: 620px;
 }
 
-.flowDiagramContainer {
-  width: 55%;
-  float: left;
+
+.technologyContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  /* grid-template-rows: 70% 30%; */
+  grid-gap: 10px;
 }
 
 .technologyTable {
-  width: 50%;
+  margin-left: 5px;
 }
 
-.technologyRadarContainer {
-  width: 45%;
-  float: right;
-  margin-right: 11px;
-  font-size: 10px;
-}
-
-.flowDiagramContainer {
-  float: left;
+.technologyChart {
+  margin: 10px;
 }
 
 .mapContainer {
@@ -38,14 +34,13 @@ button[id*="mydropdown"] {
 }
 
 .detailContainer {
-  width: 40%;
-  float: right;
   padding: 5px;
   margin-top: 0px;
 }
 
 .detailTitle {
   font-size: 18px;
+  margin-left: 5px;
 }
 
 html * {

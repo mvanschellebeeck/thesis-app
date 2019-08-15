@@ -1,8 +1,9 @@
 import React from "react";
 import "./index.css";
 
-import FlowDiagram from './technology_components/flowDiagram';
-import TechnologyRadarChart from './technology_components/radarChart';
+import FlowDiagram from "./technology_components/flowDiagram";
+import TechnologyTable from "./technology_components/technologyTable";
+import TechnologyRadarChart from "./technology_components/radarChart";
 
 export default class Technologies extends React.Component {
   constructor(props) {
@@ -45,11 +46,12 @@ export default class Technologies extends React.Component {
 
   render() {
     return (
-      <div>
-        <FlowDiagram setParentState={this.setParentState} />
-        <TechnologyRadarChart
+      <div className="technologyContainer">
+        <TechnologyTable setParentState={this.setParentState} />
+        <TechnologyRadarChart className="technologyChart" 
           technologyCombinationValues={this.state.technologyCombinationValues}
         />
+        <FlowDiagram setParentState={this.setParentState} />
       </div>
     );
   }

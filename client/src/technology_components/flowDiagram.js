@@ -5,7 +5,7 @@ import mermaid from "mermaid";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-import { Dropdown, DropdownButton, ButtonToolbar} from "react-bootstrap"
+import { Dropdown, DropdownButton, ButtonToolbar } from "react-bootstrap";
 
 export default class FlowDiagram extends Component {
   constructor(props) {
@@ -71,103 +71,17 @@ export default class FlowDiagram extends Component {
     };
   }
 
-  getRandomInts = () => {
-    // 0 - 100
-    return {
-      social: Math.floor(Math.random() * 100),
-      environmental: Math.floor(Math.random() * 100),
-      economic: Math.floor(Math.random() * 100)
-    }
-  }
-
-  handleClick(e) {
-    // generate random for now
-    const state_change = {
-      technologyCombinationValues: {
-        'Concentrate Management': this.getRandomInts(),
-        'Intake': this.getRandomInts(),
-        'Pre Treatment': this.getRandomInts(),
-        'Desalination': this.getRandomInts(),
-        'Post Treatment': this.getRandomInts()
-      }
-    };
-
-    this.props.setParentState(state_change);
-
-    const text = e.target.innerText;
-    const subprocess = text.split("-")[0];
-    const type = text.split("-")[1];
-    const state = this.state;
-    state.subprocesses[subprocess].currentType = type;
-
-    // update graph
-    // const graph = this.state.graphDefinition;
-    // const newGraph = graph.replace(subprocess, subprocess + ': ' + type);
-    // state.graphDefinition = newGraph;
-
-    this.setState(state);
-  }
-
-  createColumns(...cols) {
-    return cols.map(col => {
-      return {
-        Header: col,
-        accessor: col.toLowerCase()
-      };
-    });
-  }
-
   componentDidMount() {
     mermaid.contentLoaded();
   }
 
   render() {
-    const plant_with_properties = [];
-    Object.keys(this.state.subprocesses).forEach(subprocess => {
-      plant_with_properties.push({
-        subprocess: subprocess,
-        type: this.state.subprocesses[subprocess].currentType
-      });
-    });
-    console.log(plant_with_properties);
-
     return (
-      <div className="flowDiagramContainer">
-        <ButtonToolbar>
-          {Object.keys(this.state.subprocesses).map(subprocess => (
-            <DropdownButton
-              title={subprocess}
-              variant={this.state.subprocesses[subprocess].button}
-              id={`mydropdown-${subprocess}`}
-              key={subprocess}
-              size="sm"
-            >
-              {this.state.subprocesses[subprocess].types.map(subprocessType => (
-                <Dropdown.Item onClick={this.handleClick.bind(this)}>
-                  {subprocessType}
-                </Dropdown.Item>
-              ))}
-            </DropdownButton>
-          ))}
-        </ButtonToolbar>
+      <div>
+        <h1>
+          <b className="detailTitle">The Desalination Process</b>
+        </h1>
         <div className="mermaid">{this.state.graphDefinition}</div>
-        {/* Table */}
-        <div>
-          <h1>
-            <b className="detailTitle">Selected Technologies</b>
-          </h1>
-          <div>
-            <ReactTable
-              data={plant_with_properties}
-              columns={this.createColumns("Subprocess", "Type")}
-              defaultPageSize={5}
-              className="-striped -highlight"
-              showPageSizeOptions={false}
-              showPagination={false}
-            />
-            <br />
-          </div>
-        </div>
       </div>
     );
   }
