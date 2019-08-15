@@ -44,13 +44,25 @@ export default class Technologies extends React.Component {
     this.setState(dataFromChild);
   };
 
+  constructTitle = (title) => {
+    return (<div>
+      <h1 className="detailTitle">
+        <b>{title}</b>
+      </h1>
+      </div>);
+  }
+
   render() {
     return (
       <div className="technologyContainer">
+        {this.constructTitle("Selected Technologies")}
+        {this.constructTitle("Chart")}
         <TechnologyTable setParentState={this.setParentState} />
-        <TechnologyRadarChart className="technologyChart" 
+        <TechnologyRadarChart
           technologyCombinationValues={this.state.technologyCombinationValues}
         />
+        {this.constructTitle("The Desalination Process")}
+        {this.constructTitle("Dummy Div")}
         <FlowDiagram setParentState={this.setParentState} />
       </div>
     );

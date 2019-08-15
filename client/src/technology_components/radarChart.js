@@ -22,7 +22,7 @@ export default class TechnologyRadarChart extends PureComponent {
     console.log(data);
 
     return (
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer > 
           <RadarChart outerRadius={150} data={data}>
             <PolarGrid />
             <PolarAngleAxis dataKey="subprocess" />
@@ -50,7 +50,8 @@ export default class TechnologyRadarChart extends PureComponent {
             />
             <Legend iconSize={20} />
           </RadarChart>
-        </ResponsiveContainer>
+        </ResponsiveContainer> 
+
     );
   }
 }

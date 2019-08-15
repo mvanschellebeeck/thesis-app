@@ -133,7 +133,10 @@ export default class TechnologyTable extends Component {
 
     return (
       <div>
-        <div>
+
+        {/* Table */}
+        <div className="technologyTable">
+          <div>
           <ButtonToolbar>
             {Object.keys(this.state.subprocesses).map(subprocess => (
               <DropdownButton
@@ -154,11 +157,6 @@ export default class TechnologyTable extends Component {
             ))}
           </ButtonToolbar>
         </div>
-        {/* Table */}
-        <div className="technologyTable">
-          <h1>
-            <b className="detailTitle">Selected Technologies</b>
-          </h1>
           <ReactTable
             data={plant_with_properties}
             columns={this.createColumns("Subprocess", "Type")}

@@ -14,16 +14,16 @@ button[id*="mydropdown"] {
   width: 100%;
   display: grid;
   grid-template-columns: 50% 50%;
-  /* grid-template-rows: 70% 30%; */
+  grid-template-rows: 50px 400px 50px;
   grid-gap: 10px;
 }
 
 .technologyTable {
-  margin-left: 5px;
+  margin: 10px;
 }
 
 .technologyChart {
-  margin: 10px;
+  margin : 0 auto;
 }
 
 .mapContainer {
@@ -40,7 +40,8 @@ button[id*="mydropdown"] {
 
 .detailTitle {
   font-size: 18px;
-  margin-left: 5px;
+  text-align: center;
+  margin-top: 14px;
 }
 
 html * {
