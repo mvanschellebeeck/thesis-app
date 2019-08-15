@@ -1,8 +1,8 @@
 import React from "react";
 import "./index.css";
 
-import FlowDiagram from './components/flowDiagram';
-import TechnologyRadarChart from './components/radarChart';
+import FlowDiagram from './technology_components/flowDiagram';
+import TechnologyRadarChart from './technology_components/radarChart';
 
 export default class Technologies extends React.Component {
   constructor(props) {
