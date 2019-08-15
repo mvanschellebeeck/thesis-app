@@ -1,13 +1,15 @@
 import React from "react";
 import "./index.css";
+import { LinkContainer } from "react-router-bootstrap";
 
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import Button from 'react-bootstrap/Button';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import {
+  Nav,
+  Navbar,
+  NavDropdown,
+  Form,
+  FormControl,
+  Button
+} from "react-bootstrap";
 
 function Navigation() {
   return (
@@ -16,8 +18,12 @@ function Navigation() {
         <Navbar.Brand href="#home">WaterWorx</Navbar.Brand>
         <Nav className="mr-auto">
           <NavDropdown title="Desalination" id="basic-nav-dropdown">
-            <NavDropdown.Item href="#t1">Regional Analysis</NavDropdown.Item>
-            <NavDropdown.Item href="#t2">Technologies</NavDropdown.Item>
+            <LinkContainer to="/australia">
+              <NavDropdown.Item>Regional Analysis</NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/technologies">
+              <NavDropdown.Item>Technologies</NavDropdown.Item>
+            </LinkContainer>
           </NavDropdown>
 
           {/* <NavDropdown

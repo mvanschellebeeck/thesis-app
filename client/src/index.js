@@ -12,6 +12,7 @@ import "./index.css";
 import Technologies from './Technologies';
 import Australia from './Australia';
 import Navigation from './Navigation';
+import Home from './Home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 export default class App extends React.Component {
@@ -65,8 +66,11 @@ export default class App extends React.Component {
       <Router>
         <div>
           <Navigation />
-          <Route path="/technologies" component={Technologies}/>
-          <Route path="/australia" component={Australia}/>
+          <Switch>
+            <Route path="/" exact component={Home}/>
+            <Route path="/technologies" component={Technologies}/>
+            <Route path="/australia" component={Australia}/>
+          </Switch>
         </div>
       </Router>
     );
