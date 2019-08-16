@@ -72,7 +72,7 @@ export default class FlowDiagram extends Component {
 
   render() {
     return (
-      <div>
+      <div className="flowDiagramContainer">
         <div className="mermaid">{this.state.graphDefinition}</div>
       </div>
     );

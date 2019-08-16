@@ -9,21 +9,44 @@ button[id*="mydropdown"] {
   height: 620px;
 }
 
+/* Common titles across website */
+.detailTitle {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 14px;
+}
+
+/* Technology Page*/
 .technologyContainer {
   width: 100%;
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: 50px 400px 50px;
-  grid-gap: 10px;
+  grid-template-rows: 50px 400px;
 }
 
 .technologyTable {
   margin: 10px;
+  text-align: center;
+}
+
+.buttonToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .technologyChart {
   margin : 0 auto;
 }
+
+.flowDiagramContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+/* Australia Page*/
 
 .mapContainer {
   width: 60%;
@@ -32,16 +55,23 @@ button[id*="mydropdown"] {
   height: 620px;
 }
 
+.australiaContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50px 500px;
+}
+
+
 .detailContainer {
   padding: 5px;
   margin-top: 0px;
 }
 
-.detailTitle {
-  font-size: 18px;
-  text-align: center;
-  margin-top: 14px;
-}
+
+
+
+
 
 html * {
   /* font-family: 'Roboto', sans-serif !important; */

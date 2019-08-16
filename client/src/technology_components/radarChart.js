@@ -51,7 +51,6 @@ export default class TechnologyRadarChart extends PureComponent {
             <Legend iconSize={20} />
           </RadarChart>
         </ResponsiveContainer> 
-
     );
   }
 }

@@ -21,6 +21,15 @@ export default class Detail extends Component {
     );
   }
 
+  constructTitle = (title) => {
+    return (<div>
+      <h1 className="detailTitle">
+        <b>{title}</b>
+      </h1>
+      </div>);
+  }
+
+
   fillTable(current_plant) {
     const { all_plants } = this.props;
     const plant = all_plants[current_plant.title];
@@ -34,9 +43,7 @@ export default class Detail extends Component {
     console.log(plant_with_properties)
     return (
       <div>
-        <h1>
-          <b className="detailTitle">{current_plant.title}</b>
-        </h1>
+        {this.constructTitle(current_plant.title)}
         <p>{current_plant.description}</p>
         <div>
           <ReactTable

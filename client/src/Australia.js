@@ -18,15 +18,24 @@ export default class Australia extends React.Component {
     this.setState(dataFromChild);
   };
 
+  constructTitle = (title) => {
+    return (<div>
+      <h1 className="detailTitle">
+        <b>{title}</b>
+      </h1>
+      </div>);
+  }
+
   render() {
     return (
-      <div>
-        <Map
-          setParentState={this.setParentState}
+      <div className="australiaContainer">
+        {this.constructTitle("Desalination in Australia")}
+        <Detail
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         />
-        <Detail
+        <Map
+          setParentState={this.setParentState}
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         />

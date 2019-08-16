@@ -114,12 +114,9 @@ export default class Map extends Component {
 
   render() {
     return (
-      <div className="mapContainer">
         <div
           ref={el => (this.mapContainer = el)}
-          className="mapContainer absolute top right left bottom"
         />
-      </div>
     );
   }
 }
