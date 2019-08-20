@@ -3,6 +3,9 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import "../index.css";
 
+import { constructTitle } from '../utils/utilFunctions';
+
+
 export default class Detail extends Component {
   createColumns(...cols) {
     return cols.map(col => {
@@ -21,15 +24,6 @@ export default class Detail extends Component {
     );
   }
 
-  constructTitle = (title) => {
-    return (<div>
-      <h1 className="detailTitle">
-        <b>{title}</b>
-      </h1>
-      </div>);
-  }
-
-
   fillTable(current_plant) {
     const { all_plants } = this.props;
     const plant = all_plants[current_plant.title];
@@ -43,7 +37,7 @@ export default class Detail extends Component {
     console.log(plant_with_properties)
     return (
       <div>
-        {this.constructTitle(current_plant.title)}
+        {constructTitle(current_plant.title)}
         <p>{current_plant.description}</p>
         <div>
           <ReactTable

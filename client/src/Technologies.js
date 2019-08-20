@@ -1,6 +1,9 @@
 import React from "react";
 import "./index.css";
 
+
+import { constructTitle } from './utils/utilFunctions';
+
 import FlowDiagram from "./technology_components/flowDiagram";
 import TechnologyTable from "./technology_components/technologyTable";
 import TechnologyRadarChart from "./technology_components/radarChart";
@@ -44,25 +47,17 @@ export default class Technologies extends React.Component {
     this.setState(dataFromChild);
   };
 
-  constructTitle = (title) => {
-    return (<div>
-      <h1 className="detailTitle">
-        <b>{title}</b>
-      </h1>
-      </div>);
-  }
-
   render() {
     return (
       <div className="technologyContainer">
-        {this.constructTitle("Selected Technologies")}
-        {this.constructTitle("Chart")}
+        {constructTitle("Selected Technologies")}
+        {constructTitle("Chart")}
         <TechnologyTable setParentState={this.setParentState} />
         <TechnologyRadarChart
           technologyCombinationValues={this.state.technologyCombinationValues}
         />
-        {this.constructTitle("The Desalination Process")}
-        {this.constructTitle("Dummy Div")}
+        {constructTitle("The Desalination Process")}
+        {constructTitle("Dummy Div")}
         <FlowDiagram setParentState={this.setParentState} />
       </div>
     );
