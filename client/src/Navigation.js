@@ -14,7 +14,9 @@ function Navigation() {
   return (
     <div>
       <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="#home">WaterWorx</Navbar.Brand>
+        <LinkContainer to="/">
+          <Navbar.Brand>WaterWorx</Navbar.Brand>
+        </LinkContainer>
         <Nav className="mr-auto">
           <LinkContainer to="/technologies">
             <Nav.Link>Technologies</Nav.Link>

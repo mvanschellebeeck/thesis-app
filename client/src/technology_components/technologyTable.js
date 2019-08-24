@@ -11,46 +11,47 @@ export default class TechnologyTable extends Component {
     super(props);
     this.state = {
       subprocesses: {
-        Intake: {
-          types: ["Intake-type1", "Intake-type2", "Intake-type3"],
+        "Intake": {
+          types: ["Sub-surface", "Open-ocean", "Offshore"],
           button: "primary",
-          currentType: "type1"
+          currentType: "Sub-surface"
         },
         "Pre Treatment": {
           types: [
-            "Pre Treatment-type1",
-            "Pre Treatment-type2",
-            "Pre Treatment-type3"
+            "Sand Filtration & Candle Filtration",
+            "Ultra Filtration & Micro Filtration",
+            "Coagulation & Flocculation"
           ],
           button: "secondary",
-          currentType: "type1"
+          currentType: "Sand Filtration & Candle Filtration"
         },
-        Desalination: {
+        "Desalination": {
           types: [
-            "Desalination-type1",
-            "Desalination-type2",
-            "Desalination-type3"
+            "Reverse Osmosis (RO)",
+            "Multiple-Effect Distillation (MED)",
+            "Multi-stage Flash Distillation (MSF)",
+            "Electrodialysis (ED)"
           ],
           button: "success",
-          currentType: "type1"
+          currentType: "Reverse Osmosis (RO)"
         },
         "Post Treatment": {
           types: [
-            "Post Treatment-type1",
-            "Post Treatment-type2",
-            "Post Treatment-type3"
+            "Permeate disinfection",
+            "Chloramine",
+            "Irradiation"
           ],
           button: "warning",
-          currentType: "type1"
+          currentType: "Permeate disinfection"
         },
         "Concentrate Management": {
           types: [
-            "Concentrate Management-type1",
-            "Concentrate Management-type2",
-            "Concentrate Management-type3"
+            "Submarine Outfalls",
+            "Evaporation Ponds",
+            "Halophyte Irrigation"
           ],
           button: "danger",
-          currentType: "type1"
+          currentType: "Submarine Outfalls"
         }
       }
     };
@@ -70,21 +71,19 @@ export default class TechnologyTable extends Component {
     const state_change = {
       technologyCombinationValues: {
         "Concentrate Management": this.getRandomInts(),
-        Intake: this.getRandomInts(),
+        "Intake": this.getRandomInts(),
         "Pre Treatment": this.getRandomInts(),
-        Desalination: this.getRandomInts(),
+        "Desalination": this.getRandomInts(),
         "Post Treatment": this.getRandomInts()
       }
     };
 
     this.props.setParentState(state_change);
 
-    const text = e.target.innerText;
-    const subprocess = text.split("-")[0];
-    const type = text.split("-")[1];
+    // this is hacky, id and type aren't data fields 
+    const { id, type } = e.target;
     const state = this.state;
-    state.subprocesses[subprocess].currentType = type;
-
+    state.subprocesses[id].currentType = type;
     this.setState(state);
   }
 
@@ -105,7 +104,7 @@ export default class TechnologyTable extends Component {
         type: this.state.subprocesses[subprocess].currentType
       });
     });
-    console.log(plant_with_properties);
+    // console.log(plant_with_properties);
 
     return (
       <div>
@@ -123,7 +122,7 @@ export default class TechnologyTable extends Component {
                 >
                   {this.state.subprocesses[subprocess].types.map(
                     subprocessType => (
-                      <Dropdown.Item onClick={this.handleClick.bind(this)}>
+                      <Dropdown.Item onClick={this.handleClick.bind(this)} type={subprocessType} id={subprocess}>
                         {subprocessType}
                       </Dropdown.Item>
                     )

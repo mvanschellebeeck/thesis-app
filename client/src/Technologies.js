@@ -7,6 +7,7 @@ import { constructTitle } from './utils/utilFunctions';
 import FlowDiagram from "./technology_components/flowDiagram";
 import TechnologyTable from "./technology_components/technologyTable";
 import TechnologyRadarChart from "./technology_components/radarChart";
+import TechnologyStackedAreaChart from "./technology_components/stackedAreaChart";
 
 export default class Technologies extends React.Component {
   constructor(props) {
@@ -18,7 +19,7 @@ export default class Technologies extends React.Component {
           environmental: 60,
           economic: 80
         },
-        "Pre Treatment": {
+        "Pre-Treatment": {
           social: 10,
           environmental: 40,
           economic: 100
@@ -28,7 +29,7 @@ export default class Technologies extends React.Component {
           environmental: 30,
           economic: 60
         },
-        "Post Treatment": {
+        "Post-Treatment": {
           social: 40,
           economic: 80,
           environmental: 60
@@ -51,14 +52,15 @@ export default class Technologies extends React.Component {
     return (
       <div className="technologyContainer">
         {constructTitle("Selected Technologies")}
-        {constructTitle("Chart")}
+        {constructTitle("Desalination Subprocceses")}
         <TechnologyTable setParentState={this.setParentState} />
         <TechnologyRadarChart
           technologyCombinationValues={this.state.technologyCombinationValues}
         />
         {constructTitle("The Desalination Process")}
-        {constructTitle("Dummy Div")}
+        {constructTitle("Chart 2")}
         <FlowDiagram setParentState={this.setParentState} />
+        <TechnologyStackedAreaChart technologyCombinationValues={this.state.technologyCombinationValues} />
       </div>
     );
   }

@@ -21,7 +21,8 @@ button[id*="mydropdown"] {
   width: 100%;
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: 50px 400px;
+  grid-template-rows: 50px 400px 50px 400px;
+  grid-gap: 20px;
 }
 
 .technologyTable {
@@ -68,8 +69,27 @@ button[id*="mydropdown"] {
   margin-top: 0px;
 }
 
+.homeContainer {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-rows: 90vw;
+  height: 100vw;
+  background: #f0f6ff;
+}
 
+.homeMainContentContainer {
+  display: flex;
+  justify-content: center;
+  border-radius: 30px;
+  margin-top: 1%;
+  background: white;
+  box-shadow: 0 8px 6px -6px black;
+  border: 2px solid grey;
+}
 
+.homeMainContent {
+  margin-top: 2%;
+}
 
 
 
