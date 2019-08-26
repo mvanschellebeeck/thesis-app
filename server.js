@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
+const port = 5000;
+app.listen(port, () => `Server running on port ${port}`);
 
 // temporary gross global variable stored on the server until some sort of database is used
 var global_plants = {};
-app.use(express.json());
-app.use(express.urlencoded());
 
 var GoogleSpreadsheet = require("google-spreadsheet");
 const defaultSpreadsheetId = "1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U";
@@ -79,8 +79,3 @@ app.get("/api/plants", async (req, res) => {
         res.json(global_plants);
     }
 });
-
-
-const port = 5000;
-
-app.listen(port, () => `Server running on port ${port}`);
