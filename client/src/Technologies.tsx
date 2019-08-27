@@ -1,16 +1,32 @@
+// @ts-ignore
 import React from "react";
 import "./index.css";
 
-
 import { constructTitle } from './utils/utilFunctions';
-
 import FlowDiagram from "./technology_components/flowDiagram";
 import TechnologyTable from "./technology_components/technologyTable";
 import TechnologyRadarChart from "./technology_components/radarChart";
 import TechnologyStackedAreaChart from "./technology_components/stackedAreaChart";
 
-export default class Technologies extends React.Component {
-  constructor(props) {
+type Subprocess = "Intake" | "Pre-Treatment" | "Desalination"
+                    | "Post-Treatment" | "Concentrate Management";
+                     
+interface ImpactModel {
+  social: number,
+  environmental: number,
+  economic: number
+}
+
+interface IState  {
+  technologyCombinationValues : {
+    [key in Subprocess]: ImpactModel
+  }
+}
+
+interface IProps {} 
+
+export default class Technologies extends React.Component<IProps, IState> {
+  constructor(props : IProps) {
     super(props);
     this.state = {
       technologyCombinationValues: {
@@ -24,7 +40,7 @@ export default class Technologies extends React.Component {
           environmental: 40,
           economic: 100
         },
-        Desalination: {
+        "Desalination": {
           social: 40,
           environmental: 30,
           economic: 60
@@ -34,7 +50,7 @@ export default class Technologies extends React.Component {
           economic: 80,
           environmental: 60
         },
-        Intake: {
+        "Intake": {
           social: 40,
           environmental: 30,
           economic: 60

@@ -44,7 +44,6 @@ function getPlantProperties(sheet) {
 }
 
 function getPropertiesForPlant(plant, res) {
-    console.log(plant);
     if (!Object.keys(global_plants).length) {
         return res.status(400).json({
             error: 'global_plants variable not loaded yet'

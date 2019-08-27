@@ -4,10 +4,40 @@ import "../index.css";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
+type Subprocess = "Intake" | "Pre-Treatment" | "Desalination"
+                    | "Post-Treatment" | "Concentrate Management";
+                     
+interface ImpactModel {
+  social: number,
+  environmental: number,
+  economic: number
+}
+
+interface ISubprocessValues  {
+  technologyCombinationValues : {
+    [key in Subprocess]: ImpactModel
+  }
+}
+
+interface IState {
+  subprocesses : {
+    [key in Subprocess]: {
+      types: string[],
+      button: string,
+      currentType: string
+    }
+  }
+}
+
+interface IProps {
+  setParentState(data: ISubprocessValues): any;
+} 
+
+
 import { Dropdown, DropdownButton, ButtonToolbar } from "react-bootstrap";
 
-export default class TechnologyTable extends Component {
-  constructor(props) {
+export default class TechnologyTable extends Component<IProps, IState> {
+  constructor(props : IProps) {
     super(props);
     this.state = {
       subprocesses: {
@@ -16,7 +46,7 @@ export default class TechnologyTable extends Component {
           button: "primary",
           currentType: "Sub-surface"
         },
-        "Pre Treatment": {
+        "Pre-Treatment": {
           types: [
             "Sand Filtration & Candle Filtration",
             "Ultra Filtration & Micro Filtration",
@@ -35,7 +65,7 @@ export default class TechnologyTable extends Component {
           button: "success",
           currentType: "Reverse Osmosis (RO)"
         },
-        "Post Treatment": {
+        "Post-Treatment": {
           types: [
             "Permeate disinfection",
             "Chloramine",
@@ -72,9 +102,9 @@ export default class TechnologyTable extends Component {
       technologyCombinationValues: {
         "Concentrate Management": this.getRandomInts(),
         "Intake": this.getRandomInts(),
-        "Pre Treatment": this.getRandomInts(),
+        "Pre-Treatment": this.getRandomInts(),
         "Desalination": this.getRandomInts(),
-        "Post Treatment": this.getRandomInts()
+        "Post-Treatment": this.getRandomInts()
       }
     };
 

@@ -4,10 +4,19 @@ import axios from "axios";
 
 import "../index.css";
 
+
+interface IProps {
+  all_plants
+  current_plant
+  setParentState : any
+}
+
+
 const DESALINATION_PLANTS = "desalination-plants";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
-export default class Map extends Component {
+export default class Map extends Component<IProps> {
+  mapContainer: any;
   plantsToMapFeatures() {
     const plants = [];
     const { all_plants } = this.props;

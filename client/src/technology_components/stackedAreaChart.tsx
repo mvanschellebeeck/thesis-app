@@ -9,7 +9,11 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-export default class TechnologyStackedAreaChart extends PureComponent {
+interface IProps {
+  technologyCombinationValues
+}
+
+export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
   render() {
     const data = [];
     Object.keys(this.props.technologyCombinationValues).forEach(subprocess => {

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+      "outDir": "./built",
+      "allowJs": true,
+      "target": "es5",
+      "noImplicitReturns": true,
+      "jsx": "react",
+      "esModuleInterop": true,
+      "baseUrl": "."
+  },
+  "include": [
+      "server.js"
+  ]
+}

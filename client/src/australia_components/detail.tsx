@@ -5,8 +5,12 @@ import "../index.css";
 
 import { constructTitle } from '../utils/utilFunctions';
 
+interface IProps {
+  all_plants
+  current_plant
+}
 
-export default class Detail extends Component {
+export default class Detail extends Component<IProps> {
   createColumns(...cols) {
     return cols.map(col => {
       return {
@@ -34,7 +38,8 @@ export default class Detail extends Component {
         value: plant[property]
       });
     });
-    console.log(plant_with_properties)
+    //console.log(plant_with_properties)
+
     return (
       <div>
         {constructTitle(current_plant.title)}

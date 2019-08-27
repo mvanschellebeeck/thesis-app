@@ -9,7 +9,25 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-export default class TechnologyRadarChart extends PureComponent {
+
+
+
+type Subprocess = "Intake" | "Pre-Treatment" | "Desalination"
+                    | "Post-Treatment" | "Concentrate Management";
+                     
+interface ImpactModel {
+  social: number,
+  environmental: number,
+  economic: number
+}
+
+interface IProps  {
+  technologyCombinationValues : {
+    [key in Subprocess]: ImpactModel
+  }
+}
+
+export default class TechnologyRadarChart extends PureComponent<IProps> {
   render() {
     const data = [];
     console.log(this.props);
