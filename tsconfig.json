@@ -9,6 +9,6 @@
       "baseUrl": "."
   },
   "include": [
-      "server.js"
+      "server.ts"
   ]
 }

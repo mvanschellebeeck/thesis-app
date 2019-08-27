@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 const app = express();
 const port = 5000;
 app.listen(port, () => `Server running on port ${port}`);
@@ -10,8 +10,18 @@ var GoogleSpreadsheet = require("google-spreadsheet");
 const defaultSpreadsheetId = "1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U";
 var doc = new GoogleSpreadsheet(defaultSpreadsheetId);
 
-function getSheet(sheet_name) {
-    return new Promise((resolve, reject) => {
+interface Sheet {
+  sheet: string,
+  last_updated: string
+}
+
+interface SheetRow {
+  property: string,
+  value: any
+}
+
+function getSheet(sheet_name : string) {
+    return new Promise<Sheet>((resolve, reject) => {
         doc.getInfo((err, info) => {
             if (err) reject(err);
             const { worksheets, last_updated } = info;
@@ -26,12 +36,12 @@ function getSheet(sheet_name) {
 
 function getPlantProperties(sheet) {
     return new Promise((resolve, reject) => {
-        sheet.getRows({ offset: 1}, (err, rows) => {
+        sheet.getRows({ offset: 1}, (err, rows : SheetRow[]) => {
             if (err) reject(err);
             const plants = {};
             var curr = '';
-            rows.forEach((val, index) => {
-                const { property, value } = val;
+            rows.forEach((row : SheetRow, index : number) => {
+                const { property, value } = row;
                 if (property === "Name") {
                     curr = value;
                     plants[value] = {};
