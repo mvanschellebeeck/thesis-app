@@ -27,6 +27,8 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
+    "@types/react-table": "^6.8.5",
+    "@types/recharts": "^1.1.21",
     "react-scripts-ts": "^3.1.0"
   }
 }

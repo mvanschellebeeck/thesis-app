@@ -4,90 +4,62 @@ import "../index.css";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 
-type Subprocess = "Intake" | "Pre-Treatment" | "Desalination"
-                    | "Post-Treatment" | "Concentrate Management";
-                     
-interface ImpactModel {
-  social: number,
-  environmental: number,
-  economic: number
-}
-
-interface ISubprocessValues  {
-  technologyCombinationValues : {
-    [key in Subprocess]: ImpactModel
-  }
-}
-
-interface IState {
-  subprocesses : {
-    [key in Subprocess]: {
-      types: string[],
-      button: string,
-      currentType: string
-    }
-  }
-}
-
-interface IProps {
-  setParentState(data: ISubprocessValues): any;
-} 
-
+import {
+  Subprocess,
+  SubprocessButtonState,
+  SubprocessWithType,
+  ParentState,
+  TechnologyImpactValues
+} from "../PlantModel";
 
 import { Dropdown, DropdownButton, ButtonToolbar } from "react-bootstrap";
 
-export default class TechnologyTable extends Component<IProps, IState> {
-  constructor(props : IProps) {
-    super(props);
-    this.state = {
-      subprocesses: {
-        "Intake": {
-          types: ["Sub-surface", "Open-ocean", "Offshore"],
-          button: "primary",
-          currentType: "Sub-surface"
-        },
-        "Pre-Treatment": {
-          types: [
-            "Sand Filtration & Candle Filtration",
-            "Ultra Filtration & Micro Filtration",
-            "Coagulation & Flocculation"
-          ],
-          button: "secondary",
-          currentType: "Sand Filtration & Candle Filtration"
-        },
-        "Desalination": {
-          types: [
-            "Reverse Osmosis (RO)",
-            "Multiple-Effect Distillation (MED)",
-            "Multi-stage Flash Distillation (MSF)",
-            "Electrodialysis (ED)"
-          ],
-          button: "success",
-          currentType: "Reverse Osmosis (RO)"
-        },
-        "Post-Treatment": {
-          types: [
-            "Permeate disinfection",
-            "Chloramine",
-            "Irradiation"
-          ],
-          button: "warning",
-          currentType: "Permeate disinfection"
-        },
-        "Concentrate Management": {
-          types: [
-            "Submarine Outfalls",
-            "Evaporation Ponds",
-            "Halophyte Irrigation"
-          ],
-          button: "danger",
-          currentType: "Submarine Outfalls"
-        }
-      }
-    };
-  }
+export default class TechnologyTable extends Component<
+  ParentState,
+  SubprocessButtonState
+> {
+  state = {
+    Intake: {
+      types: ["Sub-surface", "Open-ocean", "Offshore"],
+      button: "primary",
+      currentType: "Sub-surface"
+    },
+    "Pre-Treatment": {
+      types: [
+        "Sand Filtration & Candle Filtration",
+        "Ultra Filtration & Micro Filtration",
+        "Coagulation & Flocculation"
+      ],
+      button: "secondary",
+      currentType: "Sand Filtration & Candle Filtration"
+    },
+    Desalination: {
+      types: [
+        "Reverse Osmosis (RO)",
+        "Multiple-Effect Distillation (MED)",
+        "Multi-stage Flash Distillation (MSF)",
+        "Electrodialysis (ED)"
+      ],
+      button: "success",
+      currentType: "Reverse Osmosis (RO)"
+    },
+    "Post-Treatment": {
+      types: ["Permeate disinfection", "Chloramine", "Irradiation"],
+      button: "warning",
+      currentType: "Permeate disinfection"
+    },
+    "Concentrate Management": {
+      types: [
+        "Submarine Outfalls",
+        "Evaporation Ponds",
+        "Halophyte Irrigation"
+      ],
+      button: "danger",
+      currentType: "Submarine Outfalls"
+    }
+  };
 
-  getRandomInts = () => {
+  _getRandomInts = () => {
     // 0 - 100
     return {
       social: Math.floor(Math.random() * 100),
@@ -96,28 +68,28 @@ export default class TechnologyTable extends Component<IProps, IState> {
     };
   };
 
-  handleClick(e) {
+  _handleClick = e => {
     // generate random for now
-    const state_change = {
+    const state_change: TechnologyImpactValues = {
       technologyCombinationValues: {
-        "Concentrate Management": this.getRandomInts(),
-        "Intake": this.getRandomInts(),
-        "Pre-Treatment": this.getRandomInts(),
-        "Desalination": this.getRandomInts(),
-        "Post-Treatment": this.getRandomInts()
+        "Concentrate Management": this._getRandomInts(),
+        Intake: this._getRandomInts(),
+        "Pre-Treatment": this._getRandomInts(),
+        Desalination: this._getRandomInts(),
+        "Post-Treatment": this._getRandomInts()
       }
     };
 
     this.props.setParentState(state_change);
 
-    // this is hacky, id and type aren't data fields 
+    // this is hacky, id and type aren't data fields
     const { id, type } = e.target;
     const state = this.state;
-    state.subprocesses[id].currentType = type;
+    state[id].currentType = type;
     this.setState(state);
-  }
+  };
 
-  createColumns(...cols) {
+  _createColumns(...cols: string[]) {
     return cols.map(col => {
       return {
         Header: col,
@@ -126,33 +98,40 @@ export default class TechnologyTable extends Component<IProps, IState> {
     });
   }
 
-  render() {
-    const plant_with_properties = [];
-    Object.keys(this.state.subprocesses).forEach(subprocess => {
-      plant_with_properties.push({
+  _getSubprocessesWithType(): SubprocessWithType[] {
+    const result = [];
+    Object.keys(this.state).forEach((subprocess: Subprocess) => {
+      result.push({
         subprocess: subprocess,
-        type: this.state.subprocesses[subprocess].currentType
+        type: this.state[subprocess].currentType
       });
     });
-    // console.log(plant_with_properties);
+    return result;
+  }
+
+  render() {
+    const subprocess_with_type: SubprocessWithType[] = this._getSubprocessesWithType();
 
     return (
       <div>
-        {/* Table */}
         <div>
           <div className="buttonToolbar">
             <ButtonToolbar>
-              {Object.keys(this.state.subprocesses).map(subprocess => (
+              {Object.keys(this.state).map((subprocess: Subprocess) => (
                 <DropdownButton
                   title={subprocess}
-                  variant={this.state.subprocesses[subprocess].button}
+                  variant={this.state[subprocess].button}
                   id={`mydropdown-${subprocess}`}
                   key={subprocess}
                   size="sm"
                 >
-                  {this.state.subprocesses[subprocess].types.map(
-                    subprocessType => (
-                      <Dropdown.Item onClick={this.handleClick.bind(this)} type={subprocessType} id={subprocess}>
+                  {this.state[subprocess].types.map(
+                    (subprocessType: Subprocess) => (
+                      <Dropdown.Item
+                        onClick={this._handleClick}
+                        type={subprocessType}
+                        id={subprocess}
+                      >
                         {subprocessType}
                       </Dropdown.Item>
                     )
@@ -162,8 +141,8 @@ export default class TechnologyTable extends Component<IProps, IState> {
             </ButtonToolbar>
           </div>
           <ReactTable
-            data={plant_with_properties}
-            columns={this.createColumns("Subprocess", "Type")}
+            data={subprocess_with_type}
+            columns={this._createColumns("Subprocess", "Type")}
             defaultPageSize={5}
             className="-striped -highlight technologyTable"
             showPageSizeOptions={false}

@@ -4,13 +4,50 @@ import axios from "axios";
 
 import "../index.css";
 
-
 interface IProps {
-  all_plants
-  current_plant
-  setParentState : any
+  all_plants;
+  current_plant;
+  setParentState(data: ISubprocessValues): void;
 }
 
+type Subprocess =
+  | "Intake"
+  | "Pre-Treatment"
+  | "Desalination"
+  | "Post-Treatment"
+  | "Concentrate Management";
+
+interface ImpactModel {
+  social: number;
+  environmental: number;
+  economic: number;
+}
+
+interface ISubprocessValues {
+  technologyCombinationValues?: {
+    [key in Subprocess]: ImpactModel;
+  };
+  currentlySelectedPlant?: {
+    title: string;
+    description: string;
+  };
+  plants?: any;
+}
+
+interface IState {
+  subprocesses: {
+    [key in Subprocess]: {
+      types: string[];
+      button: string;
+      currentType: string;
+    };
+  };
+}
+
+interface SubprocessWithType {
+  subprocess: Subprocess;
+  type: string;
+}
 
 const DESALINATION_PLANTS = "desalination-plants";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -122,10 +159,6 @@ export default class Map extends Component<IProps> {
   }
 
   render() {
-    return (
-        <div
-          ref={el => (this.mapContainer = el)}
-        />
-    );
+    return <div ref={el => (this.mapContainer = el)} />;
   }
 }

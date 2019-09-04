@@ -11,7 +11,7 @@ interface IProps {
 }
 
 export default class Detail extends Component<IProps> {
-  createColumns(...cols) {
+  _createColumns(...cols) {
     return cols.map(col => {
       return {
         Header: col,
@@ -20,7 +20,7 @@ export default class Detail extends Component<IProps> {
     });
   }
 
-  emptyTable() {
+  _emptyTable() {
     return (
       <div>
         <p>Click a desalination plant for details</p>
@@ -47,7 +47,7 @@ export default class Detail extends Component<IProps> {
         <div>
           <ReactTable
             data={plant_with_properties}
-            columns={this.createColumns("Property", "Value")}
+            columns={this._createColumns("Property", "Value")}
             defaultPageSize={10}
             className="-striped -highlight"
           />
@@ -63,7 +63,7 @@ export default class Detail extends Component<IProps> {
     const { current_plant } = this.props;
     const detail = current_plant.title
       ? this.fillTable(current_plant)
-      : this.emptyTable();
+      : this._emptyTable();
 
     return <div className="detailContainer">{detail}</div>;
   }

@@ -10,7 +10,7 @@ import {
   Button
 } from "react-bootstrap";
 
-function Navigation() {
+export default function Navigation() {
   return (
     <div>
       <Navbar bg="dark" variant="dark">
@@ -34,4 +34,3 @@ function Navigation() {
   );
 }
 
-export default Navigation;

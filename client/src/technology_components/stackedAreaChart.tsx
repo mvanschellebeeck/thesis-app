@@ -9,9 +9,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 
-interface IProps {
-  technologyCombinationValues
-}
+import { TechnologyImpactValues as IProps } from "../PlantModel";
 
 export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
   render() {
@@ -22,7 +20,6 @@ export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
         ...this.props.technologyCombinationValues[subprocess]
       });
     });
-    console.log(data);
 
     return (
       <ResponsiveContainer>

@@ -2,16 +2,14 @@ import React, { Component } from "react";
 import "../index.css";
 import mermaid from "mermaid";
 
-interface IProps {
-  setParentState
-}
+interface IProps {}
 
 interface IState {
-  graphDefinition
+  graphDefinition: string;
 }
 
 export default class FlowDiagram extends Component<IProps, IState> {
-  constructor(props) {
+  constructor(props: IProps) {
     super(props);
 
     mermaid.initialize({
