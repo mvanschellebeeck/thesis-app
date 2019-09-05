@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from 'react';
 import {
   AreaChart,
   Area,
@@ -6,10 +6,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
-} from "recharts";
+  ResponsiveContainer,
+} from 'recharts';
 
-import { TechnologyImpactValues as IProps } from "../PlantModel";
+import { TechnologyImpactValues as IProps } from '../Models';
 
 export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
   render() {
@@ -17,7 +17,7 @@ export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
     Object.keys(this.props.technologyCombinationValues).forEach(subprocess => {
       data.push({
         subprocess: subprocess,
-        ...this.props.technologyCombinationValues[subprocess]
+        ...this.props.technologyCombinationValues[subprocess],
       });
     });
 
@@ -31,7 +31,7 @@ export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
             top: 10,
             right: 30,
             left: 0,
-            bottom: 0
+            bottom: 0,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />

@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import "../index.css";
-import mermaid from "mermaid";
+import React, { Component } from 'react';
+import '../index.css';
+import mermaid from 'mermaid';
 
 interface IProps {}
 
@@ -14,8 +14,8 @@ export default class FlowDiagram extends Component<IProps, IState> {
 
     mermaid.initialize({
       mermaid: {
-        startOnLoad: true
-      }
+        startOnLoad: true,
+      },
     });
 
     this.state = {
@@ -24,7 +24,7 @@ export default class FlowDiagram extends Component<IProps, IState> {
       A(1. Intake)-->B(2. Pre Treatment)
       B-->C(Desalination)
       C-->D(Post Treatment)
-      C-->E(Concentrate Management)`
+      C-->E(Concentrate Management)`,
     };
   }
 

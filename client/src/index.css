@@ -1,6 +1,6 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
-button[id*="mydropdown"] {
+button[id*='mydropdown'] {
   margin: 5px;
 }
 

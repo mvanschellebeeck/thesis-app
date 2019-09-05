@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import ReactTable from "react-table";
-import "react-table/react-table.css";
-import "../index.css";
+import React, { Component } from 'react';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
+import '../index.css';
 
-import { constructTitle } from "../utils/utilFunctions";
-import { MapProps as DetailProps, PlantSummary } from "../PlantModel";
+import { constructTitle } from '../utils/utilFunctions';
+import { MapProps as DetailProps, PlantSummary } from '../Models';
 
 export default class Detail extends Component<DetailProps> {
   _createColumns(...cols: string[]) {
     return cols.map(col => {
       return {
         Header: col,
-        accessor: col.toLowerCase()
+        accessor: col.toLowerCase(),
       };
     });
   }
@@ -31,7 +31,7 @@ export default class Detail extends Component<DetailProps> {
     Object.keys(plant).forEach(property => {
       plant_with_properties.push({
         property: property,
-        value: plant[property]
+        value: plant[property],
       });
     });
     //console.log(plant_with_properties)
@@ -43,7 +43,7 @@ export default class Detail extends Component<DetailProps> {
         <div>
           <ReactTable
             data={plant_with_properties}
-            columns={this._createColumns("Property", "Value")}
+            columns={this._createColumns('Property', 'Value')}
             defaultPageSize={10}
             className="-striped -highlight"
           />

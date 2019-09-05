@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from 'react';
 import {
   Radar,
   RadarChart,
@@ -6,10 +6,10 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
   Legend,
-  ResponsiveContainer
-} from "recharts";
+  ResponsiveContainer,
+} from 'recharts';
 
-import { TechnologyImpactValues } from "../PlantModel";
+import { TechnologyImpactValues } from '../Models';
 
 export default class TechnologyRadarChart extends PureComponent<
   TechnologyImpactValues
@@ -20,7 +20,7 @@ export default class TechnologyRadarChart extends PureComponent<
     Object.keys(this.props.technologyCombinationValues).forEach(subprocess => {
       data.push({
         subprocess: subprocess,
-        ...this.props.technologyCombinationValues[subprocess]
+        ...this.props.technologyCombinationValues[subprocess],
       });
     });
     console.log(data);

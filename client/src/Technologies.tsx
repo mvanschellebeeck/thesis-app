@@ -1,13 +1,13 @@
-import React from "react";
-import "./index.css";
+import React from 'react';
+import './index.css';
 
-import { constructTitle } from "./utils/utilFunctions";
-import FlowDiagram from "./technology_components/flowDiagram";
-import TechnologyTable from "./technology_components/technologyTable";
-import TechnologyRadarChart from "./technology_components/radarChart";
-import TechnologyStackedAreaChart from "./technology_components/stackedAreaChart";
+import { constructTitle } from './utils/utilFunctions';
+import FlowDiagram from './technology_components/flowDiagram';
+import TechnologyTable from './technology_components/technologyTable';
+import TechnologyRadarChart from './technology_components/radarChart';
+import TechnologyStackedAreaChart from './technology_components/stackedAreaChart';
 
-import { TechnologyParentState, TechnologyImpactValues } from "./PlantModel";
+import { TechnologyParentState, TechnologyImpactValues } from './Models';
 
 export default class Technologies extends React.Component<
   TechnologyParentState,
@@ -15,32 +15,32 @@ export default class Technologies extends React.Component<
 > {
   state = {
     technologyCombinationValues: {
-      "Concentrate Management": {
+      'Concentrate Management': {
         social: 40,
         environmental: 60,
-        economic: 80
+        economic: 80,
       },
-      "Pre-Treatment": {
+      'Pre-Treatment': {
         social: 10,
         environmental: 40,
-        economic: 100
+        economic: 100,
       },
       Desalination: {
         social: 40,
         environmental: 30,
-        economic: 60
+        economic: 60,
       },
-      "Post-Treatment": {
+      'Post-Treatment': {
         social: 40,
         economic: 80,
-        environmental: 60
+        environmental: 60,
       },
       Intake: {
         social: 40,
         environmental: 30,
-        economic: 60
-      }
-    }
+        economic: 60,
+      },
+    },
   };
 
   setParentState = (dataFromChild: TechnologyImpactValues) => {
@@ -51,14 +51,14 @@ export default class Technologies extends React.Component<
   render() {
     return (
       <div className="technologyContainer">
-        {constructTitle("Selected Technologies")}
-        {constructTitle("Desalination Subprocceses")}
+        {constructTitle('Selected Technologies')}
+        {constructTitle('Desalination Subprocceses')}
         <TechnologyTable setParentState={this.setParentState} />
         <TechnologyRadarChart
           technologyCombinationValues={this.state.technologyCombinationValues}
         />
-        {constructTitle("The Desalination Process")}
-        {constructTitle("Chart 2")}
+        {constructTitle('The Desalination Process')}
+        {constructTitle('Chart 2')}
         <FlowDiagram />
         <TechnologyStackedAreaChart
           technologyCombinationValues={this.state.technologyCombinationValues}

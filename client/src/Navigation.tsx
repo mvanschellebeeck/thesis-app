@@ -1,14 +1,8 @@
-import React from "react";
-import "./index.css";
-import { LinkContainer } from "react-router-bootstrap";
+import React from 'react';
+import './index.css';
+import { LinkContainer } from 'react-router-bootstrap';
 
-import {
-  Nav,
-  Navbar,
-  Form,
-  FormControl,
-  Button
-} from "react-bootstrap";
+import { Nav, Navbar, Form, FormControl, Button } from 'react-bootstrap';
 
 export default function Navigation() {
   return (
@@ -33,4 +27,3 @@ export default function Navigation() {
     </div>
   );
 }
-

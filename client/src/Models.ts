@@ -1,17 +1,17 @@
 export type Subprocess =
-  | "Intake"
-  | "Pre-Treatment"
-  | "Desalination"
-  | "Post-Treatment"
-  | "Concentrate Management";
+  | 'Intake'
+  | 'Pre-Treatment'
+  | 'Desalination'
+  | 'Post-Treatment'
+  | 'Concentrate Management';
 
-type BasicImpactModel = {
+interface BasicImpactModel {
   social: number;
   environmental: number;
   economic: number;
 }
 
-export type TechnologyImpactValues = {
+export interface TechnologyImpactValues {
   technologyCombinationValues: {
     [key in Subprocess]: BasicImpactModel;
   };
@@ -25,7 +25,7 @@ export type SubprocessButtonState = {
     };
 }
 
-export type SubprocessWithType = {
+export interface SubprocessWithType {
   subprocess: Subprocess;
   type: string;
 }
@@ -34,7 +34,7 @@ export interface TechnologyParentState {
   setParentState(data: TechnologyImpactValues): any;
 }
 
-export type PlantSummary = {
+export interface PlantSummary {
   title: string,
   description: string
 }

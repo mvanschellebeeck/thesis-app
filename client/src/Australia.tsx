@@ -1,19 +1,19 @@
-import React from "react";
-import "./index.css";
-import { constructTitle } from "./utils/utilFunctions";
+import React from 'react';
+import './index.css';
+import { constructTitle } from './utils/utilFunctions';
 
-import Map from "./australia_components/map";
-import Detail from "./australia_components/detail";
+import Map from './australia_components/map';
+import Detail from './australia_components/detail';
 
-import { MapState, PlantSummary } from "./PlantModel";
+import { MapState, PlantSummary } from './Models';
 
 export default class Australia extends React.Component<{}, MapState> {
   state = {
     plants: {},
     currentlySelectedPlant: {
-      title: "",
-      description: ""
-    }
+      title: '',
+      description: '',
+    },
   };
 
   updateCurrentPlant = (current_plant: PlantSummary) => {
@@ -31,7 +31,7 @@ export default class Australia extends React.Component<{}, MapState> {
   render() {
     return (
       <div className="australiaContainer">
-        {constructTitle("Desalination in Australia")}
+        {constructTitle('Desalination in Australia')}
         <Detail
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}

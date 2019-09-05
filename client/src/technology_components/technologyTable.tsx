@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import "../index.css";
+import React, { Component } from 'react';
+import '../index.css';
 
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 
 import {
   Subprocess,
   SubprocessButtonState,
   SubprocessWithType,
   TechnologyParentState,
-  TechnologyImpactValues
-} from "../PlantModel";
+  TechnologyImpactValues,
+} from '../Models';
 
-import { Dropdown, DropdownButton, ButtonToolbar } from "react-bootstrap";
+import { Dropdown, DropdownButton, ButtonToolbar } from 'react-bootstrap';
 
 export default class TechnologyTable extends Component<
   TechnologyParentState,
@@ -20,43 +20,43 @@ export default class TechnologyTable extends Component<
 > {
   state = {
     Intake: {
-      types: ["Sub-surface", "Open-ocean", "Offshore"],
-      button: "primary",
-      currentType: "Sub-surface"
+      types: ['Sub-surface', 'Open-ocean', 'Offshore'],
+      button: 'primary',
+      currentType: 'Sub-surface',
     },
-    "Pre-Treatment": {
+    'Pre-Treatment': {
       types: [
-        "Sand Filtration & Candle Filtration",
-        "Ultra Filtration & Micro Filtration",
-        "Coagulation & Flocculation"
+        'Sand Filtration & Candle Filtration',
+        'Ultra Filtration & Micro Filtration',
+        'Coagulation & Flocculation',
       ],
-      button: "secondary",
-      currentType: "Sand Filtration & Candle Filtration"
+      button: 'secondary',
+      currentType: 'Sand Filtration & Candle Filtration',
     },
     Desalination: {
       types: [
-        "Reverse Osmosis (RO)",
-        "Multiple-Effect Distillation (MED)",
-        "Multi-stage Flash Distillation (MSF)",
-        "Electrodialysis (ED)"
+        'Reverse Osmosis (RO)',
+        'Multiple-Effect Distillation (MED)',
+        'Multi-stage Flash Distillation (MSF)',
+        'Electrodialysis (ED)',
       ],
-      button: "success",
-      currentType: "Reverse Osmosis (RO)"
+      button: 'success',
+      currentType: 'Reverse Osmosis (RO)',
     },
-    "Post-Treatment": {
-      types: ["Permeate disinfection", "Chloramine", "Irradiation"],
-      button: "warning",
-      currentType: "Permeate disinfection"
+    'Post-Treatment': {
+      types: ['Permeate disinfection', 'Chloramine', 'Irradiation'],
+      button: 'warning',
+      currentType: 'Permeate disinfection',
     },
-    "Concentrate Management": {
+    'Concentrate Management': {
       types: [
-        "Submarine Outfalls",
-        "Evaporation Ponds",
-        "Halophyte Irrigation"
+        'Submarine Outfalls',
+        'Evaporation Ponds',
+        'Halophyte Irrigation',
       ],
-      button: "danger",
-      currentType: "Submarine Outfalls"
-    }
+      button: 'danger',
+      currentType: 'Submarine Outfalls',
+    },
   };
 
   _getRandomInts = () => {
@@ -64,7 +64,7 @@ export default class TechnologyTable extends Component<
     return {
       social: Math.floor(Math.random() * 100),
       environmental: Math.floor(Math.random() * 100),
-      economic: Math.floor(Math.random() * 100)
+      economic: Math.floor(Math.random() * 100),
     };
   };
 
@@ -72,12 +72,12 @@ export default class TechnologyTable extends Component<
     // generate random for now
     const state_change: TechnologyImpactValues = {
       technologyCombinationValues: {
-        "Concentrate Management": this._getRandomInts(),
+        'Concentrate Management': this._getRandomInts(),
         Intake: this._getRandomInts(),
-        "Pre-Treatment": this._getRandomInts(),
+        'Pre-Treatment': this._getRandomInts(),
         Desalination: this._getRandomInts(),
-        "Post-Treatment": this._getRandomInts()
-      }
+        'Post-Treatment': this._getRandomInts(),
+      },
     };
 
     this.props.setParentState(state_change);
@@ -93,7 +93,7 @@ export default class TechnologyTable extends Component<
     return cols.map(col => {
       return {
         Header: col,
-        accessor: col.toLowerCase()
+        accessor: col.toLowerCase(),
       };
     });
   }
@@ -103,7 +103,7 @@ export default class TechnologyTable extends Component<
     Object.keys(this.state).forEach((subprocess: Subprocess) => {
       result.push({
         subprocess: subprocess,
-        type: this.state[subprocess].currentType
+        type: this.state[subprocess].currentType,
       });
     });
     return result;
@@ -134,7 +134,7 @@ export default class TechnologyTable extends Component<
                       >
                         {subprocessType}
                       </Dropdown.Item>
-                    )
+                    ),
                   )}
                 </DropdownButton>
               ))}
@@ -142,7 +142,7 @@ export default class TechnologyTable extends Component<
           </div>
           <ReactTable
             data={subprocess_with_type}
-            columns={this._createColumns("Subprocess", "Type")}
+            columns={this._createColumns('Subprocess', 'Type')}
             defaultPageSize={5}
             className="-striped -highlight technologyTable"
             showPageSizeOptions={false}

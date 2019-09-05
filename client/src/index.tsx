@@ -1,8 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import registerServiceWorker from "./registerServiceWorker";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import registerServiceWorker from './registerServiceWorker';
 
-import "./index.css";
+import './index.css';
 
 import Technologies from './Technologies';
 import Australia from './Australia';
@@ -13,7 +13,7 @@ import PageNotFound from './PageNotFound';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 export default class App extends React.Component {
-  componentDidMount() { }
+  componentDidMount() {}
 
   render() {
     return (
@@ -21,10 +21,10 @@ export default class App extends React.Component {
         <div>
           <Navigation />
           <Switch>
-            <Route path="/" exact component={Home}/>
-            <Route path="/technologies" component={Technologies}/>
-            <Route path="/australia" component={Australia}/>
-            <Route component={PageNotFound}/>
+            <Route path="/" exact component={Home} />
+            <Route path="/technologies" component={Technologies} />
+            <Route path="/australia" component={Australia} />
+            <Route component={PageNotFound} />
           </Switch>
         </div>
       </Router>
@@ -32,5 +32,5 @@ export default class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

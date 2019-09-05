@@ -1,0 +1,50 @@
+db.plantDetails.insertMany([
+  {
+    Name: "Sydney’s Desalination Plant - Kurnell",
+    Longitude: 151.205136,
+    Latitude: -34.02475,
+    "Year Commisioned": 2010,
+    Capacity: "90 Gigalitres / year",
+    Cost: "$1.89 billion",
+    "State Water Supply 2012-13 %": 17
+  },
+  {
+    Name: "Gold Coast Desalination Plant - Tugun",
+    Longitude: 153.497,
+    Latitude: -28.1571,
+    "Year Commisioned": 2009,
+    Capacity: "49 Gigalitres / year",
+    Cost: "$1.2 billion",
+    "State Water Supply 2012-13 %": 18
+  },
+  {
+    Name: "Victorian Desalination Plant",
+    Longitude: 145.526288,
+    Latitude: -38.588381,
+    "Year Commisioned": 2012,
+    Capacity: "150 Gigalitres / day",
+    "Extended Output": "550 megalitres / day",
+    Cost: "$3.5 billion",
+    "State Water Supply 2012-13 %": 37,
+    "Project Overview": "https://www.aquasure.com.au/uploads/files/ProjectOverview.pdf"
+  },
+  {
+    Name: "Adelaide Desalination Plant - Port Stanvac",
+    Longitude: 138.4796,
+    Latitude: -35.0929,
+    "Year Commisioned": 2012,
+    Capacity: "100 Gigalitres / year",
+    Cost: "$1.83 billion",
+    "State Water Supply 2012-13 %": 62
+  },
+  {
+    Name: "Perth Seawater Desalination Plant - Kwinana",
+    Longitude: 115.7736,
+    Latitude: -32.2043,
+    "Year Commisioned": 2006,
+    Capacity: "45 Gigalitres / year",
+    "Extended Output": "50 megalitres / day",
+    Cost: "$387 million",
+    "State Water Supply 2012-13 %": 14
+  }
+])
