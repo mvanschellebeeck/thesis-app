@@ -4,56 +4,28 @@ import axios from "axios";
 
 import "../index.css";
 
-interface IProps {
-  all_plants;
-  current_plant;
-  setParentState(data: ISubprocessValues): void;
+import {
+  MapState,
+  MapProps as MapPropsNoParent,
+  PlantSummary,
+  PlantAPI
+} from "../PlantModel";
+
+interface MapProps extends MapPropsNoParent {
+  updateCurrentPlant(dataFromChild: PlantSummary): void;
+  updatePlantData(dataFromChild: any): void;
 }
 
-type Subprocess =
-  | "Intake"
-  | "Pre-Treatment"
-  | "Desalination"
-  | "Post-Treatment"
-  | "Concentrate Management";
-
-interface ImpactModel {
-  social: number;
-  environmental: number;
-  economic: number;
-}
-
-interface ISubprocessValues {
-  technologyCombinationValues?: {
-    [key in Subprocess]: ImpactModel;
-  };
-  currentlySelectedPlant?: {
-    title: string;
-    description: string;
-  };
-  plants?: any;
-}
-
-interface IState {
-  subprocesses: {
-    [key in Subprocess]: {
-      types: string[];
-      button: string;
-      currentType: string;
-    };
-  };
-}
-
-interface SubprocessWithType {
-  subprocess: Subprocess;
-  type: string;
+interface ServerResponse {
+  data: PlantAPI;
 }
 
 const DESALINATION_PLANTS = "desalination-plants";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
 
-export default class Map extends Component<IProps> {
+export default class Map extends Component<MapProps, MapState> {
   mapContainer: any;
+
   plantsToMapFeatures() {
     const plants = [];
     const { all_plants } = this.props;
@@ -79,21 +51,17 @@ export default class Map extends Component<IProps> {
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
-      //    center: [133.7751, -25.2744],
+      center: [133.7751, -25.2744],
       bounds: [[109.338953078, -45.6345972634], [158.569469029, -8.6681857235]],
-      // maxBounds: [
-      //   [109.338953078, -45.6345972634],
-      //   [158.569469029, -8.6681857235]
-      // ],
       zoom: 3
     });
 
     map.on("load", () => {
       axios
         .get("/api/plants")
-        .then(plants => {
-          const state_change = { plants: plants.data };
-          this.props.setParentState(state_change);
+        .then((plants: ServerResponse) => {
+          this.props.updatePlantData(plants.data);
+
           const geojson_features = this.plantsToMapFeatures();
           map.addLayer({
             id: "desalination-plants",
@@ -149,12 +117,10 @@ export default class Map extends Component<IProps> {
     map.on("click", DESALINATION_PLANTS, e => {
       const selected_plant = e.features[0].properties;
       const state_change = {
-        currentlySelectedPlant: {
-          title: selected_plant.title,
-          description: selected_plant.description
-        }
+        title: selected_plant.title,
+        description: selected_plant.description
       };
-      this.props.setParentState(state_change);
+      this.props.updateCurrentPlant(state_change);
     });
   }
 

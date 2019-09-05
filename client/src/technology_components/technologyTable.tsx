@@ -8,14 +8,14 @@ import {
   Subprocess,
   SubprocessButtonState,
   SubprocessWithType,
-  ParentState,
+  TechnologyParentState,
   TechnologyImpactValues
 } from "../PlantModel";
 
 import { Dropdown, DropdownButton, ButtonToolbar } from "react-bootstrap";
 
 export default class TechnologyTable extends Component<
-  ParentState,
+  TechnologyParentState,
   SubprocessButtonState
 > {
   state = {

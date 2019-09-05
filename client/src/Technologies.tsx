@@ -7,10 +7,10 @@ import TechnologyTable from "./technology_components/technologyTable";
 import TechnologyRadarChart from "./technology_components/radarChart";
 import TechnologyStackedAreaChart from "./technology_components/stackedAreaChart";
 
-import { ParentState, TechnologyImpactValues } from "./PlantModel";
+import { TechnologyParentState, TechnologyImpactValues } from "./PlantModel";
 
 export default class Technologies extends React.Component<
-  ParentState,
+  TechnologyParentState,
   TechnologyImpactValues
 > {
   state = {

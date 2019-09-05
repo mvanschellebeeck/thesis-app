@@ -3,15 +3,11 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import "../index.css";
 
-import { constructTitle } from '../utils/utilFunctions';
+import { constructTitle } from "../utils/utilFunctions";
+import { MapProps as DetailProps, PlantSummary } from "../PlantModel";
 
-interface IProps {
-  all_plants
-  current_plant
-}
-
-export default class Detail extends Component<IProps> {
-  _createColumns(...cols) {
+export default class Detail extends Component<DetailProps> {
+  _createColumns(...cols: string[]) {
     return cols.map(col => {
       return {
         Header: col,
@@ -28,7 +24,7 @@ export default class Detail extends Component<IProps> {
     );
   }
 
-  fillTable(current_plant) {
+  fillTable(current_plant: PlantSummary) {
     const { all_plants } = this.props;
     const plant = all_plants[current_plant.title];
     const plant_with_properties = [];

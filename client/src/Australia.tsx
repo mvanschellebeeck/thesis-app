@@ -5,22 +5,27 @@ import { constructTitle } from "./utils/utilFunctions";
 import Map from "./australia_components/map";
 import Detail from "./australia_components/detail";
 
-interface IState {
-  plants: any;
-  currentlySelectedPlant: any;
-}
+import { MapState, PlantSummary } from "./PlantModel";
 
-interface IProps {}
-
-export default class Australia extends React.Component<IProps, IState> {
+export default class Australia extends React.Component<{}, MapState> {
   state = {
     plants: {},
-    currentlySelectedPlant: {}
+    currentlySelectedPlant: {
+      title: "",
+      description: ""
+    }
   };
 
-  setParentState = dataFromChild => {
-    // child is currently either Map or Detail
-    this.setState(dataFromChild);
+  updateCurrentPlant = (current_plant: PlantSummary) => {
+    let state = Object.assign({}, this.state);
+    state.currentlySelectedPlant = current_plant;
+    this.setState(state);
+  };
+
+  updatePlantData = (plant_data: any) => {
+    let state = Object.assign({}, this.state);
+    state.plants = plant_data;
+    this.setState(state);
   };
 
   render() {
@@ -32,7 +37,8 @@ export default class Australia extends React.Component<IProps, IState> {
           all_plants={this.state.plants}
         />
         <Map
-          setParentState={this.setParentState}
+          updateCurrentPlant={this.updateCurrentPlant}
+          updatePlantData={this.updatePlantData}
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         />

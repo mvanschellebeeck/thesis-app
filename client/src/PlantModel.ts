@@ -5,7 +5,7 @@ export type Subprocess =
   | "Post-Treatment"
   | "Concentrate Management";
 
-export type BasicImpactModel = {
+type BasicImpactModel = {
   social: number;
   environmental: number;
   economic: number;
@@ -30,9 +30,25 @@ export type SubprocessWithType = {
   type: string;
 }
 
-
-export type ParentState = {
+export interface TechnologyParentState {
   setParentState(data: TechnologyImpactValues): any;
 }
 
+export type PlantSummary = {
+  title: string,
+  description: string
+}
 
+export interface MapState {
+  currentlySelectedPlant: PlantSummary
+  plants: any;
+}
+
+export interface MapProps {
+  current_plant: PlantSummary
+  all_plants: any;
+}
+
+export interface PlantAPI {
+  plants: any
+}
