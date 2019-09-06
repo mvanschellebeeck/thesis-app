@@ -3,6 +3,9 @@ const app = express();
 const port = 5000;
 app.listen(port, () => `Server running on port ${port}`);
 
+import assert from 'assert';
+import mongoUtils from './db/mongoUtils';
+
 // temporary gross global variable stored on the server until some sort of database is used
 var global_plants = {};
 
@@ -88,3 +91,22 @@ app.get("/api/plants", async (req, res) => {
         res.json(global_plants);
     }
 });
+
+
+
+app.get("/mongodb/plants", async (req, res) => {
+  mongoUtils.connectToServer((err, client) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var db = mongoUtils.getRegionalDb();
+      db.collection('plantDetails')
+        .find({})
+        .toArray((err, docs) => {
+          assert.equal(err, null);
+          res.json(docs);
+        });
+    }
+  });  
+});
+

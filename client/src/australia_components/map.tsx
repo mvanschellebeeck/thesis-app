@@ -58,8 +58,21 @@ export default class Map extends Component<MapProps, MapState> {
 
     map.on('load', () => {
       axios
-        .get('/api/plants')
-        .then((plants: ServerResponse) => {
+        .get('/mongodb/plants', {
+          transformResponse: [].concat(
+            axios.defaults.transformResponse,
+            data => {
+              const newData = {};
+              data.forEach(item => {
+                const name = item['Name'];
+                delete item['_id'];
+                newData[name] = item;
+              });
+              return newData;
+            },
+          ),
+        })
+        .then(plants => {
           this.props.updatePlantData(plants.data);
 
           const geojson_features = this.plantsToMapFeatures();

@@ -8,8 +8,8 @@ module.exports = {
     MongoClient.connect(url, function(err, client) {
       if (err) console.error(err);
       _db_regional = client.db('regional');
-      _db_technologies = client.db('technologies');
-      console.log('finished creating client');
+      // _db_technologies = client.db('technologies');
+      console.log('MongoDB connection established.');
       return callback(err);
     });
   },
