@@ -72,7 +72,7 @@ function getPropertiesForPlant(plant, res) {
     }
 }
 
-app.get("/api/plants", async (req, res) => {
+app.get("/gsheets/plants", async (req, res) => {
     const sheet_name = "Desalination Plants";
     const params = req.query;
     // pass optional spreadsheetId as a GET parameter
@@ -93,20 +93,18 @@ app.get("/api/plants", async (req, res) => {
 });
 
 
+// start db connection
+mongoUtils.connectToServer((err) => {
+  if (err) console.error(err);
+});
 
-app.get("/mongodb/plants", async (req, res) => {
-  mongoUtils.connectToServer((err, client) => {
-    if (err) {
-      console.log(err);
-    } else {
-      var db = mongoUtils.getRegionalDb();
-      db.collection('plantDetails')
-        .find({})
-        .toArray((err, docs) => {
-          assert.equal(err, null);
-          res.json(docs);
-        });
-    }
-  });  
+app.get("/mongodb/plants", (req, res) => {
+  var db = mongoUtils.getRegionalDb();
+  db.collection('plantDetails')
+    .find({})
+    .toArray((err, docs) => {
+      assert.equal(err, null);
+      res.json(docs);
+    });
 });
 

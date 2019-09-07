@@ -6,10 +6,11 @@ var _db_regional, _db_technologies;
 module.exports = {
   connectToServer: callback => {
     MongoClient.connect(url, function(err, client) {
-      if (err) console.error(err);
-      _db_regional = client.db('regional');
-      // _db_technologies = client.db('technologies');
-      console.log('MongoDB connection established.');
+      if (!err) {
+        _db_regional = client.db('regional');
+        // _db_technologies = client.db('technologies');
+        console.log('MongoDB connection established.');
+      }
       return callback(err);
     });
   },
