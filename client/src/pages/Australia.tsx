@@ -1,11 +1,11 @@
 import React from 'react';
-import './index.css';
-import { constructTitle } from './utils/utilFunctions';
+import '../index.css';
+import { constructTitle } from '../utils/utilFunctions';
 
-import Map from './australia_components/map';
-import Detail from './australia_components/detail';
+import Map from '../components/map';
+import Detail from '../components/plantDetailTable';
 
-import { MapState, PlantSummary } from './Models';
+import { MapState, PlantSummary } from '../utils/Models';
 
 export default class Australia extends React.Component<{}, MapState> {
   state = {

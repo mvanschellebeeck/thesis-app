@@ -9,7 +9,7 @@ import {
   MapProps as MapPropsNoParent,
   PlantSummary,
   PlantAPI,
-} from '../Models';
+} from '../utils/Models';
 
 interface MapProps extends MapPropsNoParent {
   updateCurrentPlant(dataFromChild: PlantSummary): void;

@@ -1,13 +1,13 @@
 import React from 'react';
-import './index.css';
+import '../index.css';
 
-import { constructTitle } from './utils/utilFunctions';
-import FlowDiagram from './technology_components/flowDiagram';
-import TechnologyTable from './technology_components/technologyTable';
-import TechnologyRadarChart from './technology_components/radarChart';
-import TechnologyStackedAreaChart from './technology_components/stackedAreaChart';
+import { constructTitle } from '../utils/utilFunctions';
+import FlowDiagram from '../components/desalinationFlowDiagram';
+import TechnologyTable from '../components/technologyTable';
+import TechnologyRadarChart from '../components/radarChart';
+import TechnologyStackedAreaChart from '../components/stackedAreaChart';
 
-import { TechnologyParentState, TechnologyImpactValues } from './Models';
+import { TechnologyParentState, TechnologyImpactValues } from '../utils/Models';
 
 export default class Technologies extends React.Component<
   TechnologyParentState,

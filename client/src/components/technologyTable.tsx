@@ -10,7 +10,7 @@ import {
   SubprocessWithType,
   TechnologyParentState,
   TechnologyImpactValues,
-} from '../Models';
+} from '../utils/Models';
 
 import { Dropdown, DropdownButton, ButtonToolbar } from 'react-bootstrap';
 

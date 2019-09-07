@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-import { TechnologyImpactValues as IProps } from '../Models';
+import { TechnologyImpactValues as IProps } from '../utils/Models';
 
 export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
   render() {

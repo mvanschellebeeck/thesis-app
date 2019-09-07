@@ -4,7 +4,7 @@ import 'react-table/react-table.css';
 import '../index.css';
 
 import { constructTitle } from '../utils/utilFunctions';
-import { MapProps as DetailProps, PlantSummary } from '../Models';
+import { MapProps as DetailProps, PlantSummary } from '../utils/Models';
 
 export default class Detail extends Component<DetailProps> {
   _createColumns(...cols: string[]) {

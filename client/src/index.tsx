@@ -4,11 +4,11 @@ import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
-import Technologies from './Technologies';
-import Australia from './Australia';
-import Navigation from './Navigation';
-import Home from './Home';
-import PageNotFound from './PageNotFound';
+import Technologies from './pages/Technologies';
+import Australia from './pages/Australia';
+import Navigation from './pages/Navigation';
+import Home from './pages/Home';
+import PageNotFound from './pages/PageNotFound';
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 

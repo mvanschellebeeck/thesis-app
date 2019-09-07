@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-import { TechnologyImpactValues } from '../Models';
+import { TechnologyImpactValues } from '../utils/Models';
 
 export default class TechnologyRadarChart extends PureComponent<
   TechnologyImpactValues
