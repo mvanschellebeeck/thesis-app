@@ -6,6 +6,11 @@ import '../index.css';
 import { constructTitle } from '../utils/utilFunctions';
 import { MapProps as DetailProps, PlantSummary } from '../utils/Models';
 
+interface plantWithProperties {
+  property: string;
+  value: any;
+}
+
 export default class Detail extends Component<DetailProps> {
   _createColumns(...cols: string[]) {
     return cols.map(col => {
@@ -27,7 +32,7 @@ export default class Detail extends Component<DetailProps> {
   fillTable(current_plant: PlantSummary) {
     const { all_plants } = this.props;
     const plant = all_plants[current_plant.title];
-    const plant_with_properties = [];
+    const plant_with_properties: plantWithProperties[] = [];
     Object.keys(plant).forEach(property => {
       plant_with_properties.push({
         property: property,

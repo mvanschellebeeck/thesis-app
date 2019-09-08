@@ -13,11 +13,11 @@ import { TechnologyImpactValues as IProps } from '../utils/Models';
 
 export default class TechnologyStackedAreaChart extends PureComponent<IProps> {
   render() {
-    const data = [];
+    const data: any[] = [];
     Object.keys(this.props.technologyCombinationValues).forEach(subprocess => {
       data.push({
         subprocess: subprocess,
-        ...this.props.technologyCombinationValues[subprocess],
+        ...(this.props.technologyCombinationValues as any)[subprocess],
       });
     });
 

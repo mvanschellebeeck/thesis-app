@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl, { Point } from 'mapbox-gl';
 import axios from 'axios';
 
 import '../index.css';
@@ -21,13 +21,15 @@ interface ServerResponse {
 }
 
 const DESALINATION_PLANTS = 'desalination-plants';
-mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN;
+process.env.REACT_APP_MAPBOX_TOKEN === undefined
+  ? console.log('Please add REACT_APP_MAPBOX_TOKEN to .env file.')
+  : (mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || '');
 
 export default class Map extends Component<MapProps, MapState> {
   mapContainer: any;
 
   plantsToMapFeatures() {
-    const plants = [];
+    const plants: GeoJSON.Feature<GeoJSON.Geometry>[] = [];
     const { all_plants } = this.props;
     Object.keys(all_plants).forEach(plant => {
       const properties = all_plants[plant];
@@ -60,10 +62,11 @@ export default class Map extends Component<MapProps, MapState> {
       axios
         .get('/mongodb/plants', {
           transformResponse: [].concat(
+            // @ts-ignore: Cant fix this axios type
             axios.defaults.transformResponse,
-            data => {
-              const newData = {};
-              data.forEach(item => {
+            (data: any) => {
+              const newData = {} as any;
+              data.forEach((item: any) => {
                 const name = item['Name'];
                 delete item['_id'];
                 newData[name] = item;
@@ -109,15 +112,16 @@ export default class Map extends Component<MapProps, MapState> {
     map.on('mouseenter', DESALINATION_PLANTS, e => {
       map.getCanvas().style.cursor = 'pointer';
 
-      const coordinates = e.features[0].geometry.coordinates.slice();
-      const description = e.features[0].properties.description;
+      const geom: GeoJSON.Geometry = e.features![0].geometry as GeoJSON.Point;
+      const point = geom.coordinates.slice() as [number, number];
+      const description = e.features![0].properties!.description;
 
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+      while (Math.abs(e.lngLat.lng - point[0]) > 180) {
+        point[0] += e.lngLat.lng > point[0] ? 360 : -360;
       }
 
       popup
-        .setLngLat(coordinates)
+        .setLngLat(point)
         .setHTML(description)
         .addTo(map);
     });
@@ -128,10 +132,10 @@ export default class Map extends Component<MapProps, MapState> {
     });
 
     map.on('click', DESALINATION_PLANTS, e => {
-      const selected_plant = e.features[0].properties;
+      const selected_plant = e.features![0].properties;
       const state_change = {
-        title: selected_plant.title,
-        description: selected_plant.description,
+        title: selected_plant!.title,
+        description: selected_plant!.description,
       };
       this.props.updateCurrentPlant(state_change);
     });

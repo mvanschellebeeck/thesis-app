@@ -13,9 +13,7 @@ export default class FlowDiagram extends Component<IProps, IState> {
     super(props);
 
     mermaid.initialize({
-      mermaid: {
-        startOnLoad: true,
-      },
+      startOnLoad: true,
     });
 
     this.state = {

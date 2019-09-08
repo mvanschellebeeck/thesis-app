@@ -32,11 +32,8 @@ Formats:
 ## Quick Start
 
 ``` bash
-# Install dependencies for server
+# Install all dependencies (server and client) -- May need to change this due to react-scripts in client/ ??
 npm install
-
-# Install dependencies for client
-npm run client-install
 
 # Run the client & server with concurrently
 npm run dev

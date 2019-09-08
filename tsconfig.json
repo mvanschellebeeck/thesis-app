@@ -6,9 +6,11 @@
       "noImplicitReturns": true,
       "jsx": "react",
       "esModuleInterop": true,
-      "baseUrl": "."
+      "baseUrl": ".",
+      "noImplicitUseStrict": true
   },
   "include": [
-      "server.ts"
+      "server/server.ts",
+      "client/src/**/*"
   ]
 }

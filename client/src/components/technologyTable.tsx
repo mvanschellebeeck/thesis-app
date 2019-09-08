@@ -68,7 +68,7 @@ export default class TechnologyTable extends Component<
     };
   };
 
-  _handleClick = e => {
+  _handleClick = (e: any) => {
     // generate random for now
     const state_change: TechnologyImpactValues = {
       technologyCombinationValues: {
@@ -85,7 +85,7 @@ export default class TechnologyTable extends Component<
     // this is hacky, id and type aren't data fields
     const { id, type } = e.target;
     const state = this.state;
-    state[id].currentType = type;
+    state[id as Subprocess].currentType = type;
     this.setState(state);
   };
 
@@ -99,11 +99,11 @@ export default class TechnologyTable extends Component<
   }
 
   _getSubprocessesWithType(): SubprocessWithType[] {
-    const result = [];
-    Object.keys(this.state).forEach((subprocess: Subprocess) => {
+    const result: SubprocessWithType[] = [];
+    Object.keys(this.state).forEach(subprocess => {
       result.push({
-        subprocess: subprocess,
-        type: this.state[subprocess].currentType,
+        subprocess: subprocess as Subprocess,
+        type: this.state[subprocess as Subprocess].currentType,
       });
     });
     return result;
@@ -117,16 +117,16 @@ export default class TechnologyTable extends Component<
         <div>
           <div className="buttonToolbar">
             <ButtonToolbar>
-              {Object.keys(this.state).map((subprocess: Subprocess) => (
+              {Object.keys(this.state).map(subprocess => (
                 <DropdownButton
                   title={subprocess}
-                  variant={this.state[subprocess].button}
+                  variant={this.state[subprocess as Subprocess].button}
                   id={`mydropdown-${subprocess}`}
                   key={subprocess}
                   size="sm"
                 >
-                  {this.state[subprocess].types.map(
-                    (subprocessType: Subprocess) => (
+                  {this.state[subprocess as Subprocess].types.map(
+                    subprocessType => (
                       <Dropdown.Item
                         onClick={this._handleClick}
                         type={subprocessType}

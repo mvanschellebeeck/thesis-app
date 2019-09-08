@@ -5,7 +5,7 @@ export type Subprocess =
   | 'Post-Treatment'
   | 'Concentrate Management';
 
-interface BasicImpactModel {
+export interface BasicImpactModel {
   social: number;
   environmental: number;
   economic: number;

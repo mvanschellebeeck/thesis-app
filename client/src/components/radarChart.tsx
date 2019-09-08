@@ -15,12 +15,12 @@ export default class TechnologyRadarChart extends PureComponent<
   TechnologyImpactValues
 > {
   render() {
-    const data = [];
+    const data: any[] = [];
     console.log(this.props);
     Object.keys(this.props.technologyCombinationValues).forEach(subprocess => {
       data.push({
         subprocess: subprocess,
-        ...this.props.technologyCombinationValues[subprocess],
+        ...(this.props.technologyCombinationValues as any)[subprocess],
       });
     });
     console.log(data);
