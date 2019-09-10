@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import mapboxgl, { Point } from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
 
 import '../index.css';

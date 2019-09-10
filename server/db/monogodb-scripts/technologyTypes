@@ -1,0 +1,42 @@
+db.technologyTypes.insertMany([
+  {
+    Intake: {
+      types: ["Sub-surface", "Open-ocean", "Offshore"],
+      button: "primary",
+      currentType: "Sub-surface",
+    },
+    "Pre-Treatment": {
+      types: [
+        "Sand Filtration & Candle Filtration",
+        "Ultra Filtration & Micro Filtration",
+        "Coagulation & Flocculation",
+      ],
+      button: "secondary",
+      currentType: "Sand Filtration & Candle Filtration",
+    },
+    Desalination: {
+      types: [
+        "Reverse Osmosis (RO)",
+        "Multiple-Effect Distillation (MED)",
+        "Multi-stage Flash Distillation (MSF)",
+        "Electrodialysis (ED)",
+      ],
+      button: "success",
+      currentType: "Reverse Osmosis (RO)",
+    },
+    "Post-Treatment": {
+      types: ["Permeate disinfection", "Chloramine", "Irradiation"],
+      button: "warning",
+      currentType: "Permeate disinfection",
+    },
+    "Concentrate Management": {
+      types: [
+        "Submarine Outfalls",
+        "Evaporation Ponds",
+        "Halophyte Irrigation",
+      ],
+      button: "danger",
+      currentType: "Submarine Outfalls",
+    }
+  }
+])

@@ -98,6 +98,7 @@ mongoUtils.connectToServer((err) => {
   if (err) console.error(err);
 });
 
+
 app.get("/mongodb/plants", (req, res) => {
   var db = mongoUtils.getRegionalDb();
   db.collection('plantDetails')
@@ -107,4 +108,16 @@ app.get("/mongodb/plants", (req, res) => {
       res.json(docs);
     });
 });
+
+
+app.get("/mongodb/technologyTypes", (req, res) => {
+  var db = mongoUtils.getTechnologiesDb();
+  db.collection('technologyTypes')
+    .find({})
+    .toArray((err, docs) => {
+      assert.equal(err, null);
+      res.json(docs);
+    });
+});
+
 

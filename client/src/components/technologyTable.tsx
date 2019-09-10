@@ -3,6 +3,8 @@ import '../index.css';
 
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import axios from 'axios';
+import { Dropdown, DropdownButton, ButtonToolbar } from 'react-bootstrap';
 
 import {
   Subprocess,
@@ -12,52 +14,19 @@ import {
   TechnologyImpactValues,
 } from '../utils/Models';
 
-import { Dropdown, DropdownButton, ButtonToolbar } from 'react-bootstrap';
+type initialState = {};
 
 export default class TechnologyTable extends Component<
   TechnologyParentState,
   SubprocessButtonState
 > {
-  state = {
-    Intake: {
-      types: ['Sub-surface', 'Open-ocean', 'Offshore'],
-      button: 'primary',
-      currentType: 'Sub-surface',
-    },
-    'Pre-Treatment': {
-      types: [
-        'Sand Filtration & Candle Filtration',
-        'Ultra Filtration & Micro Filtration',
-        'Coagulation & Flocculation',
-      ],
-      button: 'secondary',
-      currentType: 'Sand Filtration & Candle Filtration',
-    },
-    Desalination: {
-      types: [
-        'Reverse Osmosis (RO)',
-        'Multiple-Effect Distillation (MED)',
-        'Multi-stage Flash Distillation (MSF)',
-        'Electrodialysis (ED)',
-      ],
-      button: 'success',
-      currentType: 'Reverse Osmosis (RO)',
-    },
-    'Post-Treatment': {
-      types: ['Permeate disinfection', 'Chloramine', 'Irradiation'],
-      button: 'warning',
-      currentType: 'Permeate disinfection',
-    },
-    'Concentrate Management': {
-      types: [
-        'Submarine Outfalls',
-        'Evaporation Ponds',
-        'Halophyte Irrigation',
-      ],
-      button: 'danger',
-      currentType: 'Submarine Outfalls',
-    },
-  };
+  state = {} as SubprocessButtonState;
+
+  componentDidMount() {
+    axios.get('/mongodb/technologyTypes').then(plants => {
+      this.setState(plants.data[0] as SubprocessButtonState);
+    });
+  }
 
   _getRandomInts = () => {
     // 0 - 100
