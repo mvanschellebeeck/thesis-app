@@ -14,8 +14,6 @@ import {
   TechnologyImpactValues,
 } from '../utils/Models';
 
-type initialState = {};
-
 export default class TechnologyTable extends Component<
   TechnologyParentState,
   SubprocessButtonState
@@ -24,7 +22,9 @@ export default class TechnologyTable extends Component<
 
   componentDidMount() {
     axios.get('/mongodb/technologyTypes').then(plants => {
-      this.setState(plants.data[0] as SubprocessButtonState);
+      const data = plants.data[0];
+      delete data['_id'];
+      this.setState(data as SubprocessButtonState);
     });
   }
 
@@ -78,45 +78,56 @@ export default class TechnologyTable extends Component<
     return result;
   }
 
-  render() {
-    const subprocess_with_type: SubprocessWithType[] = this._getSubprocessesWithType();
+  _getButtonDropdowns() {
+    return (
+      <div className="buttonToolbar">
+        <ButtonToolbar>
+          {Object.keys(this.state).map(subprocess => (
+            <DropdownButton
+              title={subprocess}
+              variant={this.state[subprocess as Subprocess].button}
+              id={`mydropdown-${subprocess}`}
+              key={subprocess}
+              size="sm"
+            >
+              {this.state[subprocess as Subprocess].types.map(
+                subprocessType => (
+                  <Dropdown.Item
+                    onClick={this._handleClick}
+                    type={subprocessType}
+                    id={subprocess}
+                  >
+                    {subprocessType}
+                  </Dropdown.Item>
+                ),
+              )}
+            </DropdownButton>
+          ))}
+        </ButtonToolbar>
+      </div>
+    );
+  }
 
+  _getTable() {
+    const subprocess_with_type: SubprocessWithType[] = this._getSubprocessesWithType();
+    return (
+      <ReactTable
+        data={subprocess_with_type}
+        columns={this._createColumns('Subprocess', 'Type')}
+        defaultPageSize={5}
+        className="-striped -highlight technologyTable"
+        showPageSizeOptions={false}
+        showPagination={false}
+      />
+    );
+  }
+
+  render() {
     return (
       <div>
         <div>
-          <div className="buttonToolbar">
-            <ButtonToolbar>
-              {Object.keys(this.state).map(subprocess => (
-                <DropdownButton
-                  title={subprocess}
-                  variant={this.state[subprocess as Subprocess].button}
-                  id={`mydropdown-${subprocess}`}
-                  key={subprocess}
-                  size="sm"
-                >
-                  {this.state[subprocess as Subprocess].types.map(
-                    subprocessType => (
-                      <Dropdown.Item
-                        onClick={this._handleClick}
-                        type={subprocessType}
-                        id={subprocess}
-                      >
-                        {subprocessType}
-                      </Dropdown.Item>
-                    ),
-                  )}
-                </DropdownButton>
-              ))}
-            </ButtonToolbar>
-          </div>
-          <ReactTable
-            data={subprocess_with_type}
-            columns={this._createColumns('Subprocess', 'Type')}
-            defaultPageSize={5}
-            className="-striped -highlight technologyTable"
-            showPageSizeOptions={false}
-            showPagination={false}
-          />
+          {this._getButtonDropdowns()}
+          {this._getTable()}
           <br />
         </div>
       </div>
