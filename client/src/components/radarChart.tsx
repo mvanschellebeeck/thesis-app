@@ -1,11 +1,11 @@
 import React, { PureComponent } from 'react';
 import {
+  Legend,
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
   Radar,
   RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Legend,
   ResponsiveContainer,
 } from 'recharts';
 
@@ -16,14 +16,12 @@ export default class TechnologyRadarChart extends PureComponent<
 > {
   render() {
     const data: any[] = [];
-    console.log(this.props);
     Object.keys(this.props.technologyCombinationValues).forEach(subprocess => {
       data.push({
-        subprocess: subprocess,
+        subprocess,
         ...(this.props.technologyCombinationValues as any)[subprocess],
       });
     });
-    console.log(data);
 
     return (
       <ResponsiveContainer>

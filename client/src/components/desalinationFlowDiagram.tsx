@@ -1,15 +1,13 @@
+import mermaid from 'mermaid';
 import React, { Component } from 'react';
 import '../index.css';
-import mermaid from 'mermaid';
-
-interface IProps {}
 
 interface IState {
   graphDefinition: string;
 }
 
-export default class FlowDiagram extends Component<IProps, IState> {
-  constructor(props: IProps) {
+export default class FlowDiagram extends Component<{}, IState> {
+  constructor(props: {}) {
     super(props);
 
     mermaid.initialize({

@@ -1,17 +1,17 @@
+import axios from 'axios';
 import React, { Component } from 'react';
-import '../index.css';
-
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import axios from 'axios';
-import { Dropdown, DropdownButton, ButtonToolbar } from 'react-bootstrap';
+import '../index.css';
+
+import { ButtonToolbar, Dropdown, DropdownButton } from 'react-bootstrap';
 
 import {
   Subprocess,
   SubprocessButtonState,
   SubprocessWithType,
-  TechnologyParentState,
   TechnologyImpactValues,
+  TechnologyParentState,
 } from '../utils/Models';
 
 export default class TechnologyTable extends Component<
@@ -23,33 +23,33 @@ export default class TechnologyTable extends Component<
   componentDidMount() {
     axios.get('/mongodb/technologyTypes').then(plants => {
       const data = plants.data[0];
-      delete data['_id'];
+      delete data._id;
       this.setState(data as SubprocessButtonState);
     });
   }
 
-  _getRandomInts = () => {
+  getRandomInts = () => {
     // 0 - 100
     return {
-      social: Math.floor(Math.random() * 100),
-      environmental: Math.floor(Math.random() * 100),
       economic: Math.floor(Math.random() * 100),
+      environmental: Math.floor(Math.random() * 100),
+      social: Math.floor(Math.random() * 100),
     };
   };
 
-  _handleClick = (e: any) => {
+  handleClick = (e: any) => {
     // generate random for now
-    const state_change: TechnologyImpactValues = {
+    const stateChange: TechnologyImpactValues = {
       technologyCombinationValues: {
-        'Concentrate Management': this._getRandomInts(),
-        Intake: this._getRandomInts(),
-        'Pre-Treatment': this._getRandomInts(),
-        Desalination: this._getRandomInts(),
-        'Post-Treatment': this._getRandomInts(),
+        'Concentrate Management': this.getRandomInts(),
+        Intake: this.getRandomInts(),
+        'Pre-Treatment': this.getRandomInts(),
+        Desalination: this.getRandomInts(),
+        'Post-Treatment': this.getRandomInts(),
       },
     };
 
-    this.props.setParentState(state_change);
+    this.props.setParentState(stateChange);
 
     // this is hacky, id and type aren't data fields
     const { id, type } = e.target;
@@ -93,7 +93,7 @@ export default class TechnologyTable extends Component<
               {this.state[subprocess as Subprocess].types.map(
                 subprocessType => (
                   <Dropdown.Item
-                    onClick={this._handleClick}
+                    onClick={this.handleClick}
                     type={subprocessType}
                     id={subprocess}
                   >
@@ -109,10 +109,10 @@ export default class TechnologyTable extends Component<
   }
 
   _getTable() {
-    const subprocess_with_type: SubprocessWithType[] = this._getSubprocessesWithType();
+    const subprocessWithType: SubprocessWithType[] = this._getSubprocessesWithType();
     return (
       <ReactTable
-        data={subprocess_with_type}
+        data={subprocessWithType}
         columns={this._createColumns('Subprocess', 'Type')}
         defaultPageSize={5}
         className="-striped -highlight technologyTable"

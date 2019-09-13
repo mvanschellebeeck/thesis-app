@@ -1,1 +1,9 @@
-{}
+{
+  "extends": "tslint:recommended",
+  "rules": {
+    "quotemark": [true, "single", "jsx-double"],
+    "member-access": false,
+    "arrow-parens": false,
+    "semicolon": false
+  }
+}

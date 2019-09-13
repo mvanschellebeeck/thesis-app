@@ -1,8 +1,8 @@
 import React from 'react';
 import '../index.css';
-import { LinkContainer } from 'react-router-bootstrap';
 
-import { Nav, Navbar, Form, FormControl, Button } from 'react-bootstrap';
+import { Button, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
 export default function Navigation() {
   return (

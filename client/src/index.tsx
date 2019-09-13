@@ -4,17 +4,15 @@ import registerServiceWorker from './registerServiceWorker';
 
 import './index.css';
 
-import Technologies from './pages/Technologies';
 import Australia from './pages/Australia';
-import Navigation from './pages/Navigation';
 import Home from './pages/Home';
+import Navigation from './pages/Navigation';
 import PageNotFound from './pages/PageNotFound';
+import Technologies from './pages/Technologies';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 export default class App extends React.Component {
-  componentDidMount() {}
-
   render() {
     return (
       <Router>

@@ -1,22 +1,21 @@
-import React, { Component } from 'react';
-import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
-
+import mapboxgl from 'mapbox-gl';
+import React, { Component } from 'react';
 import '../index.css';
 
 import {
-  MapState,
   MapProps as MapPropsNoParent,
-  PlantSummary,
+  MapState,
   PlantAPI,
+  PlantSummary,
 } from '../utils/Models';
 
-interface MapProps extends MapPropsNoParent {
+interface IMapProps extends MapPropsNoParent {
   updateCurrentPlant(dataFromChild: PlantSummary): void;
   updatePlantData(dataFromChild: any): void;
 }
 
-interface ServerResponse {
+interface IServerResponse {
   data: PlantAPI;
 }
 
@@ -25,25 +24,25 @@ process.env.REACT_APP_MAPBOX_TOKEN === undefined
   ? console.log('Please add REACT_APP_MAPBOX_TOKEN to .env file.')
   : (mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || '');
 
-export default class Map extends Component<MapProps, MapState> {
+export default class Map extends Component<IMapProps, MapState> {
   mapContainer: any;
 
   plantsToMapFeatures() {
-    const plants: GeoJSON.Feature<GeoJSON.Geometry>[] = [];
+    const plants: Array<GeoJSON.Feature<GeoJSON.Geometry>> = [];
     const { all_plants } = this.props;
     Object.keys(all_plants).forEach(plant => {
       const properties = all_plants[plant];
       plants.push({
-        type: 'Feature',
         geometry: {
-          type: 'Point',
           coordinates: [properties.Longitude, properties.Latitude],
+          type: 'Point',
         },
         properties: {
-          title: plant,
           description: properties.Description || 'No description provided',
           icon: 'monument',
+          title: plant,
         },
+        type: 'Feature',
       });
     });
     return plants;
@@ -51,10 +50,10 @@ export default class Map extends Component<MapProps, MapState> {
 
   componentDidMount() {
     const map = new mapboxgl.Map({
+      bounds: [[109.338953078, -45.6345972634], [158.569469029, -8.6681857235]],
+      center: [133.7751, -25.2744],
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [133.7751, -25.2744],
-      bounds: [[109.338953078, -45.6345972634], [158.569469029, -8.6681857235]],
       zoom: 3,
     });
 
@@ -67,8 +66,8 @@ export default class Map extends Component<MapProps, MapState> {
             (data: any) => {
               const newData = {} as any;
               data.forEach((item: any) => {
-                const name = item['Name'];
-                delete item['_id'];
+                const name = item.Name;
+                delete item._id;
                 newData[name] = item;
               });
               return newData;
@@ -78,25 +77,25 @@ export default class Map extends Component<MapProps, MapState> {
         .then(plants => {
           this.props.updatePlantData(plants.data);
 
-          const geojson_features = this.plantsToMapFeatures();
+          const geoJsonFeatures = this.plantsToMapFeatures();
           map.addLayer({
             id: 'desalination-plants',
-            type: 'symbol',
-            source: {
-              type: 'geojson',
-              data: {
-                type: 'FeatureCollection',
-                features: geojson_features,
-              },
-            },
             layout: {
+              'icon-allow-overlap': true,
               'icon-image': '{icon}-15',
+              'text-anchor': 'top',
               'text-field': '{title}',
               'text-offset': [0, 0.6],
-              'text-anchor': 'top',
               'text-size': 14,
-              'icon-allow-overlap': true,
             },
+            source: {
+              data: {
+                features: geoJsonFeatures,
+                type: 'FeatureCollection',
+              },
+              type: 'geojson',
+            },
+            type: 'symbol',
           });
         })
         .catch(e => {
@@ -132,12 +131,12 @@ export default class Map extends Component<MapProps, MapState> {
     });
 
     map.on('click', DESALINATION_PLANTS, e => {
-      const selected_plant = e.features![0].properties;
-      const state_change = {
-        title: selected_plant!.title,
-        description: selected_plant!.description,
+      const selectedPlant = e.features![0].properties;
+      const stateChange = {
+        description: selectedPlant!.description,
+        title: selectedPlant!.title,
       };
-      this.props.updateCurrentPlant(state_change);
+      this.props.updateCurrentPlant(stateChange);
     });
   }
 

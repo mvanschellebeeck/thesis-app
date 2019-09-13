@@ -1,13 +1,12 @@
 import React from 'react';
 import '../index.css';
 
-import { constructTitle } from '../utils/utilFunctions';
 import FlowDiagram from '../components/desalinationFlowDiagram';
-import TechnologyTable from '../components/technologyTable';
 import TechnologyRadarChart from '../components/radarChart';
 import TechnologyStackedAreaChart from '../components/stackedAreaChart';
-
-import { TechnologyParentState, TechnologyImpactValues } from '../utils/Models';
+import TechnologyTable from '../components/technologyTable';
+import { TechnologyImpactValues, TechnologyParentState } from '../utils/Models';
+import { constructTitle } from '../utils/utilFunctions';
 
 export default class Technologies extends React.Component<
   TechnologyParentState,
@@ -16,29 +15,29 @@ export default class Technologies extends React.Component<
   state = {
     technologyCombinationValues: {
       'Concentrate Management': {
-        social: 40,
-        environmental: 60,
         economic: 80,
+        environmental: 60,
+        social: 40,
       },
       'Pre-Treatment': {
-        social: 10,
-        environmental: 40,
         economic: 100,
+        environmental: 40,
+        social: 10,
       },
       Desalination: {
-        social: 40,
-        environmental: 30,
         economic: 60,
+        environmental: 30,
+        social: 40,
       },
       'Post-Treatment': {
-        social: 40,
         economic: 80,
         environmental: 60,
+        social: 40,
       },
       Intake: {
-        social: 40,
-        environmental: 30,
         economic: 60,
+        environmental: 30,
+        social: 40,
       },
     },
   };

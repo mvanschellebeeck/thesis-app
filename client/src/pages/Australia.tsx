@@ -9,22 +9,22 @@ import { MapState, PlantSummary } from '../utils/Models';
 
 export default class Australia extends React.Component<{}, MapState> {
   state = {
-    plants: {},
     currentlySelectedPlant: {
-      title: '',
       description: '',
+      title: '',
     },
+    plants: {},
   };
 
-  updateCurrentPlant = (current_plant: PlantSummary) => {
+  updateCurrentPlant = (currentPlant: PlantSummary) => {
     this.setState({
-      currentlySelectedPlant: current_plant,
+      currentlySelectedPlant: currentPlant,
     });
   };
 
-  updatePlantData = (plant_data: any) => {
+  updatePlantData = (plantData: any) => {
     this.setState({
-      plants: plant_data,
+      plants: plantData,
     });
   };
 
