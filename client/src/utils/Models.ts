@@ -17,12 +17,14 @@ export interface TechnologyImpactValues {
   };
 }
 
+export type testType = {
+    types: string[];
+    button: string;
+    currentType: string;
+}
+
 export type SubprocessButtonState = {
-    [key in Subprocess]: {
-      types: string[];
-      button: string;
-      currentType: string;
-    };
+    [key in Subprocess]: testType
 }
 
 export interface SubprocessWithType {

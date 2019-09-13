@@ -17,15 +17,15 @@ export default class Australia extends React.Component<{}, MapState> {
   };
 
   updateCurrentPlant = (current_plant: PlantSummary) => {
-    let state = Object.assign({}, this.state);
-    state.currentlySelectedPlant = current_plant;
-    this.setState(state);
+    this.setState({
+      currentlySelectedPlant: current_plant,
+    });
   };
 
   updatePlantData = (plant_data: any) => {
-    let state = Object.assign({}, this.state);
-    state.plants = plant_data;
-    this.setState(state);
+    this.setState({
+      plants: plant_data,
+    });
   };
 
   render() {

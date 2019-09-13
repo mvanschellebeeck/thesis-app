@@ -1,10 +1,10 @@
 import express from "express";
+import assert from 'assert';
+import connectToMongo from './db/mongo'
+
 const app = express();
 const port = 5000;
 app.listen(port, () => `Server running on port ${port}`);
-
-import assert from 'assert';
-import mongoUtils from './db/mongoUtils';
 
 // temporary gross global variable stored on the server until some sort of database is used
 var global_plants = {};
@@ -12,6 +12,12 @@ var global_plants = {};
 var GoogleSpreadsheet = require("google-spreadsheet");
 const defaultSpreadsheetId = "1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U";
 var doc = new GoogleSpreadsheet(defaultSpreadsheetId);
+
+//start db connection
+var db;
+connectToMongo((_db) => {
+  db = _db;
+});
 
 interface Sheet {
   sheet: string,
@@ -93,15 +99,9 @@ app.get("/gsheets/plants", async (req, res) => {
 });
 
 
-// start db connection
-mongoUtils.connectToServer((err) => {
-  if (err) console.error(err);
-});
-
-
 app.get("/mongodb/plants", (req, res) => {
-  var db = mongoUtils.getRegionalDb();
-  db.collection('plantDetails')
+  // var db = myMongo.getRegionalDb();
+  db.regional.collection('plantDetails')
     .find({})
     .toArray((err, docs) => {
       assert.equal(err, null);
@@ -111,8 +111,8 @@ app.get("/mongodb/plants", (req, res) => {
 
 
 app.get("/mongodb/technologyTypes", (req, res) => {
-  var db = mongoUtils.getTechnologiesDb();
-  db.collection('technologyTypes')
+  // var db = myMongo.getTechnologiesDb();
+  db.technologies.collection('technologyTypes')
     .find({})
     .toArray((err, docs) => {
       assert.equal(err, null);

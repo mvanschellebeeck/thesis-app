@@ -22,5 +22,6 @@ yarn-error.log*
 
 # mongo utils
 mongodb-scripts/
+config.js
 
 
