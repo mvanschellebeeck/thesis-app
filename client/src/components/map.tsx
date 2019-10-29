@@ -78,6 +78,7 @@ export default class Map extends Component<IMapProps, MapState> {
           this.props.updatePlantData(plants.data);
 
           const geoJsonFeatures = this.plantsToMapFeatures();
+          console.log(geoJsonFeatures);
           map.addLayer({
             id: 'desalination-plants',
             layout: {
@@ -93,6 +94,49 @@ export default class Map extends Component<IMapProps, MapState> {
                 features: geoJsonFeatures,
                 type: 'FeatureCollection',
               },
+              type: 'geojson',
+            },
+            type: 'symbol',
+          });
+
+          map.addLayer({
+            id: 'murray-darling-basin',
+            type: 'fill',
+            source: {
+              type: 'geojson',
+              data: '../mdb_boundary.geojson',
+            },
+            paint: {
+              'fill-color': 'rgba(200, 100, 240, 0.4)',
+              'fill-outline-color': 'rgba(200, 100, 240, 1)',
+            },
+          });
+
+          map.addLayer({
+            id: 'great-artisan-basin',
+            type: 'fill',
+            source: {
+              type: 'geojson',
+              data: '../gab_boundary.geojson',
+            },
+            paint: {
+              'fill-color': 'rgba(250, 100, 0, 0.4)',
+              'fill-outline-color': 'rgba(100, 200, 240, 1)',
+            },
+          });
+
+          map.addLayer({
+            id: 'bores',
+            layout: {
+              'icon-allow-overlap': true,
+              'icon-image': '{icon}',
+              'text-anchor': 'top',
+              'text-field': '{id}',
+              'text-offset': [0, 0.6],
+              'text-size': 14,
+            },
+            source: {
+              data: '../map1.geojson',
               type: 'geojson',
             },
             type: 'symbol',

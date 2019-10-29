@@ -25,3 +25,5 @@ mongodb-scripts/
 config.js
 
 
+# geojson files
+*.geojson

@@ -6,7 +6,7 @@ button[id*='mydropdown'] {
 
 #x {
   width: 100%;
-  height: 620px;
+  height: 820px;
 }
 
 /* Common titles across website */
@@ -59,8 +59,8 @@ button[id*='mydropdown'] {
 .australiaContainer {
   width: 100%;
   display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: 50px 500px;
+  grid-template-columns: 70% 30%;
+  grid-template-rows: 50px 120px 500px;
 }
 
 

@@ -30,6 +30,9 @@
     "typescript": "^3.6.2"
   },
   "dependencies": {
+    "@material-ui/core": "^4.5.2",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.30",
     "@types/jest": "^24.0.18",
     "@types/mapbox-gl": "^0.54.3",
     "@types/mermaid": "^8.2.0",

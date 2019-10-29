@@ -5,7 +5,9 @@ import { constructTitle } from '../utils/utilFunctions';
 import Map from '../components/map';
 import Detail from '../components/plantDetailTable';
 
+// import groupedButtons from '../components/groupedButtons';
 import { MapState, PlantSummary } from '../utils/Models';
+import GroupedButton from '../components/groupedButtons';
 
 export default class Australia extends React.Component<{}, MapState> {
   state = {
@@ -32,10 +34,13 @@ export default class Australia extends React.Component<{}, MapState> {
     return (
       <div className="australiaContainer">
         {constructTitle('Desalination in Australia')}
+
         <Detail
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         />
+        <GroupedButton />
+        <div></div>
         <Map
           updateCurrentPlant={this.updateCurrentPlant}
           updatePlantData={this.updatePlantData}
