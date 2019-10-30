@@ -1,5 +1,5 @@
-import express from "express";
 import assert from 'assert';
+import express from "express";
 import connectToMongo from './db/mongo'
 
 const app = express();
@@ -7,14 +7,14 @@ const port = 5000;
 app.listen(port, () => `Server running on port ${port}`);
 
 // temporary gross global variable stored on the server until some sort of database is used
-var global_plants = {};
+let globalPlants = {};
 
-var GoogleSpreadsheet = require("google-spreadsheet");
-const defaultSpreadsheetId = "1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U";
-var doc = new GoogleSpreadsheet(defaultSpreadsheetId);
+const GoogleSpreadsheet = require('google-spreadsheet');
+const defaultSpreadsheetId = '1ByXhNNXjQsJmthiWwn4cfgId32rdCRY6L6rH0R-B20U';
+let doc = new GoogleSpreadsheet(defaultSpreadsheetId);
 
-//start db connection
-var db;
+// start db connection
+let db;
 connectToMongo((_db) => {
   db = _db;
 });
@@ -29,15 +29,15 @@ interface SheetRow {
   value: any
 }
 
-function getSheet(sheet_name : string) {
+function getSheet(sheet_name: string) {
     return new Promise<Sheet>((resolve, reject) => {
         doc.getInfo((err, info) => {
-            if (err) reject(err);
+            if (err) { reject(err); }
             const { worksheets, last_updated } = info;
             const worksheet = worksheets.find(sheet => sheet.title === sheet_name);
             resolve({
-                sheet: worksheet, 
-                last_updated: last_updated
+                sheet: worksheet,
+                last_updated
             });
         })
     });
@@ -45,17 +45,17 @@ function getSheet(sheet_name : string) {
 
 function getPlantProperties(sheet) {
     return new Promise((resolve, reject) => {
-        sheet.getRows({ offset: 1}, (err, rows : SheetRow[]) => {
-            if (err) reject(err);
+        sheet.getRows({ offset: 1}, (err, rows: SheetRow[]) => {
+            if (err) { reject(err); }
             const plants = {};
-            var curr = '';
-            rows.forEach((row : SheetRow, index : number) => {
+            let curr = '';
+            rows.forEach((row: SheetRow, index: number) => {
                 const { property, value } = row;
-                if (property === "Name") {
+                if (property === 'Name') {
                     curr = value;
                     plants[value] = {};
-                } 
-                else plants[curr][property] = value;
+                }
+                else { plants[curr][property] = value; }
             });
             resolve(plants)
         });
@@ -63,23 +63,21 @@ function getPlantProperties(sheet) {
 }
 
 function getPropertiesForPlant(plant, res) {
-    if (!Object.keys(global_plants).length) {
+    if (!Object.keys(globalPlants).length) {
         return res.status(400).json({
-            error: 'global_plants variable not loaded yet'
+            error: 'global_plants variable not loaded yet',
         });
-    }
-    else if (!(plant in global_plants)) { 
+    } else if (!(plant in globalPlants)) {
         return res.status(400).json({
-            error: `${plant} is not a valid plant name`
+            error: `${plant} is not a valid plant name`,
         });
-    }
-    else {
-        res.json(global_plants[plant]);
+    } else {
+        res.json(globalPlants[plant]);
     }
 }
 
-app.get("/gsheets/plants", async (req, res) => {
-    const sheet_name = "Desalination Plants";
+app.get('/gsheets/plants', async (req, res) => {
+    const sheet_name = 'Desalination Plants';
     const params = req.query;
     // pass optional spreadsheetId as a GET parameter
     if ('spreadsheetId' in params && params.spreadsheetId != defaultSpreadsheetId) {
@@ -89,17 +87,15 @@ app.get("/gsheets/plants", async (req, res) => {
     if ('plant' in params) {
         const plant = params.plant;
         getPropertiesForPlant(plant, res);
-    }
-    else {
+    } else {
         // this should be in try catch for proper error passing
         const { sheet, last_updated } = await getSheet(sheet_name);
-        global_plants = await getPlantProperties(sheet);
-        res.json(global_plants);
+        globalPlants = await getPlantProperties(sheet);
+        res.json(globalPlants);
     }
 });
 
-
-app.get("/mongodb/plants", (req, res) => {
+app.get('/mongodb/plants', (req, res) => {
   // var db = myMongo.getRegionalDb();
   db.regional.collection('plantDetails')
     .find({})
@@ -109,8 +105,7 @@ app.get("/mongodb/plants", (req, res) => {
     });
 });
 
-
-app.get("/mongodb/technologyTypes", (req, res) => {
+app.get('/mongodb/technologyTypes', (req, res) => {
   // var db = myMongo.getTechnologiesDb();
   db.technologies.collection('technologyTypes')
     .find({})
@@ -119,5 +114,4 @@ app.get("/mongodb/technologyTypes", (req, res) => {
       res.json(docs);
     });
 });
-
 
