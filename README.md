@@ -32,8 +32,24 @@ Formats:
 ## Quick Start
 
 ``` bash
-# Install all dependencies (server and client) -- May need to change this due to react-scripts in client/ ??
+# start docker (Install docker)
+docker pull mongo:4.2.1
+docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:4.0.4
+# insert values
+docker exec -it mongodb bash
+mongo
+use regional
+db.createCollection("plantDetails")
+
+use technologies
+db.createCollection("technologyTypes")
+# run scripts
+
 npm install
+npm install client # eventually remove react-scripts dependency
+
+# get mapbox api key
+# add REACT_APP_MAPBOX_TOKEN="..." to client/.env
 
 # Run the client & server with concurrently
 npm run dev
