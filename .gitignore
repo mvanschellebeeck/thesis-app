@@ -21,6 +21,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # data processing work
-/data
+data/*
+!data/thesis-work.ipynb
 
 *.geojson
