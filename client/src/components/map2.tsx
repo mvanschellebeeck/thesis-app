@@ -2,6 +2,12 @@ import mapboxgl from 'mapbox-gl';
 import React, { Component } from 'react';
 import '../index.css';
 
+const GAB_ID = 'great-artesian-basin';
+const MDB_ID = 'murray-darling-basin';
+
+//const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
+const states = ['NSW'];
+
 process.env.REACT_APP_MAPBOX_TOKEN === undefined
   ? console.log('Please add REACT_APP_MAPBOX_TOKEN to .env file.')
   : (mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || '');
@@ -19,11 +25,11 @@ export default class Map extends Component {
 
     map.on('load', () => {
          map.addLayer({
-            id: 'murray-darling-basin',
+            id: MDB_ID,
             type: 'fill',
             source: {
               type: 'geojson',
-              data: '../mdb_boundary.geojson',
+              data: '../geojson/aquifers/murray_darling_basin.geojson',
             },
             paint: {
               'fill-color': 'rgba(200, 100, 240, 0.4)',
@@ -32,41 +38,34 @@ export default class Map extends Component {
           });
 
           map.addLayer({
-            id: 'great-artisan-basin',
+            id: GAB_ID,
             type: 'fill',
             source: {
               type: 'geojson',
-              data: '../gab_boundary.geojson',
+              data: '../geojson/aquifers/great_artesian_basin.geojson',
             },
             paint: {
               'fill-color': 'rgba(250, 100, 0, 0.4)',
-              'fill-outline-color': 'rgba(100, 200, 240, 1)',
+              'fill-outline-color': 'rgba(250, 100, 0, 1)',
             },
           });
 
-          map.addLayer({
-            id: 'bores',
-            layout: {
+          states.map(state => {
+            map.addLayer({
+             id: `${state}_bores`,
+             layout: {
               'icon-allow-overlap': true,
               'icon-image': '{icon}',
-              'text-anchor': 'top',
-//              'text-field': '{id}',
-              'text-offset': [0, 0.6],
-              'text-size': 14,
             },
             source: {
-              data: '../map1.geojson',
+              data: `../geojson/bores/${state}_simple.geojson`,
               type: 'geojson',
             },
             type: 'symbol',
-          });
-        })
-
-    const popup = new mapboxgl.Popup({
-      closeButton: false,
-      closeOnClick: false,
-    });
-  }
+            });
+          })
+       })
+ }
 
   render() {
     return <div className="inlandMapContainer" ref={el => (this.mapContainer = el)} />;

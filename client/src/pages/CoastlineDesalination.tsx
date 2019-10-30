@@ -7,7 +7,6 @@ import Detail from '../components/plantDetailTable';
 
 // import groupedButtons from '../components/groupedButtons';
 import { MapState, PlantSummary } from '../utils/Models';
-import GroupedButton from '../components/groupedButtons';
 
 export default class CoastlineDesalination extends React.Component<{}, MapState> {
   state = {

@@ -23,7 +23,7 @@ function GroupedButton() {
 
   return (
     // add a legend from https://docs.mapbox.com/mapbox-gl-js/example/updating-choropleth/
-    <div>
+    <div style={{ padding: 10}}>
     <Grid container>
         <Grid container spacing={1} direction="column" alignItems="center">
         <Grid item>
