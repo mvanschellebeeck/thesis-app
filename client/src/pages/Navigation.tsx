@@ -15,8 +15,11 @@ export default function Navigation() {
           <LinkContainer to="/technologies">
             <Nav.Link>Technologies</Nav.Link>
           </LinkContainer>
-          <LinkContainer to="/australia">
-            <Nav.Link>Regional Analysis</Nav.Link>
+          <LinkContainer to="/coastline-desalination">
+            <Nav.Link>Coastline Desalination</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/inland-desalination">
+            <Nav.Link>Inland Desalination</Nav.Link>
           </LinkContainer>
         </Nav>
         <Form inline>

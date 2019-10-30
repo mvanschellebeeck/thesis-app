@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import { withStyles} from '@material-ui/core/styles';
 import { ToggleButton } from '@material-ui/lab';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -13,6 +12,12 @@ const styles = theme => ({
 
 
 function GroupedButton() {
+  const states = ['NSW', 'QLD', 'SA', 'NT', 'WA', 'VIC'];
+  const tdsValues = {
+    'low': 'TDS < 1000',
+    'med': '1000 < TDS < 2000',
+    'high': 'TDS > 2000'
+  }
   const [region, setRegion] = useState('NSW');
   const [tds, setTds] = useState('med');
 
@@ -22,20 +27,17 @@ function GroupedButton() {
     <Grid container>
         <Grid container spacing={1} direction="column" alignItems="center">
         <Grid item>
-            <ToggleButtonGroup fullWidth aria-label="full width" value={region}>
-              <ToggleButton value="NSW">NSW</ToggleButton>
-              <ToggleButton value="QLD">QLD</ToggleButton>
-              <ToggleButton value="SA">SA</ToggleButton>
-              <ToggleButton value="NT">NT</ToggleButton>
-              <ToggleButton value="WA">WA</ToggleButton>
-              <ToggleButton value="VIC">VIC</ToggleButton>
+            <ToggleButtonGroup aria-label="full width" value={region}>
+              {states.map(state => {
+                return <ToggleButton key={state} value={state} onClick={() => setRegion(state)}>{state}</ToggleButton>
+              })}
             </ToggleButtonGroup>
           </Grid>
           <Grid item>
-            <ToggleButtonGroup fullWidth aria-label="full width" value={tds}>
-              <ToggleButton value="low">TDS &lt; 1000</ToggleButton>
-              <ToggleButton value="med">1000 &lt; TDS &lt; 2000 </ToggleButton>
-              <ToggleButton value="high">TDS &gt; 2000</ToggleButton>
+            <ToggleButtonGroup aria-label="full width" value={tds}>
+              {Object.keys(tdsValues).map(key => {
+                return <ToggleButton key={key} value={key} onClick={() => setTds(key)}>{tdsValues[key]}</ToggleButton>
+              })}
             </ToggleButtonGroup>
           </Grid>
         </Grid>

@@ -9,7 +9,7 @@ import Detail from '../components/plantDetailTable';
 import { MapState, PlantSummary } from '../utils/Models';
 import GroupedButton from '../components/groupedButtons';
 
-export default class Australia extends React.Component<{}, MapState> {
+export default class CoastlineDesalination extends React.Component<{}, MapState> {
   state = {
     currentlySelectedPlant: {
       description: '',
@@ -39,8 +39,6 @@ export default class Australia extends React.Component<{}, MapState> {
           current_plant={this.state.currentlySelectedPlant}
           all_plants={this.state.plants}
         />
-        <GroupedButton />
-        <div></div>
         <Map
           updateCurrentPlant={this.updateCurrentPlant}
           updatePlantData={this.updatePlantData}
