@@ -63,20 +63,6 @@ button[id*='mydropdown'] {
   grid-template-rows: 50px 500px;
 }
 
-.inland {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 100%;
-  grid-template-rows: 100px 800px;
-}
-
-.inlandMapContainer {
-  margin-top: 1%;
-  margin-left: 2%;
-  margin-right: 2%;
-  float: left;
-  height: 600px;
-}
 
 .detailContainer {
   padding: 5px;

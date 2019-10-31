@@ -4,14 +4,7 @@ import { withStyles} from '@material-ui/core/styles';
 import { ToggleButton } from '@material-ui/lab';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-const styles = theme => ({
-  buttonPadding: {    
-    padding: '10px'
-  },
-});
-
-
-function GroupedButton() {
+export default function FilterButtons() {
   const states = ['NSW', 'QLD', 'SA', 'NT', 'WA', 'VIC'];
   const tdsValues = {
     'low': 'TDS < 1000',
@@ -23,7 +16,7 @@ function GroupedButton() {
 
   return (
     // add a legend from https://docs.mapbox.com/mapbox-gl-js/example/updating-choropleth/
-    <div style={{ padding: 10}}>
+    <div id="filter">
     <Grid container>
         <Grid container spacing={1} direction="column" alignItems="center">
         <Grid item>
@@ -46,4 +39,3 @@ function GroupedButton() {
   );
 }
 
-export default withStyles(styles)(GroupedButton);
