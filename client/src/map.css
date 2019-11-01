@@ -11,7 +11,7 @@
   grid-column: 1/5;
 }
 
-#map_legend {
+#map_options {
   grid-row: 1/2;
   grid-column: 1/2;
   z-index: 1;
@@ -24,7 +24,7 @@
   margin: auto;
 }
 
-#map_legend2 {
+#map_legend {
   grid-row: 1/2;
   grid-column: 4/5;
   z-index: 1;

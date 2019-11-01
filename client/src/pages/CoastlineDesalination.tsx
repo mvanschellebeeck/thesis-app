@@ -2,7 +2,7 @@ import React from 'react';
 import '../index.css';
 import { constructTitle } from '../utils/utilFunctions';
 
-import Map from '../components/map';
+import Map from '../components/coastlineMap';
 import Detail from '../components/plantDetailTable';
 
 // import groupedButtons from '../components/groupedButtons';

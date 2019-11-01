@@ -1,5 +1,3 @@
-// constants.js
-
 type Dictionary = { [index: string]: {'id': string, 'colour_fill': string, 'colour_outline': string} }
 export const AQUIFERS : Dictionary = {
     'Murray Darling Basin': {
@@ -13,8 +11,3 @@ export const AQUIFERS : Dictionary = {
         'colour_outline': 'rgba(250, 100, 0, 1)'
     }
 }
-
-// // test1.js
-// import * as constants from './constants';
-// console.log(constants.ALABAMA);
-// console.log(constants.ALASKA);
