@@ -37,6 +37,13 @@
   margin: auto;
 }
 
+#map_controls {
+  grid-row: 1/2;
+  grid-column: 2/4;
+  z-index: 1;
+  text-align: center;
+}
+
 #filter {
   grid-row: 1/4;
   grid-column: 5/6;

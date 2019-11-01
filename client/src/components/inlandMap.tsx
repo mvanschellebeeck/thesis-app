@@ -34,11 +34,10 @@ const MapGL = ReactMapboxGl({
 });
 
 export default function Map(props: any) {
-  const { aquiferVisibility, boreVisibility } = props;
-  const [fitBounds, setFitBounds] = useState([[109.338953078, -45.6345972634], [158.569469029, -8.6681857235]]);
+  const { aquiferVisibility, boreVisibility, mapZoom, fitBounds, mapCenter } = props;
   const [drawer, toggleDrawer] = useState(false);
   const [currentBore, setCurrentBore] = useState(null);
-  const states = ['NSW'];
+  const states = ['NA'] as string[];
  // const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
   
   const onClickBore = (evt: any) => {
@@ -49,13 +48,14 @@ export default function Map(props: any) {
     toggleDrawer(!drawer);
   };
 
-  //const states = ['NSW'];
   return (
     <Fragment>
       <MapGL
         style="mapbox://styles/mapbox/streets-v11"
         fitBounds={fitBounds as [[number, number], [number, number]]}
         className="map"
+        zoom={mapZoom}
+        center={mapCenter}
       >
         <Fragment>
           {Object.keys(AQUIFERS).map(aquifer =>
