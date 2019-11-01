@@ -24,4 +24,4 @@ yarn-error.log*
 data/*
 !data/thesis-work.ipynb
 
-*.geojson
+client/public/geojson/bores/*
