@@ -1,11 +1,8 @@
 import React from 'react';
 import '../index.css';
 import { constructTitle } from '../utils/utilFunctions';
-
 import Map from '../components/coastlineMap';
 import Detail from '../components/plantDetailTable';
-
-// import groupedButtons from '../components/groupedButtons';
 import { MapState, PlantSummary } from '../utils/Models';
 
 export default class CoastlineDesalination extends React.Component<{}, MapState> {

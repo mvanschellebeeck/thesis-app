@@ -32,11 +32,18 @@ const styles = {
   }
 }
 
-export default function MapLegend() {
+export default function MapLegend(props) {
+  const { aquiferVisibility } = props;
   const aquifers = Object.keys(AQUIFERS);
 
+  const mapStyle = {
+    marginRight: 9,
+    marginTop: 9,
+    display: aquiferVisibility ? 'block' : 'none'
+  }
+
   return (
-    <div id="map_legend" style={{ marginRight: 9, marginTop: 9 }}>
+    <div id="map_legend" style={mapStyle}>
       <Grid container spacing={2}>
         <Grid item>
           <div>

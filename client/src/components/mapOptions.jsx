@@ -19,19 +19,27 @@ const styles = {
 }
 
 function FormLabel(props) {
-  const { name, defaultChecked } = props;
+  const { name, defaultChecked, setAquiferVisibility } = props;
   const [checked, setChecked] = useState(defaultChecked);
+
+  function handleChecked(){
+    if (name == 'Show Aquifers') {
+      setAquiferVisibility(!checked);
+    }
+    setChecked(!checked);
+  }
  
   return (
     <FormControlLabel 
-      control={<Switch checked={checked} onChange={() => setChecked(!checked)} value={name} />}  
+      control={<Switch checked={checked} onChange={() => handleChecked() } value={name} />}  
       label={<Typography style={styles.form}>{name}</Typography>}
       style={styles.formLabel}
     />
   )
 }
 
-export default function MapOptions() {
+export default function MapOptions(props) {
+  const { aquiferVisibility, setAquiferVisibility } = props;
   const options = ['Show Aquifers', 'Show Bores', 'Other Options'];
   
   return (
@@ -39,7 +47,7 @@ export default function MapOptions() {
     <FormControl component="fieldset" style={styles.form} >
       <FormGroup>
         {options.map(option => 
-          <FormLabel name={option} defaultChecked={option == 'Other Options' ? false : true}/>
+          <FormLabel name={option} defaultChecked={true} setAquiferVisibility={setAquiferVisibility} aquiferVisibility={aquiferVisibility}/>
         )}
      </FormGroup>
     </FormControl>
