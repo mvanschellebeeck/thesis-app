@@ -8,11 +8,12 @@ import '../index.css';
 export default function InlandDeslination() {
 
   const [aquiferVisibility, setAquiferVisibility] = useState(true);
+  const [boreVisibility, setBoreVisibility] = useState(true);
 
   return (
     <div className="inland">
-      <Map aquiferVisibility={aquiferVisibility}/>
-      <MapOptions setAquiferVisibility={setAquiferVisibility}/>
+      <Map aquiferVisibility={aquiferVisibility} boreVisibility={boreVisibility}/>
+      <MapOptions setAquiferVisibility={setAquiferVisibility} setBoreVisibility={setBoreVisibility}/>
       <MapLegend aquiferVisibility={aquiferVisibility}/>
       <FilterButtons />
     </div>

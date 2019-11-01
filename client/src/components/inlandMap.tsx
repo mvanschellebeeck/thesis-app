@@ -9,7 +9,7 @@ const MapGL = ReactMapboxGl({
 });
 
 export default function Map(props : any) {
-  const { aquiferVisibility } = props;
+  const { aquiferVisibility, boreVisibility } = props;
 
   const [fitBounds, setFitBounds] = useState([[109.338953078, -45.6345972634], [158.569469029, -8.6681857235]]);
   const styles = {
@@ -35,9 +35,8 @@ export default function Map(props : any) {
     }
   }
 
-
-  //const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
-  const states = ['NSW'];
+  const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
+  //const states = ['NSW'];
   return (
    <MapGL
       style="mapbox://styles/mapbox/streets-v11"
@@ -76,6 +75,7 @@ export default function Map(props : any) {
               filter={['has', 'point_count']}
               paint={styles.clusterPaintProps}
               type='circle'
+              layout={{'visibility': boreVisibility ? 'visible' : 'none'}}
             />
             <Layer
               key={`${state}_2`}
@@ -86,6 +86,7 @@ export default function Map(props : any) {
                 'text-field': '{point_count_abbreviated}',
                 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
                 'text-size': 12,
+                'visibility': boreVisibility ? 'visible' : 'none'
               }}
             />
             <Layer
@@ -96,6 +97,7 @@ export default function Map(props : any) {
               layout={{
                 'icon-allow-overlap': true,
                 'icon-image': '{icon}',
+                'visibility': boreVisibility ? 'visible' : 'none'
               }}
             />
           </Fragment>

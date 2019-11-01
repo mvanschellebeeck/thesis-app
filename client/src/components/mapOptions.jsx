@@ -19,12 +19,14 @@ const styles = {
 }
 
 function FormLabel(props) {
-  const { name, defaultChecked, setAquiferVisibility } = props;
+  const { name, defaultChecked, setAquiferVisibility, setBoreVisibility } = props;
   const [checked, setChecked] = useState(defaultChecked);
 
   function handleChecked(){
     if (name == 'Show Aquifers') {
       setAquiferVisibility(!checked);
+    } else if (name == 'Show Bores') {
+      setBoreVisibility(!checked);
     }
     setChecked(!checked);
   }
@@ -39,7 +41,7 @@ function FormLabel(props) {
 }
 
 export default function MapOptions(props) {
-  const { aquiferVisibility, setAquiferVisibility } = props;
+  const { setAquiferVisibility, setBoreVisibility } = props;
   const options = ['Show Aquifers', 'Show Bores', 'Other Options'];
   
   return (
@@ -47,7 +49,7 @@ export default function MapOptions(props) {
     <FormControl component="fieldset" style={styles.form} >
       <FormGroup>
         {options.map(option => 
-          <FormLabel name={option} defaultChecked={true} setAquiferVisibility={setAquiferVisibility} aquiferVisibility={aquiferVisibility}/>
+          <FormLabel name={option} defaultChecked={true} setAquiferVisibility={setAquiferVisibility} setBoreVisibility={setBoreVisibility}/>
         )}
      </FormGroup>
     </FormControl>
