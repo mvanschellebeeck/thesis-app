@@ -23,9 +23,9 @@ function FormLabel(props) {
   const [checked, setChecked] = useState(defaultChecked);
 
   function handleChecked(){
-    if (name == 'Show Aquifers') {
+    if (name === 'Show Aquifers') {
       setAquiferVisibility(!checked);
-    } else if (name == 'Show Bores') {
+    } else if (name === 'Show Bores') {
       setBoreVisibility(!checked);
     }
     setChecked(!checked);

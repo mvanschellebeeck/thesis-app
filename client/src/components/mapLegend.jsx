@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, Grid, List, ListItem, ListItemText, Icon, ListItemIcon } from '@material-ui/core';
 import { AQUIFERS } from '../constants';
+import '../map.css';
 
 function AquiferIcon(props) {
   const { fill, outline } = props;

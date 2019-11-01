@@ -3,7 +3,7 @@ import FilterButtons from '../components/filterButtons';
 import Map from '../components/inlandMap';
 import MapOptions from '../components/mapOptions';
 import MapLegend from '../components/mapLegend';
-import '../index.css';
+import '../map.css';
 
 export default function InlandDeslination() {
 
