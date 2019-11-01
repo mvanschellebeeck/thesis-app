@@ -7,16 +7,16 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Icon from '@material-ui/core/Icon';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { AQUIFERS } from '../constants';
 
 function CustomIcon(props) {
+  const { fill, outline } = props;
+
   return(<Icon>
-    <img src="./icon-water-blue.svg" width="30" height="30"></img>
+    <svg version="1.1" width="30" height="20" viewBox="0 0 16 9">
+      <rect x="0" y="2" width="8" height="4" fill={fill} stroke={outline} stroke-width="0.3" rx="1" ry="1"/>
+    </svg>
   </Icon>);
-  // return (
-  //   <SvgIcon {...props}>
-  //     <path d="M102 0L103 1L104 0L105 1" />
-  //   </SvgIcon>
-  // );
 }
 
 export default function MapLegend() {
@@ -26,7 +26,8 @@ export default function MapLegend() {
     antoine: true,
   });
 
-  const aquifers = ['Murray Darling Basin', 'Great Artesian Basin', 'Some Other Aquifer'];
+
+  const aquifers = Object.keys(AQUIFERS);
 
   const handleChange = name => event => {
     setState({ ...state, [name]: event.target.checked });
@@ -39,12 +40,12 @@ export default function MapLegend() {
           <div>
             <List>
               {aquifers.map(aquifer => 
-              <ListItem key={aquifer}style={{ marginBottom: 0, paddingTop: 4, paddingBottom: 4}}>
-                  <ListItemIcon style={{minWidth: 0, marginRight: 5}}>
-                    <CustomIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={<Typography style={{fontSize: '14px'}}>{aquifer}</Typography>} />
-                </ListItem>)}
+                  <ListItem key={aquifer}style={{ marginBottom: 0, paddingTop: 4, paddingBottom: 4}}>
+                      <ListItemIcon style={{minWidth: 0, marginRight: 5}}>
+                      <CustomIcon fill={AQUIFERS[aquifer].colour_fill} outline={AQUIFERS[aquifer].colour_outline}/>
+                    </ListItemIcon>
+                    <ListItemText primary={<Typography style={{fontSize: '14px'}}>{aquifer}</Typography>} />
+                  </ListItem>)}
             </List>
           </div>
         </Grid>

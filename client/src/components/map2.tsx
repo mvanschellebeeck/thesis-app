@@ -1,12 +1,13 @@
 import mapboxgl from 'mapbox-gl';
 import React, { Component } from 'react';
 import '../map2.css';
+import { AQUIFERS } from '../constants';
 
 const GAB_ID = 'great-artesian-basin';
 const MDB_ID = 'murray-darling-basin';
 
-const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
-// const states = ['NSW'];
+//const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
+ const states = ['a'];
 
 process.env.REACT_APP_MAPBOX_TOKEN === undefined
   ? console.error('Please add REACT_APP_MAPBOX_TOKEN to .env file.')
@@ -23,32 +24,24 @@ export default class Map extends Component {
       zoom: 3,
     });
 
-    map.on('load', () => {
-      map.addLayer({
-        id: MDB_ID,
-        type: 'fill',
-        source: {
-          type: 'geojson',
-          data: '../geojson/aquifers/murray_darling_basin.geojson',
-        },
-        paint: {
-          'fill-color': 'rgba(200, 100, 240, 0.4)',
-          'fill-outline-color': 'rgba(200, 100, 240, 1)',
-        },
-      });
 
-      map.addLayer({
-        id: GAB_ID,
-        type: 'fill',
-        source: {
-          type: 'geojson',
-          data: '../geojson/aquifers/great_artesian_basin.geojson',
-        },
-        paint: {
-          'fill-color': 'rgba(250, 100, 0, 0.4)',
-          'fill-outline-color': 'rgba(250, 100, 0, 1)',
-        },
+
+    map.on('load', () => {
+      Object.keys(AQUIFERS).map(aquifer => {
+        map.addLayer({
+          id: AQUIFERS[aquifer].id,
+          type: 'fill',
+          source: {
+            type: 'geojson',
+            data: `../geojson/aquifers/${AQUIFERS[aquifer].id}.geojson`,
+          },
+          paint: {
+            'fill-color': AQUIFERS[aquifer].colour_fill,
+            'fill-outline-color': AQUIFERS[aquifer].colour_outline
+          }
+        });
       });
+    
 
       states.map(state => {
         map.addSource(`${state}_bores`, {
