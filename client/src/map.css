@@ -44,6 +44,13 @@
   text-align: center;
 }
 
+#bore_table {
+  grid-row: 3/4;
+  grid-column: 2/4;
+  margin: auto;
+  z-index: 1;
+}
+
 #filter {
   grid-row: 1/4;
   grid-column: 5/6;

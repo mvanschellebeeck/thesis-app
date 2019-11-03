@@ -1,32 +1,33 @@
 import React, { Fragment, useState } from 'react';
 import '../map.css';
 import { AQUIFERS } from '../constants';
-import ReactMapboxGl, { Layer, GeoJSONLayer } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, GeoJSONLayer, Popup } from 'react-mapbox-gl';
 import Drawer from '@material-ui/core/Drawer';
 import StickyHeadtable from './table'
+import { Fade } from '@material-ui/core';
 
 const styles = {
-    clusterPaintProps: {
-      'circle-color': [
-        'step',
-        ['get', 'point_count'],
-        '#51bbd6',
-        100,
-        '#f1f075',
-        750,
-        '#f28cb1',
-      ],
-      'circle-radius': [
-        'step',
-        ['get', 'point_count'],
-        20,
-        100,
-        30,
-        750,
-        40,
-      ],
-    }
+  clusterPaintProps: {
+    'circle-color': [
+      'step',
+      ['get', 'point_count'],
+      '#51bbd6',
+      100,
+      '#f1f075',
+      750,
+      '#f28cb1',
+    ],
+    'circle-radius': [
+      'step',
+      ['get', 'point_count'],
+      20,
+      100,
+      30,
+      750,
+      40,
+    ],
   }
+}
 
 
 const MapGL = ReactMapboxGl({
@@ -34,20 +35,38 @@ const MapGL = ReactMapboxGl({
 });
 
 export default function Map(props: any) {
+  const defaultCenter = [133.7751, -25.2744]; //long-lat
   const { aquiferVisibility, boreVisibility, mapZoom, fitBounds, mapCenter } = props;
   const [drawer, toggleDrawer] = useState(false);
-  const [currentBore, setCurrentBore] = useState(null);
-  const states = ['NA'] as string[];
- // const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
-  
+  const [currentBore, setCurrentBore] = useState('');
+  const [currentBoreLong, setCurrentBoreLong] = useState(defaultCenter[0]);
+  const [currentBoreLat, setCurrentBoreLat] = useState(defaultCenter[1]);
+  //const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
+  const states = ['NSW'];
+
+
+
+  const onBoreHover = (evt: any) => {
+    console.log(evt);
+  }
   const onClickBore = (evt: any) => {
     evt.preventDefault();
-    console.log(evt.features);
+    const coordinates = evt.features[0].geometry.coordinates.slice();
+    console.log(coordinates);
     const { id } = evt.features[0].properties;
     setCurrentBore(id);
+    setCurrentBoreLong(coordinates[0]);
+    setCurrentBoreLat(coordinates[1]);
     toggleDrawer(!drawer);
   };
 
+  const renderPopup = () => {
+    if (currentBore != '') return ( <Popup coordinates={[currentBoreLong, currentBoreLat]}> 
+      <h1>{currentBore}</h1>
+    </Popup>);
+
+    return '';
+  }
   return (
     <Fragment>
       <MapGL
@@ -56,7 +75,11 @@ export default function Map(props: any) {
         className="map"
         zoom={mapZoom}
         center={mapCenter}
-      >
+      > 
+      {renderPopup()}
+        {/* <Popup coordinates={[currentBoreLong, currentBoreLat]}> 
+          <h1>{currentBore}</h1>
+        </Popup> */}
         <Fragment>
           {Object.keys(AQUIFERS).map(aquifer =>
             <GeoJSONLayer
@@ -67,6 +90,9 @@ export default function Map(props: any) {
                 'fill-outline-color': AQUIFERS[aquifer].colour_outline
               }}
               fillLayout={{ 'visibility': aquiferVisibility ? 'visible' : 'none' }}
+              sourceOptions={{
+                tolerance: 1
+              }}
             />
           )}
 
@@ -75,11 +101,13 @@ export default function Map(props: any) {
               <GeoJSONLayer
                 key={state}
                 id={`${state}_bores`}
-                data={`../geojson/bores/${state}_simple.geojson`}
+                data={`https://mvanschellebeeck.github.io/geojson-server/${state}_simple.geojson`}
                 sourceOptions={{
                   cluster: true,
                   clusterMaxZoom: 14,
-                  clusterRadius: 50
+                  clusterRadius: 50,
+                  buffer: 0,
+                  maxzoom: 12
                 }}
               />
               <Layer
@@ -114,15 +142,22 @@ export default function Map(props: any) {
                   'visibility': boreVisibility ? 'visible' : 'none'
                 }}
                 onClick={onClickBore}
-//                onMouseEnter={onBoreHover} make this change to pointy hand
+                onMouseEnter={onBoreHover}
+              //                onMouseEnter={onBoreHover} make this change to pointy hand
               />
             </Fragment>
           )}
         </Fragment>
       </MapGL>
-      <Drawer anchor="right" open={drawer} onClose={() => toggleDrawer(!drawer)}>
+
+
+      <div id="bore_table">
+        <Fade in={drawer}>
+      {/* <Drawer style={{marginBottom: 40}} anchor="bottom" open={drawer} onClose={() => toggleDrawer(!drawer)}> */}
         <StickyHeadtable bore={currentBore}/>
-      </Drawer>
+        </Fade>
+      </div>
+      {/* </Drawer> */}
     </Fragment>
   );
 }

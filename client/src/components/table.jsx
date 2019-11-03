@@ -1,10 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
+import { Fade, Paper, Table, TableBody, TableCell, TableRow } from '@material-ui/core';
 
 const columns = [
   { id: 'name', label: 'Name' },
@@ -19,7 +15,6 @@ const rows = [
   createData('India', 'IN'),//, 1324171354, 3287263),
   createData('China', 'CN'),// 1403500365, 9596961),
   createData('Italy', 'IT'),// 60483973, 301340),
-  createData('United States', 'US'),// 'US', 327167
 ];
 
 const useStyles = makeStyles({
