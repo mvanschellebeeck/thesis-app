@@ -25,7 +25,7 @@ export default function StickyHeadTable(props) {
          <TableBody>
             {rows.map(row => {
               return (
-                <TableRow hover tabIndex={-1} key={`row-${row}`}>
+                row !== 'icon' && <TableRow hover tabIndex={-1} key={`row-${row}`}>
                   {columns.map(column => 
                       <TableCell key={`cell-${row}`}> {column === 'key' ? row : currentBoreProps[row]}</TableCell>
                   )}

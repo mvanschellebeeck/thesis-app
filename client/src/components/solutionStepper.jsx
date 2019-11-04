@@ -25,20 +25,32 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function getSteps() {
-  return ['Select bores with appropriate salinity', 
-          'Filter to locations where MAR can be applied', 
+  return ['Assumptions',
+          'Select bores with appropriate salinity', 
+          'Remove bores with very low water levels',
+          'Filter to locations where MAR should be applied', 
           'Rule out domestic bores'];
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return `Mobile desalination can only operate at TDS values between X and Y...
-              The solution is proposed for brackish saltwater which is ...`;
+      return `This solution is on the basis that groundwater will continue to be exploited
+              and desalination + MAR will be used to combat the exploitation as opposed
+              to supplementing water supply`
     case 1:
-      return `The analysis should target areas that are close to aquifers or catchments.
-              These provide the optimal conveyance for managed aquifer recharge`;
+      return `For mobile desalination to be viable it should operate at TDS values of 
+              at most 10000 TDS (brackish water)`
     case 2:
+      return `Avoid bores with very low groundwater levels. Further extraction can cause
+              saltwater intrusion and amplify the groundwater problem`
+
+    case 3:
+      return `The managed aquifer recharge implementation should target areas of appropriate groundwater levels
+              that can benefit from aquifer recharge. The proposed management scheme is economically viable if, 
+              roughly, the groundwater produced exceeds the treated wastewater recharged multiplied by the ratio 
+              of the unit costs for treatment to desalination` 
+    case 4:
       return `Plants should operate at scale, rules out domestic.`;
     default:
       return 'Unknown step';
@@ -61,6 +73,21 @@ export default function SolutionStepper() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  const stepButton = (step) => {
+    switch(step) {
+      case 0:
+        return 'Continue';
+      case 1:
+        return 'Filter Bores < 10,000 TDS';
+      case 2:
+        return 'Filter out bores with low water levels';
+      case 3:
+        return 'Determine recharge locations';
+      default:
+        return 'Next';
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -85,7 +112,7 @@ export default function SolutionStepper() {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    {stepButton(index)}
                   </Button>
                 </div>
               </div>
@@ -96,7 +123,7 @@ export default function SolutionStepper() {
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>
-            The map now shows potential locations fora mobile desalination + managed aquifer
+            The map now shows potential locations for a mobile desalination + managed aquifer
             recharge system.
           </Typography>
           <Button onClick={handleReset} className={classes.button}>
