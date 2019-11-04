@@ -30,12 +30,12 @@ const useStyles = makeStyles({
 export default function StickyHeadTable(props) {
   const { bore } = props;
   const classes = useStyles();
-  console.log(bore);
+  console.log(`bore is ${bore}`);
 
   return (
     <Paper className={classes.root}>
       <div className={classes.tableWrapper}>
-        <Table aria-label="bore detail table">
+        {<Table aria-label="bore detail table">
          <TableBody>
             {rows.map(row => {
               return (
@@ -52,7 +52,7 @@ export default function StickyHeadTable(props) {
               );
             })}
           </TableBody>
-        </Table>
+        </Table>}
       </div>
     </Paper>
   );

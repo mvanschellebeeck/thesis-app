@@ -7,6 +7,7 @@ import NavigationIcon from '@material-ui/icons/Navigation';
 const useStyles = makeStyles(theme => ({
   fab: {
     margin: theme.spacing(1),
+    zIndex: 1
   },
   extendedIcon: {
     marginRight: theme.spacing(1),
