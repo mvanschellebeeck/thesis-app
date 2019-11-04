@@ -23,5 +23,6 @@ yarn-error.log*
 # data processing work
 data/*
 !data/thesis-work.ipynb
+!data/main_function.ipynb
 
 client/public/geojson/bores/*

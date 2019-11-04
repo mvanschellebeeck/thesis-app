@@ -23,8 +23,9 @@ function TabPanel(props) {
   );
 }
 
-export default function FilterSection() {
+export default function FilterSection(props) {
   const [tab, setTab] = useState(0);
+  const { states, setStates } = props;
   return (
     <div id="filter">
       <AppBar position="static">
@@ -39,7 +40,7 @@ export default function FilterSection() {
         </Tabs>
       </AppBar>
       <TabPanel value={tab} index={0}>
-        <CustomFilter />
+        <CustomFilter states={states} setStates={setStates}/>
       </TabPanel>
       <TabPanel value={tab} index={1}>
         <SolutionStepper />

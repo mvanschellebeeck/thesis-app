@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
-export default function CustomFilter() {
-  const states = ['NSW', 'QLD', 'SA', 'NT', 'WA', 'VIC'];
+export default function CustomFilter(props) {
+  const { states, setStates } = props;
+  const allStates = ['NSW', 'QLD', 'SA', 'NT', 'WA', 'VIC', 'TAS'];
 
   const tdsValues = {
     low: 'TDS < 1000',
@@ -11,11 +12,8 @@ export default function CustomFilter() {
     high: 'TDS > 2000',
   };
 
-  const allBoreTypes = ['NA', 'Domestic', 'Agriculture']
-
-  const [regions, setRegions] = useState(['NSW']);
+  const allBoreTypes = ['NA', 'Stock & Domestic', 'Agriculture', 'Water Supply', 'Monitoring', 'Irrigation', 'Exploration'];
   const [boreTypes, setBoreTypes] = useState(['NA', 'Domestic'])
-
   const [tds, setTds] = useState('med');
 
   return (
@@ -24,10 +22,10 @@ export default function CustomFilter() {
         <Grid item>
           <ToggleButtonGroup
             aria-label="full width"
-            value={regions}
-            onChange={(e, newRegions) => setRegions(newRegions)}
+            value={states}
+            onChange={(e, newStates) => setStates(newStates)}
           >
-            {states.map(state => {
+            {allStates.map(state => {
               return (
                 <ToggleButton key={state} value={state}>
                   {state}

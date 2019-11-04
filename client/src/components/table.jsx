@@ -1,36 +1,22 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Fade, Paper, Table, TableBody, TableCell, TableRow } from '@material-ui/core';
-
-const columns = [
-  { id: 'name', label: 'Name' },
-  { id: 'code', label: 'ISO\u00a0Code' },
-];
-
-function createData(name, code) {
-  return { name, code };
-}
-
-const rows = [
-  createData('India', 'IN'),//, 1324171354, 3287263),
-  createData('China', 'CN'),// 1403500365, 9596961),
-  createData('Italy', 'IT'),// 60483973, 301340),
-];
+import { Paper, Table, TableBody, TableCell, TableRow } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
-    width: '80vh',
+    width: '30vw',
   },
   tableWrapper: {
-    maxHeight: 440,
+    maxHeight: '30vh',
     overflow: 'auto',
   },
 });
 
 export default function StickyHeadTable(props) {
-  const { bore } = props;
+  const { currentBoreProps } = props;
   const classes = useStyles();
-  console.log(`bore is ${bore}`);
+  const columns = ['key', 'value'];
+  const rows = Object.keys(currentBoreProps);
 
   return (
     <Paper className={classes.root}>
@@ -39,15 +25,10 @@ export default function StickyHeadTable(props) {
          <TableBody>
             {rows.map(row => {
               return (
-                <TableRow hover tabIndex={-1} key={row.code}>
-                  {columns.map(column => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align={column.align}>
-                          {bore}
-                      </TableCell>
-                    );
-                  })}
+                <TableRow hover tabIndex={-1} key={`row-${row}`}>
+                  {columns.map(column => 
+                      <TableCell key={`cell-${row}`}> {column === 'key' ? row : currentBoreProps[row]}</TableCell>
+                  )}
                 </TableRow>
               );
             })}

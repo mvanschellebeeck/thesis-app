@@ -15,16 +15,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function MapControls(props) {
-  const { setMapZoom, setFitBounds, setMapCenter } = props;
+  const { setMapZoom, setMapCenter, setFitBounds } = props;
   const classes = useStyles();
-  const defaultBounds = [[109.338953078, -45.6345972634], [158.569469029, -8.6681857235]];
   const defaultCenter = [133.7751, -25.2744];
+  const defaultFitBounds = [
+    [109.338953078, -45.6345972634],
+    [158.569469029, -8.6681857235],
+  ];
+  const defaultZoom = [3];
+
+
+  const handleClick = () => {
+    setMapZoom(defaultZoom);
+    setMapCenter(defaultCenter);
+    setFitBounds(defaultFitBounds);
+  }
 
   return (
     <div id="map_controls" >
-      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={()=>{setMapZoom([3]);setMapCenter(defaultCenter); console.log('pressed')}}>
+      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={handleClick}>
         <NavigationIcon className={classes.extendedIcon} />
-       Reset Map 
+        Reset Map
       </Fab>
     </div>
   );

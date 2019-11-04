@@ -49,7 +49,7 @@ export default function MapOptions(props) {
     <FormControl component="fieldset" style={styles.form} >
       <FormGroup>
         {options.map(option => 
-          <FormLabel name={option} defaultChecked={true} setAquiferVisibility={setAquiferVisibility} setBoreVisibility={setBoreVisibility}/>
+          <FormLabel key={option} name={option} defaultChecked={true} setAquiferVisibility={setAquiferVisibility} setBoreVisibility={setBoreVisibility}/>
         )}
      </FormGroup>
     </FormControl>

@@ -8,7 +8,7 @@ function AquiferIcon(props) {
   return (
     <Icon>
       <svg version="1.1" width="30" height="20" viewBox="0 0 16 9">
-        <rect x="0" y="2" width="8" height="4" fill={fill} stroke={outline} stroke-width="0.3" rx="1" ry="1" />
+        <rect x="0" y="2" width="8" height="4" fill={fill} stroke={outline} strokeWidth="0.3" rx="1" ry="1" />
       </svg>
     </Icon>
   );
