@@ -12,7 +12,7 @@ export default function CustomFilter(props) {
     high: 'TDS > 2000',
   };
 
-  const allBoreTypes = ['NA', 'Stock & Domestic', 'Agriculture', 'Water Supply', 'Monitoring', 'Irrigation', 'Exploration'];
+  const allBoreTypes = ['NA', 'Stock & Domestic', 'Agriculture', '...'];//, 'Agriculture', 'Water Supply', 'Monitoring', 'Irrigation', 'Exploration'];
   const [boreTypes, setBoreTypes] = useState(['NA', 'Domestic'])
   const [tds, setTds] = useState('med');
 
@@ -47,6 +47,7 @@ export default function CustomFilter(props) {
         </Grid>
         <Grid item>
           <ToggleButtonGroup
+            size="small"
             aria-label="full width"
             value={boreTypes}
             onChange={(e, newBoreTypes) => { setBoreTypes(newBoreTypes)}}

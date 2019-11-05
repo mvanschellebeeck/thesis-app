@@ -15,8 +15,9 @@ export default function InlandDeslination() {
     [158.569469029, -8.6681857235],
   ]);
   const [mapCenter, setMapCenter] = useState([133.7751, -25.2744]);
-  const [states, setStates] = useState(['NSW'])
+  const [states, setStates] = useState(['NSW']);
   const [currentBoreProps, setCurrentBoreProps] = useState('');
+  const [modalVisibility, setModalVisibility] = useState(false);
 
   return (
     <div className="inland">
@@ -29,6 +30,8 @@ export default function InlandDeslination() {
         states={states}
         currentBoreProps={currentBoreProps}
         setCurrentBoreProps={setCurrentBoreProps}
+        modalVisibility={modalVisibility}
+        setModalVisibility={setModalVisibility}
       />
       <MapOptions
         setAquiferVisibility={setAquiferVisibility}
@@ -40,7 +43,7 @@ export default function InlandDeslination() {
         setMapCenter={setMapCenter}
       />
       <MapLegend aquiferVisibility={aquiferVisibility} />
-      <FilterSection states={states} setStates={setStates}/>
+      <FilterSection states={states} setStates={setStates} />
     </div>
   );
 }

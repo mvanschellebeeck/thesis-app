@@ -8,6 +8,10 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItem';
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '90%',
@@ -25,35 +29,70 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function getSteps() {
-  return ['Assumptions',
-          'Select bores with appropriate salinity', 
-          'Remove bores with very low water levels',
-          'Filter to locations where MAR should be applied', 
-          'Rule out domestic bores'];
+  return [
+    'Assumptions',
+    'Select bores with appropriate salinity',
+    'Remove bores with very low water levels',
+    'Filter to locations where MAR should be applied',
+    'Select bores that scale',
+  ];
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return `This solution is on the basis that groundwater will continue to be exploited
-              and desalination + MAR will be used to combat the exploitation as opposed
-              to supplementing water supply`
+      return (
+        <ul>
+          <li>- Groundwater will continue to be overly exploited</li>
+          <li>- The focus is to combat groundwater shortage</li>
+          <li>- Brackish water desalination is more economically feasible than seawater desalination</li>
+        </ul>
+      )
+      // return (
+      //   <List style={{height: '100%'}}>
+      //     <ListItem>
+      //       <ListItemText primary={<Typography>test</Typography>} />
+      //     </ListItem>
+      //   </List>
+      // );
+    // return `This solution is on the basis that groundwater will continue to be exploited
+    //         and desalination + MAR will be used to combat the exploitation as opposed
+    //         to supplementing water supply. It assumes brackish water desalination is
+    //         more econonmically feasable then seawater desalination.`
     case 1:
-      return `For mobile desalination to be viable it should operate at TDS values of 
-              at most 10000 TDS (brackish water)`
+      return (
+        <Typography>
+          For mobile desalination to be viable it should operate at TDS values
+          between 1000 and 10000 TDS (brackish water)
+        </Typography>
+      );
     case 2:
-      return `Avoid bores with very low groundwater levels. Further extraction can cause
-              saltwater intrusion and amplify the groundwater problem`
+      return (
+        <Typography>
+          Avoid bores with very low groundwater levels. Further extraction can
+          cause saltwater intrusion and amplify the groundwater problem
+        </Typography>
+      );
 
     case 3:
-      return `The managed aquifer recharge implementation should target areas of appropriate groundwater levels
-              that can benefit from aquifer recharge. The proposed management scheme is economically viable if, 
-              roughly, the groundwater produced exceeds the treated wastewater recharged multiplied by the ratio 
-              of the unit costs for treatment to desalination` 
+      return (
+        <Typography>
+          The managed aquifer recharge implementation should target areas of
+          appropriate groundwater levels that can benefit from aquifer recharge.
+          The proposed management scheme is economically viable if, roughly, the
+          groundwater produced exceeds the treated wastewater recharged
+          multiplied by the ratio of the unit costs for treatment to
+          desalination
+        </Typography>
+      );
     case 4:
-      return `Plants should operate at scale, rules out domestic.`;
+      return (
+        <Typography>
+          Plants should operate at scale, rules out domestic/stock and monitoring bores
+        </Typography>
+      );
     default:
-      return 'Unknown step';
+      return <Typography>Unknown step</Typography>;
   }
 }
 
@@ -74,8 +113,8 @@ export default function SolutionStepper() {
     setActiveStep(0);
   };
 
-  const stepButton = (step) => {
-    switch(step) {
+  const stepButton = step => {
+    switch (step) {
       case 0:
         return 'Continue';
       case 1:
@@ -87,7 +126,7 @@ export default function SolutionStepper() {
       default:
         return 'Next';
     }
-  }
+  };
 
   return (
     <div className={classes.root}>
@@ -96,7 +135,8 @@ export default function SolutionStepper() {
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
             <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
+              <>{getStepContent(index)}</>
+              {/* <Typography>{getStepContent(index)}</Typography> */}
               <div className={classes.actionsContainer}>
                 <div>
                   <Button
@@ -123,8 +163,8 @@ export default function SolutionStepper() {
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>
-            The map now shows potential locations for a mobile desalination + managed aquifer
-            recharge system.
+            The map now shows potential locations for a mobile desalination +
+            managed aquifer recharge system.
           </Typography>
           <Button onClick={handleReset} className={classes.button}>
             Reset

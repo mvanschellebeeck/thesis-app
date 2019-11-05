@@ -4,6 +4,7 @@ import ReactMapboxGl, { GeoJSONLayer, Layer, Popup } from 'react-mapbox-gl';
 import { AQUIFERS } from '../constants';
 import '../map.css';
 import StickyHeadtable from './table';
+import Modal from '@material-ui/core/Modal';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -35,58 +36,71 @@ export default function Map(props) {
     fitBounds,
     mapCenter,
     setCurrentBoreProps,
-    currentBoreProps
+    currentBoreProps,
+    modalVisibility,
+    setModalVisibility
   } = props;
-  const [drawer, toggleDrawer] = useState(false);
   const [currentBore, setCurrentBore] = useState('');
   const [currentBoreLong, setCurrentBoreLong] = useState(defaultCenter[0]);
   const [currentBoreLat, setCurrentBoreLat] = useState(defaultCenter[1]);
-  const [popup, showPopup] = useState(false);
+  // const [popup, showPopup] = useState(false);
+  const [boreDetail, setBoreDetail] = useState(false);
+  // const [filter, setFilter] = useState(['has', 'salinity'])
+  const [filter, setFilter] = useState(['>', '1000', ['get', 'salinity']]);
+
   // const states = ['NSW', 'NT', 'QLD', 'SA', 'TAS', 'VIC', 'WA'];
   //const states = ['NSW'];
   const { states } = props;
 
-  const onBoreHover = (evt) => {
+  const onBoreHover = evt => {
     const coordinates = evt.features[0].geometry.coordinates.slice();
     const { id } = evt.features[0].properties;
     setCurrentBore(id);
     setCurrentBoreLong(coordinates[0]);
     setCurrentBoreLat(coordinates[1]);
     setCurrentBoreProps(evt.features[0].properties);
-    showPopup(true);
+    // showPopup(true);
     console.log('mouse enter');
   };
 
-  const onLeaveBore = (evt) => {
+  const onLeaveBore = evt => {
     evt.preventDefault();
     console.log('mouse leave');
-    showPopup(false);
-  }
+  };
 
-  const onClickBore = (evt) => {
+  const onClickBore = evt => {
     evt.preventDefault();
-    toggleDrawer(true);
+    setModalVisibility(true);
+    // showPopup(false);
   };
 
-
-  const renderPopup = () => {
-    if (popup) {
-      return (
-        <Popup coordinates={[currentBoreLong, currentBoreLat]}>
-          <h1>{currentBore}</h1>
-        </Popup>
-      );
-    }
-    return '';
-  };
+  // const renderPopup = () => {
+  //   if (popup) {
+  //     return (
+  //       <>
+  //       <Popup coordinates={[currentBoreLong, currentBoreLat]}>
+  //         <h1>{currentBore}</h1>
+  //       </Popup>
+  //       </>
+  //     );
+  //   }
+  //   return '';
+  // };
 
   const renderTable = () => {
     return (
-      <Fade in={drawer} timeout={1000}>
-        <div id="bore_table">
-          <StickyHeadtable bore={currentBore} currentBoreProps={currentBoreProps}/>
-        </div>
-      </Fade>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={modalVisibility}
+          onClose={() => setModalVisibility(false)}
+        >
+          <StickyHeadtable
+            bore={currentBore}
+            currentBoreProps={currentBoreProps}
+            setModalVisibility={setModalVisibility}
+          />
+        </Modal> 
     );
   };
 
@@ -99,7 +113,7 @@ export default function Map(props) {
         zoom={mapZoom}
         center={mapCenter}
       >
-        {renderPopup()} {}
+        {/* {renderPopup()}  */}
         <>
           {Object.keys(AQUIFERS).map(aquifer => (
             <GeoJSONLayer
@@ -136,7 +150,7 @@ export default function Map(props) {
                 key={`${state}_1`}
                 id={`${state}_cluster`}
                 sourceId={`${state}_bores`}
-                filter={['has', 'point_count']}
+                filter={['all', ['has', 'point_count']]}
                 paint={styles.clusterPaintProps}
                 type="circle"
                 layout={{ visibility: boreVisibility ? 'visible' : 'none' }}
@@ -145,7 +159,7 @@ export default function Map(props) {
                 key={`${state}_2`}
                 id={`${state}_cluster-count`}
                 sourceId={`${state}_bores`}
-                filter={['has', 'point_count']}
+                filter={['all', ['has', 'point_count']]}
                 layout={{
                   'text-field': '{point_count_abbreviated}',
                   'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
@@ -157,7 +171,7 @@ export default function Map(props) {
                 id={`${state}_unclustered-point`}
                 key={`${state}_3`}
                 sourceId={`${state}_bores`}
-                filter={['!', ['has', 'point_count']]}
+                filter={['all', ['!has', 'point_count']]}
                 layout={{
                   'icon-allow-overlap': true,
                   'icon-image': '{icon}',
@@ -165,7 +179,7 @@ export default function Map(props) {
                 }}
                 onClick={onClickBore}
                 onMouseLeave={onLeaveBore}
-                onMouseEnter={onBoreHover}// make this change to pointy hand
+                onMouseEnter={onBoreHover} // make this change to pointy hand
               />
             </>
           ))}
