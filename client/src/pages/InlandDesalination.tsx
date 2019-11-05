@@ -9,6 +9,7 @@ import '../map.css';
 export default function InlandDeslination() {
   const [aquiferVisibility, setAquiferVisibility] = useState(true);
   const [boreVisibility, setBoreVisibility] = useState(true);
+  const [plantVisibility, setPlantVisibility] = useState(false);
   const [mapZoom, setMapZoom] = useState([0]);
   const [fitBounds, setFitBounds] = useState([
     [109.338953078, -45.6345972634],
@@ -18,6 +19,7 @@ export default function InlandDeslination() {
   const [states, setStates] = useState(['NSW']);
   const [currentBoreProps, setCurrentBoreProps] = useState('');
   const [modalVisibility, setModalVisibility] = useState(false);
+  const [modalVisibility2, setModalVisibility2] = useState(false);
 
   return (
     <div className="inland">
@@ -26,16 +28,20 @@ export default function InlandDeslination() {
         fitBounds={fitBounds}
         aquiferVisibility={aquiferVisibility}
         boreVisibility={boreVisibility}
+        plantVisibility={plantVisibility}
         mapCenter={mapCenter}
         states={states}
         currentBoreProps={currentBoreProps}
         setCurrentBoreProps={setCurrentBoreProps}
         modalVisibility={modalVisibility}
+        modalVisibility2={modalVisibility2}
         setModalVisibility={setModalVisibility}
+        setModalVisibility2={setModalVisibility2}
       />
       <MapOptions
         setAquiferVisibility={setAquiferVisibility}
         setBoreVisibility={setBoreVisibility}
+        setPlantVisibility={setPlantVisibility}
       />
       <MapControls
         setMapZoom={setMapZoom}
