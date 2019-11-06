@@ -1,66 +1,205 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Card, CardContent, CardActions, Button } from '@material-ui/core';
-
+import {
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  Typography,
+  Slider,
+} from '@material-ui/core';
+import NumberFormat from 'react-number-format';
 import CloseIcon from '@material-ui/icons/Close';
+import '../plantModal.css';
+import { Pie } from 'react-chartjs-2';
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
   },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-  },
   card: {
     margin: 'auto',
-    marginTop: '5%',
+    marginTop: 5,
     width: '70vw',
+  },
+  formControl: {
+    margin: theme.spacing(0.5),
+    width: 300,
   },
 }));
 
 export default function PlantDetail(props) {
   const { modalVisibility2, setModalVisibility2 } = props;
-  return modalVisibility2 ? <BasicTextFields setModalVisibility2={setModalVisibility2} /> : <></>;
+  return modalVisibility2 ? (
+    <BasicTextFields setModalVisibility2={setModalVisibility2} />
+  ) : (
+    <></>
+  );
+}
+
+const data = {
+	labels: [
+		'Red',
+		'Blue',
+		'Yellow'
+	],
+	datasets: [{
+		data: [300, 50, 100],
+		backgroundColor: [
+		'#FF6384',
+		'#36A2EB',
+		'#FFCE56'
+		],
+		hoverBackgroundColor: [
+		'#FF6384',
+		'#36A2EB',
+		'#FFCE56'
+		]
+	}]
+};
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={values => {
+        onChange({
+          target: {
+            value: values.value,
+          },
+        });
+      }}
+      thousandSeparator
+      isNumericString
+    />
+  );
 }
 
 function BasicTextFields(props) {
   const classes = useStyles();
   const { setModalVisibility2 } = props;
+
+  const [cost, setCost] = useState(null);
+  const [energy, setEnergy] = useState(null);
+  const [feasibility, setFeasibility] = useState(1.03);
+
   return (
     <Card className={classes.card}>
       <CardContent>
-        <form className={classes.container} noValidate autoComplete="off">
-          <div>
-            <TextField
-              id="standard-basic"
-              className={classes.textField}
-              label="Standard"
-              margin="normal"
-            />
+        <div id="plant_modal">
+          <div id="fields">
+            <Typography id="discrete-slider-always" gutterBottom>
+              Water Supply
+            </Typography>
+            <div>
+              <Slider
+                defaultValue={30}
+                getAriaValueText={value => `${value}%`}
+                aria-labelledby="discrete-slider"
+                valueLabelDisplay="on"
+                step={1}
+                min={0}
+                max={100}
+                valueLabelFormat={value => `${value}%`}
+                className={classes.formControl}
+              />
+            </div>
+            <div>
+              <TextField
+                className={classes.formControl}
+                label="Capital Cost"
+                value={cost}
+                onChange={e => setCost(e.target.value)}
+                id="cost"
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                }}
+                inputProps={{ prefix: '$' }}
+              />
+            </div>
+            <div>
+              <TextField
+                className={classes.formControl}
+                label="SWRO Unit Price"
+                value={energy}
+                onChange={e => setEnergy(e.target.value)}
+                id="swro-unit-price"
+                InputProps={{
+                  inputComponent: NumberFormatCustom,
+                }}
+                inputProps={{ prefix: '$' }}
+              />
+            </div>
+            <div>
+              <TextField
+                disabled
+                className={classes.formControl}
+                label="Projected Population (2066)"
+                defaultValue={'100,000'}
+                id="projected-population"
+              />
+            </div>
+            <div>
+              <TextField
+                disabled
+                className={classes.formControl}
+                label="Current Population"
+                id="population"
+                defaultValue={'80,000'}
+              />
+            </div>
+            <div>
+              <TextField
+                disabled
+                className={classes.formControl}
+                label="Projected Water Use"
+                defaultValue={'12,341 kL/day'}
+                id="projected-water-use"
+              />
+            </div>
+            <div>
+              <TextField
+                disabled
+                className={classes.formControl}
+                label="Desalnation Efficiency"
+                id="desal-efficiency"
+                defaultValue={'42,300 kw/H'}
+              />
+            </div>
+            <div>
+              <TextField
+                disabled
+                className={classes.formControl}
+                label="Salinity"
+                id="salinity"
+                defaultValue={'33,000 ppm'}
+              />
+            </div>
+            <div>
+              <TextField
+                disabled
+                className={classes.formControl}
+                label="Water Price"
+                id="water_price"
+                defaultValue={'$2.31/kL'}
+              />
+            </div>
           </div>
-          <div>
-            <TextField
-              id="filled-basic"
-              className={classes.textField}
-              label="Filled"
-              margin="normal"
-              variant="filled"
-            />
+          <div id="pie_map">
+            <Pie data={data} />
           </div>
-          <div>
-            <TextField
-              id="outlined-basic"
-              className={classes.textField}
-              label="Outlined"
-              margin="normal"
-              variant="outlined"
-            />
+          <div id="feasability">
+            <Typography style={{ fontSize: '14px', color: 'gray', margin: 'auto'}}>Feasibility Index</Typography>
+            <Typography style={{ fontSize: '46px', fontWeight: 'bold' }}>
+              {feasibility}
+            </Typography>
           </div>
-        </form>
+        </div>
       </CardContent>
       <CardActions>
         <Button
