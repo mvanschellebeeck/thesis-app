@@ -11,8 +11,9 @@ import {
 } from '@material-ui/core';
 import NumberFormat from 'react-number-format';
 import CloseIcon from '@material-ui/icons/Close';
+import PlantChart from './plantChart';
 import '../plantModal.css';
-import { Pie } from 'react-chartjs-2';
+
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -39,26 +40,7 @@ export default function PlantDetail(props) {
   );
 }
 
-const data = {
-	labels: [
-		'Red',
-		'Blue',
-		'Yellow'
-	],
-	datasets: [{
-		data: [300, 50, 100],
-		backgroundColor: [
-		'#FF6384',
-		'#36A2EB',
-		'#FFCE56'
-		],
-		hoverBackgroundColor: [
-		'#FF6384',
-		'#36A2EB',
-		'#FFCE56'
-		]
-	}]
-};
+
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -191,7 +173,7 @@ function BasicTextFields(props) {
             </div>
           </div>
           <div id="pie_map">
-            <Pie data={data} />
+            <PlantChart title="Operational Costs" width={300} height={300}/>
           </div>
           <div id="feasability">
             <Typography style={{ fontSize: '14px', color: 'gray', margin: 'auto'}}>Feasibility Index</Typography>
