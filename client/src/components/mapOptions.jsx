@@ -18,14 +18,7 @@ const styles = {
   },
 };
 
-function FormLabel(props) {
-  const {
-    name,
-    defaultChecked,
-    setAquiferVisibility,
-    setBoreVisibility,
-    setPlantVisibility
-  } = props;
+function FormLabel({ name, defaultChecked, setAquiferVisibility, setBoreVisibility, setPlantVisibility }) {
   const [checked, setChecked] = useState(defaultChecked);
 
   function handleChecked() {
@@ -54,8 +47,7 @@ function FormLabel(props) {
   );
 }
 
-export default function MapOptions(props) {
-  const { setAquiferVisibility, setBoreVisibility, setPlantVisibility } = props;
+export default function MapOptions({ setAquiferVisibility, setBoreVisibility, setPlantVisibility }) {
   const options = ['Show Aquifers', 'Show Bores', 'Show Coastal Plants'];
 
   return (

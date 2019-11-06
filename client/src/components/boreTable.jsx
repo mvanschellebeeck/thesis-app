@@ -46,9 +46,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default function StickyHeadTable(props) {
+export default function BoreTable({ currentBoreProps, setBoreModalVisibility }) {
   const classes = useStyles();
-  const { currentBoreProps, setModalVisibility } = props;
   const columns = ['key', 'value'];
   const rows = Object.keys(currentBoreProps);
 
@@ -94,7 +93,7 @@ export default function StickyHeadTable(props) {
           color="secondary"
           style={{ margin: 'auto' }}
           size="medium"
-          onClick={() => setModalVisibility(false)}
+          onClick={() => setBoreModalVisibility(false)}
         >
           Close
         </Button>

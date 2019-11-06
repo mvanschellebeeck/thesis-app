@@ -14,8 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function MapControls(props) {
-  const { setMapZoom, setMapCenter, setFitBounds } = props;
+export default function MapControls({ setMapZoom, setMapCenter, setFitBounds }) {
   const classes = useStyles();
   const defaultCenter = [133.7751, -25.2744];
   const defaultFitBounds = [

@@ -6,9 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import CustomFilter from './customFilter';
 import SolutionStepper from './solutionStepper';
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
+function TabPanel({ children, value, index, ...other }) {
   return (
     <Typography
       component="div"
@@ -23,9 +21,8 @@ function TabPanel(props) {
   );
 }
 
-export default function FilterSection(props) {
+export default function FilterSection({ states, setStates }) {
   const [tab, setTab] = useState(0);
-  const { states, setStates } = props;
   return (
     <div id="filter">
       <AppBar position="static">

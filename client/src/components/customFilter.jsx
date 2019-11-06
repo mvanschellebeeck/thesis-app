@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
-export default function CustomFilter(props) {
-  const { states, setStates } = props;
+export default function CustomFilter({ states, setStates }) {
   const allStates = ['NSW', 'QLD', 'SA', 'NT', 'WA', 'VIC', 'TAS'];
 
   const tdsValues = {

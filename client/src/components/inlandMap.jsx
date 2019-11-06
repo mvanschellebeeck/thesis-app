@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactMapboxGl, { GeoJSONLayer, Layer } from 'react-mapbox-gl';
 import { AQUIFERS } from '../constants';
 import '../map.css';
-import StickyHeadtable from './table';
+import BoreTable from './boreTable';
 import PlantDetail from './plantDetail';
 import Modal from '@material-ui/core/Modal';
 
@@ -27,85 +27,68 @@ const MapGL = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN || '',
 });
 
-export default function Map(props) {
-  const {
-    aquiferVisibility,
-    boreVisibility,
-    plantVisibility,
-    mapZoom,
-    fitBounds,
-    mapCenter,
-    setCurrentBoreProps,
-    currentBoreProps,
-    modalVisibility,
-    modalVisibility2,
-    setModalVisibility,
-    setModalVisibility2,
-  } = props;
-  const [currentBore, setCurrentBore] = useState('');
-  // const [currentBoreLong, setCurrentBoreLong] = useState(defaultCenter[0]);
-  // const [currentBoreLat, setCurrentBoreLat] = useState(defaultCenter[1]);
-  const [filter, setFilter] = useState(['>', '1000', ['get', 'salinity']]);
+export default function Map({ aquiferVisibility, boreVisibility, plantVisibility, mapZoom, 
+                              fitBounds, mapCenter, setCurrentBoreProps, currentBoreProps, 
+                              boreModalVisibility, plantModalVisibility, setBoreModalVisibility, 
+                              setPlantModalVisibility, states }) {
 
-  const { states } = props;
+  const [currentBore, setCurrentBore] = useState('');
+  // const [filter, setFilter] = useState(['>', '1000', ['get', 'salinity']]);
+
 
   const onBoreHover = evt => {
     const { id } = evt.features[0].properties;
     setCurrentBore(id);
     setCurrentBoreProps(evt.features[0].properties);
     // showPopup(true);
-    console.log('mouse enter');
   };
 
   const onPlantHover = evt => {
     const { id } = evt.features[0].properties;
-    console.log(id);
   }
 
   const onPlantClick = evt => {
     evt.preventDefault();
-    console.log(evt);
-    setModalVisibility2(true);
+    setPlantModalVisibility(true);
   }
 
   const onLeaveBore = evt => {
     evt.preventDefault();
-    console.log('mouse leave');
   };
 
   const onClickBore = evt => {
     evt.preventDefault();
-    setModalVisibility(true);
+    setBoreModalVisibility(true);
   };
 
-  const renderTable = () => {
+  const renderBoreModal = () => {
     return (
       <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        open={modalVisibility}
-        onClose={() => setModalVisibility(false)}
+        open={boreModalVisibility}
+        onClose={() => setBoreModalVisibility(false)}
       >
-        <StickyHeadtable
+        <BoreTable
           bore={currentBore}
           currentBoreProps={currentBoreProps}
-          setModalVisibility={setModalVisibility}
+          setBoreModalVisibility={setBoreModalVisibility}
         />
       </Modal>
     );
   };
 
-  const renderTable2 = () => {
+  const renderPlantModal = () => {
     return (
       <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
-        open={modalVisibility2}
-        onClose={() => setModalVisibility2(false)}
+        open={plantModalVisibility}
+        onClose={() => setPlantModalVisibility(false)}
       >
         <PlantDetail
-          modalVisibility2={modalVisibility2}
-          setModalVisibility2={setModalVisibility2}
+          plantModalVisibility={plantModalVisibility}
+          setPlantModalVisibility={setPlantModalVisibility}
         />
       </Modal>
     );
@@ -132,7 +115,7 @@ export default function Map(props) {
           layout={{
             'icon-allow-overlap': true,
             'icon-image': '{icon}',
-             visibility: plantVisibility ? 'visible' : 'none',
+            visibility: plantVisibility ? 'visible' : 'none',
           }}
           onClick={onPlantClick}
           onMouseEnter={onPlantHover} // make this change to pointy hand
@@ -207,8 +190,8 @@ export default function Map(props) {
           </>
         ))}
       </MapGL>
-      {renderTable()}
-      {renderTable2()}
+      {renderBoreModal()}
+      {renderPlantModal()}
     </>
   );
 }

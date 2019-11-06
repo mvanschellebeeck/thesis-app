@@ -14,11 +14,8 @@ function AquiferIcon(props) {
   );
 }
 
-function AquiferText(props){
-  const { fontSize, text } = props;
-  return(
-    <Typography style={{ fontSize: fontSize }}>{text}</Typography>
-  )
+function AquiferText({ fontSize, text }) {
+  return <Typography style={{ fontSize: fontSize }}>{text}</Typography>;
 }
 
 const styles = {
@@ -33,8 +30,7 @@ const styles = {
   }
 }
 
-export default function MapLegend(props) {
-  const { aquiferVisibility } = props;
+export default function MapLegend({ aquiferVisibility }) {
   const aquifers = Object.keys(AQUIFERS);
 
   const mapStyle = {
@@ -54,7 +50,7 @@ export default function MapLegend(props) {
                   <ListItemIcon style={styles.listItemIcon}>
                     <AquiferIcon fill={AQUIFERS[aquifer].colour_fill} outline={AQUIFERS[aquifer].colour_outline} />
                   </ListItemIcon>
-                  <ListItemText primary={<AquiferText fontSize="14px" text={aquifer}/>} />
+                  <ListItemText primary={<AquiferText fontSize="14px" text={aquifer} />} />
                 </ListItem>)}
             </List>
           </div>

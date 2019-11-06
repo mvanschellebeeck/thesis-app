@@ -7,12 +7,8 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItem';
-
 const useStyles = makeStyles(theme => ({
+
   root: {
     width: '90%',
   },
@@ -48,17 +44,6 @@ function getStepContent(step) {
           <li>- Brackish water desalination is more economically feasible than seawater desalination</li>
         </ul>
       )
-      // return (
-      //   <List style={{height: '100%'}}>
-      //     <ListItem>
-      //       <ListItemText primary={<Typography>test</Typography>} />
-      //     </ListItem>
-      //   </List>
-      // );
-    // return `This solution is on the basis that groundwater will continue to be exploited
-    //         and desalination + MAR will be used to combat the exploitation as opposed
-    //         to supplementing water supply. It assumes brackish water desalination is
-    //         more econonmically feasable then seawater desalination.`
     case 1:
       return (
         <Typography>
