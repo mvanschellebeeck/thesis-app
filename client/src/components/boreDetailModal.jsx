@@ -12,8 +12,8 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import '../map.css';
 import CloseIcon from '@material-ui/icons/Close';
+import '../map.css';
 
 const useStyles = makeStyles({
   root: {

@@ -54,3 +54,15 @@
   grid-column: 5/6;
   height: 90vh;
 }
+
+.mapboxgl-popup-content {
+  background: rgba(0, 0, 0, 0) !important;
+  box-shadow: 0 0 0 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: red !important;
+  border-bottom-color: red !important;
+}

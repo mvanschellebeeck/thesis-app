@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import ReactMapboxGl, { GeoJSONLayer, Layer } from 'react-mapbox-gl';
+import ReactMapboxGl, { GeoJSONLayer, Layer, Popup } from 'react-mapbox-gl';
 import { AQUIFERS } from '../constants';
-import '../map.css';
-import BoreTable from './boreTable';
-import PlantDetail from './plantDetail';
+import BoreTable from './boreDetailModal';
+import PlantDetail from './plantDetailModal';
 import Modal from '@material-ui/core/Modal';
+import styled from 'styled-components'
+import '../map.css';
+import { Typography } from '@material-ui/core';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -23,28 +25,55 @@ const styles = {
   },
 };
 
+const StyledPopup = styled.div`
+  background: white;
+  color: #3f618c;
+  font-weight: 400;
+  padding: 5px;
+  border-radius: 2px;
+`;
+
+
+
 const MapGL = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN || '',
 });
 
-export default function Map({ aquiferVisibility, boreVisibility, plantVisibility, mapZoom, 
-                              fitBounds, mapCenter, setCurrentBoreProps, currentBoreProps, 
-                              boreModalVisibility, plantModalVisibility, setBoreModalVisibility, 
-                              setPlantModalVisibility, states }) {
+export default function Map({ aquiferVisibility, boreVisibility, plantVisibility, mapZoom,
+  fitBounds, mapCenter, setCurrentBoreProps, currentBoreProps,
+  boreModalVisibility, plantModalVisibility, setBoreModalVisibility,
+  setPlantModalVisibility, states }) {
 
-  const [currentBore, setCurrentBore] = useState('');
+  const [currentBore, setCurrentBore] = useState(null);
+  const [currentBoreLong, setCurrentBoreLong] = useState(null);
+  const [currentBoreLat, setCurrentBoreLat] = useState(null);
   // const [filter, setFilter] = useState(['>', '1000', ['get', 'salinity']]);
 
 
-  const onBoreHover = evt => {
+  const onEnterBore = evt => {
     const { id } = evt.features[0].properties;
+    const coordinates = evt.features[0].geometry.coordinates.slice();
+    // for some reason setting state to an object would 
+    // break the mouseLeave ???
     setCurrentBore(id);
-    setCurrentBoreProps(evt.features[0].properties);
-    // showPopup(true);
+    setCurrentBoreLong(coordinates[0]);
+    setCurrentBoreLat(coordinates[1]);
+    console.log(`Entered bore`);
   };
 
-  const onPlantHover = evt => {
+  const onLeaveBore = evt => {
+    console.log('left bore');
+    setCurrentBore(null);
+  };
+
+  const onEnterPlant = evt => {
     const { id } = evt.features[0].properties;
+    console.log(`Entered plant with id ${id}`);
+  }
+
+  const onLeavePlant = evt => {
+    // const { id } = evt.features[0].properties;
+    console.log(`Left plant with id `);
   }
 
   const onPlantClick = evt => {
@@ -52,13 +81,11 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
     setPlantModalVisibility(true);
   }
 
-  const onLeaveBore = evt => {
-    evt.preventDefault();
-  };
 
   const onClickBore = evt => {
     evt.preventDefault();
     setBoreModalVisibility(true);
+    setCurrentBoreProps(evt.features[0].properties);
   };
 
   const renderBoreModal = () => {
@@ -97,12 +124,28 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
   return (
     <>
       <MapGL
+        // eslint-disable-next-line
         style="mapbox://styles/mapbox/streets-v11"
         fitBounds={fitBounds}
         className="map"
         zoom={mapZoom}
         center={mapCenter}
       >
+        {currentBore &&
+            <Popup offset={[0, -10]} coordinates={[currentBoreLong, currentBoreLat]} >
+              <div style={{ padding: '15px', borderRadius: '9px', backgroundColor: 'red' }}>
+                <Typography variant="button" display="block" gutterBottom>
+                  {currentBore} 
+                </Typography>
+                 <Typography variant="caption" display="block" gutterBottom>
+                  Salinity:
+                </Typography>
+                <Typography variant="caption" display="block" gutterBottom>
+                  Water Levels:
+                </Typography>
+                </div>
+            </Popup>
+        }
         <GeoJSONLayer
           key={'some_key'}
           id={'desalination_plants_source'}
@@ -118,7 +161,8 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
             visibility: plantVisibility ? 'visible' : 'none',
           }}
           onClick={onPlantClick}
-          onMouseEnter={onPlantHover} // make this change to pointy hand
+          onMouseEnter={onEnterPlant} // make this change to pointy hand
+          onMouseLeave={onLeavePlant}
         />
 
         {Object.keys(AQUIFERS).map(aquifer => (
@@ -153,6 +197,21 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
               }}
             />
             <Layer
+              id={`${state}_unclustered-point`}
+              key={`${state}_3`}
+              sourceId={`${state}_bores`}
+              filter={['all', ['!has', 'point_count']]}
+              layout={{
+                'icon-allow-overlap': true,
+                'icon-image': '{icon}',
+                visibility: boreVisibility ? 'visible' : 'none',
+              }}
+              onClick={onClickBore}
+              onMouseEnter={onEnterBore}
+              onMouseLeave={onLeaveBore}
+            />
+
+            <Layer
               key={`${state}_1`}
               id={`${state}_cluster`}
               sourceId={`${state}_bores`}
@@ -172,20 +231,6 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
                 'text-size': 12,
                 visibility: boreVisibility ? 'visible' : 'none',
               }}
-            />
-            <Layer
-              id={`${state}_unclustered-point`}
-              key={`${state}_3`}
-              sourceId={`${state}_bores`}
-              filter={['all', ['!has', 'point_count']]}
-              layout={{
-                'icon-allow-overlap': true,
-                'icon-image': '{icon}',
-                visibility: boreVisibility ? 'visible' : 'none',
-              }}
-              onClick={onClickBore}
-              onMouseLeave={onLeaveBore}
-              onMouseEnter={onBoreHover} // make this change to pointy hand
             />
           </>
         ))}

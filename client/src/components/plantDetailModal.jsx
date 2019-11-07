@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     margin: 'auto',
     marginTop: 5,
-    width: '70vw',
+    width: '50vw',
   },
   formControl: {
     margin: theme.spacing(0.5),

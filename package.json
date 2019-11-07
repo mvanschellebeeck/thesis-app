@@ -60,6 +60,7 @@
     "react-scripts-client": "file:client",
     "react-table": "^6.10.2",
     "recharts": "^1.7.1",
-    "semantic-ui-react": "^0.88.1"
+    "semantic-ui-react": "^0.88.1",
+    "styled-components": "^4.4.1"
   }
 }
