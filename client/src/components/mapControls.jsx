@@ -2,7 +2,7 @@ import React from 'react';
 import Fab from '@material-ui/core/Fab';
 import { makeStyles } from '@material-ui/core/styles';
 import NavigationIcon from '@material-ui/icons/Navigation';
-import '../map.css';
+import './map.css';
 
 const useStyles = makeStyles(theme => ({
   fab: {

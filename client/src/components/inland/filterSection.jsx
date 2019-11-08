@@ -21,7 +21,7 @@ function TabPanel({ children, value, index, ...other }) {
   );
 }
 
-export default function FilterSection({ states, setStates }) {
+export default function FilterSection({ states, setStates, setSalinityFilter }) {
   const [tab, setTab] = useState(0);
   return (
     <div id="filter">
@@ -37,7 +37,7 @@ export default function FilterSection({ states, setStates }) {
         </Tabs>
       </AppBar>
       <TabPanel value={tab} index={0}>
-        <CustomFilter states={states} setStates={setStates}/>
+        <CustomFilter states={states} setStates={setStates} setSalinityFilter={setSalinityFilter}/>
       </TabPanel>
       <TabPanel value={tab} index={1}>
         <SolutionStepper />

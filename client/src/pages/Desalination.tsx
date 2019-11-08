@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import FilterSection from '../components/filterSection';
-import Map from '../components/inlandMap';
+import FilterSection from '../components/inland/filterSection';
+import Map from '../components/map';
 import MapControls from '../components/mapControls';
 import MapLegend from '../components/mapLegend';
 import MapOptions from '../components/mapOptions';
-import '../map.css';
+import '../components/map.css';
 
-export default function InlandDeslination() {
+export default function Desalination() {
   const [aquiferVisibility, setAquiferVisibility] = useState(true);
   const [boreVisibility, setBoreVisibility] = useState(true);
   const [plantVisibility, setPlantVisibility] = useState(false);
@@ -20,6 +20,7 @@ export default function InlandDeslination() {
   const [currentBoreProps, setCurrentBoreProps] = useState('');
   const [boreModalVisbility, setBoreModalVisibility] = useState(false);
   const [plantModalVisibility, setPlantModalVisibility] = useState(false);
+  const [salinityFilter, setSalinityFilter] = useState(999999);
 
   return (
     <div className="inland">
@@ -37,6 +38,7 @@ export default function InlandDeslination() {
         plantModalVisibility={plantModalVisibility}
         setBoreModalVisibility={setBoreModalVisibility}
         setPlantModalVisibility={setPlantModalVisibility}
+        salinityFilter={salinityFilter}
       />
       <MapOptions
         setAquiferVisibility={setAquiferVisibility}
@@ -49,7 +51,7 @@ export default function InlandDeslination() {
         setMapCenter={setMapCenter}
       />
       <MapLegend aquiferVisibility={aquiferVisibility} />
-      <FilterSection states={states} setStates={setStates} />
+      <FilterSection states={states} setStates={setStates} setSalinityFilter={setSalinityFilter}/>
     </div>
   );
 }

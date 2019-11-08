@@ -1,8 +1,7 @@
 import React from 'react';
-import '../index.css';
-
 import { Button, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import '../index.css';
 
 export default function Navigation() {
   return (
@@ -12,14 +11,8 @@ export default function Navigation() {
           <Navbar.Brand>WaterWorx</Navbar.Brand>
         </LinkContainer>
         <Nav className="mr-auto">
-          <LinkContainer to="/technologies">
-            <Nav.Link>Technologies</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to="/coastline-desalination">
-            <Nav.Link>Coastline Desalination</Nav.Link>
-          </LinkContainer>
           <LinkContainer to="/inland-desalination">
-            <Nav.Link>Inland Desalination</Nav.Link>
+            <Nav.Link>Desalination</Nav.Link>
           </LinkContainer>
         </Nav>
         <Form inline>

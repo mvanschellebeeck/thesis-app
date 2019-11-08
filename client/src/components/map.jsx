@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMapboxGl, { GeoJSONLayer, Layer, Popup } from 'react-mapbox-gl';
 import { AQUIFERS } from '../constants';
-import BoreTable from './boreDetailModal';
-import PlantDetail from './plantDetailModal';
+import BoreTable from './inland/boreDetailModal';
+import PlantDetail from './coastline/plantDetailModal';
 import Modal from '@material-ui/core/Modal';
-import styled from 'styled-components'
-import '../map.css';
+import './map.css';
 import { Typography } from '@material-ui/core';
+import axios from 'axios';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -25,15 +25,6 @@ const styles = {
   },
 };
 
-const StyledPopup = styled.div`
-  background: white;
-  color: #3f618c;
-  font-weight: 400;
-  padding: 5px;
-  border-radius: 2px;
-`;
-
-
 
 const MapGL = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN || '',
@@ -42,13 +33,27 @@ const MapGL = ReactMapboxGl({
 export default function Map({ aquiferVisibility, boreVisibility, plantVisibility, mapZoom,
   fitBounds, mapCenter, setCurrentBoreProps, currentBoreProps,
   boreModalVisibility, plantModalVisibility, setBoreModalVisibility,
-  setPlantModalVisibility, states }) {
+  setPlantModalVisibility, states, salinityFilter }) {
 
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
   const [currentBoreLat, setCurrentBoreLat] = useState(null);
   // const [filter, setFilter] = useState(['>', '1000', ['get', 'salinity']]);
 
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        `${GEOJSON_SERVER}/TAS.geojson`
+      );
+      result.data.features = result.data.features.filter(function(x){
+        return x.properties.salinity < salinityFilter;
+      });
+      setData(result.data);
+    };
+    fetchData();
+  }, [salinityFilter]);
 
   const onEnterBore = evt => {
     const { id } = evt.features[0].properties;
@@ -69,6 +74,7 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
   const onEnterPlant = evt => {
     const { id } = evt.features[0].properties;
     console.log(`Entered plant with id ${id}`);
+    console.log(data);
   }
 
   const onLeavePlant = evt => {
@@ -132,7 +138,7 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         center={mapCenter}
       >
         {currentBore &&
-            <Popup offset={[0, -10]} coordinates={[currentBoreLong, currentBoreLat]} >
+            <Popup offset={[0, -10]} coordinates={[currentBoreLong, currentBoreLat]}>
               <div style={{ padding: '15px', borderRadius: '9px', backgroundColor: 'red' }}>
                 <Typography variant="button" display="block" gutterBottom>
                   {currentBore} 
@@ -149,7 +155,9 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         <GeoJSONLayer
           key={'some_key'}
           id={'desalination_plants_source'}
-          data={`${GEOJSON_SERVER}/desalination_plants.geojson`}
+          // data={`${GEOJSON_SERVER}/desalination_plants.geojson`}
+          data={data ? data : `${GEOJSON_SERVER}/desalination_plants.geojson`}
+          // data={`${GEOJSON_SERVER}/${data ? data : 'desalination_plants.geojson'}`}
         />
         <Layer
           id={'desalination_plants'}
@@ -220,6 +228,7 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
               type="circle"
               layout={{ visibility: boreVisibility ? 'visible' : 'none' }}
             />
+
             <Layer
               key={`${state}_2`}
               id={`${state}_cluster-count`}
