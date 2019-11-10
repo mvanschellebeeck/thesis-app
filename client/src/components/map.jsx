@@ -38,22 +38,28 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
   const [currentBoreLat, setCurrentBoreLat] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [currentSalinity, setCurrentSalinity] = useState('');
+  const [currentLevel, setCurrentLevel] = useState('');
+
   // const [filter, setFilter] = useState(['>', '1000', ['get', 'salinity']]);
 
-  const [data, setData] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios(
-        `${GEOJSON_SERVER}/TAS.geojson`
-      );
-      result.data.features = result.data.features.filter(function(x){
-        return x.properties.salinity < salinityFilter;
-      });
-      setData(result.data);
-    };
-    fetchData();
-  }, [salinityFilter]);
+  // useEffect(() => {
+  //   const fetchData = async (state) => {
+  //     const result = await axios(
+  //       `${GEOJSON_SERVER}/${state}.geojson`
+  //     );
+  //     result.data.features = result.data.features.filter(function(x){
+  //       return x.properties.salinity < salinityFilter;
+  //     });
+  //     setData({ [state]: result.data });
+  //   };
+  //   ['NSW', 'QLD', 'SA', 'NT', 'WA', 'VIC', 'TAS'].map(state => {
+  //     fetchData(state);
+  //     console.log(state);
+  //   })
+  // }, [salinityFilter]);
 
   const onEnterBore = evt => {
     const { id } = evt.features[0].properties;
@@ -63,18 +69,19 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
     setCurrentBore(id);
     setCurrentBoreLong(coordinates[0]);
     setCurrentBoreLat(coordinates[1]);
-    console.log(`Entered bore`);
+    setCurrentSalinity(evt.features[0].properties.salinity + ' ' + evt.features[0].properties.salinity_uom);
+    setCurrentLevel(evt.features[0].properties.level);
+    setShowPopup(true);
   };
 
   const onLeaveBore = evt => {
-    console.log('left bore');
     setCurrentBore(null);
+    setShowPopup(false);
   };
 
   const onEnterPlant = evt => {
     const { id } = evt.features[0].properties;
     console.log(`Entered plant with id ${id}`);
-    console.log(data);
   }
 
   const onLeavePlant = evt => {
@@ -86,7 +93,6 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
     evt.preventDefault();
     setPlantModalVisibility(true);
   }
-
 
   const onClickBore = evt => {
     evt.preventDefault();
@@ -137,17 +143,17 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         zoom={mapZoom}
         center={mapCenter}
       >
-        {currentBore &&
+        {showPopup &&
             <Popup offset={[0, -10]} coordinates={[currentBoreLong, currentBoreLat]}>
               <div style={{ padding: '15px', borderRadius: '9px', backgroundColor: 'red' }}>
                 <Typography variant="button" display="block" gutterBottom>
                   {currentBore} 
                 </Typography>
                  <Typography variant="caption" display="block" gutterBottom>
-                  Salinity:
+                   Salinity: {currentSalinity}
                 </Typography>
                 <Typography variant="caption" display="block" gutterBottom>
-                  Water Levels:
+                  Level: {currentLevel || 'No Records'}
                 </Typography>
                 </div>
             </Popup>
@@ -155,9 +161,8 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         <GeoJSONLayer
           key={'some_key'}
           id={'desalination_plants_source'}
-          // data={`${GEOJSON_SERVER}/desalination_plants.geojson`}
-          data={data ? data : `${GEOJSON_SERVER}/desalination_plants.geojson`}
-          // data={`${GEOJSON_SERVER}/${data ? data : 'desalination_plants.geojson'}`}
+          data={`${GEOJSON_SERVER}/desalination_plants.geojson`}
+          // data={data ? data : `${GEOJSON_SERVER}/desalination_plants.geojson`}
         />
         <Layer
           id={'desalination_plants'}
@@ -196,6 +201,7 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
               key={state}
               id={`${state}_bores`}
               data={`${GEOJSON_SERVER}/${state}.geojson`}
+              // data={data[state]}
               sourceOptions={{
                 buffer: 0,
                 cluster: true,

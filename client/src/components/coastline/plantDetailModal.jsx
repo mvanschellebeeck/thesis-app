@@ -14,7 +14,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import PlantChart from './plantChart';
 import '../plantModal.css';
 
-
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
