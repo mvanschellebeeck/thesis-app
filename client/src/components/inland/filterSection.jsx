@@ -33,13 +33,13 @@ export default function FilterSection({ states, setStates, setSalinityFilter }) 
           variant="fullWidth"
         >
           <Tab label="Custom Filter" />
-          <Tab label="Proposed Solution" />
+          {/* <Tab label="Proposed Solution" /> */}
         </Tabs>
       </AppBar>
-      <TabPanel value={tab} index={0}>
+      {/* <TabPanel value={tab} index={0}>
         <CustomFilter states={states} setStates={setStates} setSalinityFilter={setSalinityFilter}/>
-      </TabPanel>
-      <TabPanel value={tab} index={1}>
+      </TabPanel> */}
+      <TabPanel value={tab} index={0}>
         <SolutionStepper />
       </TabPanel>
     </div>

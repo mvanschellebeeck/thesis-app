@@ -1,13 +1,13 @@
 .inland {
   height: 90vh;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: repeat(3, 1fr);
 }
 
 .map {
   grid-row: 1/4;
-  grid-column: 1/5;
+  grid-column: 1/6;
 }
 
 #map_options {
@@ -51,8 +51,8 @@
 
 #filter {
   grid-row: 1/4;
-  grid-column: 5/6;
-  height: 90vh;
+  grid-column: 6/6;
+  /* height: 90vh; */
 }
 
 .mapboxgl-popup-content {
@@ -63,17 +63,29 @@
 }
 
 .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-  border-right-color: red !important;
+  border-right-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
-  border-top-color: red !important;
+  border-top-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
-  border-bottom-color: red !important;
+  border-bottom-color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
-  border-left-color: red !important;
+
+  border: 1px solid;
+  border-left-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+#tooltip {
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 10px 6px -6px #777;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid;
+  border-radius: 15px;
+  margin: auto;
 }

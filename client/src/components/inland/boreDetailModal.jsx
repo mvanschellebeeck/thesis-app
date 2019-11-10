@@ -46,7 +46,23 @@ const useStyles = makeStyles({
   },
 });
 
-export default function BoreTable({ currentBoreProps, setBoreModalVisibility }) {
+function cleanKey(key) {
+  const names = {
+    'bore_depth': 'Bore Depth',
+    'drilled_date': 'Drilled Date',
+    'land_elevation': 'Land Elevation',
+    'last_level_measurement': 'Last Level Measurement',
+    'last_salinity_measurement': 'Last Salinity Measurement',
+    'level': 'Level',
+    'obs_point_datum': 'Obs Point Datum',
+    'salinity': 'Salinity',
+    'salinity_uom': 'Salinity unit',
+    'type_of_use': 'Type of Use'
+  }
+  return names[key];
+}
+
+export default function BoreTable({ currentBoreProps, setBoreModalVisibility, setShowPopup }) {
   const classes = useStyles();
   const columns = ['key', 'value'];
   const rows = Object.keys(currentBoreProps);
@@ -64,7 +80,7 @@ export default function BoreTable({ currentBoreProps, setBoreModalVisibility }) 
                 <TableBody>
                   {rows.map((row, index) => {
                     return (
-                      row !== 'icon' && (
+                      (row !== 'icon' && row !== 'id') && (
                         <TableRow
                           hover
                           tabIndex={-1}
@@ -73,7 +89,7 @@ export default function BoreTable({ currentBoreProps, setBoreModalVisibility }) 
                           {columns.map(column => (
                             <TableCell key={`cell-${row}-${index}`}>
                               {' '}
-                              {column === 'key' ? row : currentBoreProps[row]}
+                              {column === 'key' ? cleanKey(row) : currentBoreProps[row]}
                             </TableCell>
                           ))}
                         </TableRow>
@@ -93,7 +109,10 @@ export default function BoreTable({ currentBoreProps, setBoreModalVisibility }) 
           color="secondary"
           style={{ margin: 'auto' }}
           size="medium"
-          onClick={() => setBoreModalVisibility(false)}
+          onClick={() =>{
+             setBoreModalVisibility(false);
+             setShowPopup(false);
+          }}
         >
           Close
         </Button>

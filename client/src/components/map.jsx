@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import ReactMapboxGl, { GeoJSONLayer, Layer, Popup } from 'react-mapbox-gl';
+import ReactMapboxGl, { GeoJSONLayer, Layer } from 'react-mapbox-gl';
 import { AQUIFERS } from '../constants';
 import BoreTable from './inland/boreDetailModal';
 import PlantDetail from './coastline/plantDetailModal';
 import Modal from '@material-ui/core/Modal';
 import './map.css';
-import { Typography } from '@material-ui/core';
-import axios from 'axios';
+import Popup from './popup';
+import { Typography, Chip, Avatar } from '@material-ui/core';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -38,29 +38,15 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
   const [currentBoreLat, setCurrentBoreLat] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
+  const [showBorePopup, setShowBorePopup] = useState(false);
+  const [showPlantPopup, setShowPlantPopup] = useState(false);
   const [currentSalinity, setCurrentSalinity] = useState('');
   const [currentLevel, setCurrentLevel] = useState('');
-
-  // const [filter, setFilter] = useState(['>', '1000', ['get', 'salinity']]);
-
-
-  // useEffect(() => {
-  //   const fetchData = async (state) => {
-  //     const result = await axios(
-  //       `${GEOJSON_SERVER}/${state}.geojson`
-  //     );
-  //     result.data.features = result.data.features.filter(function(x){
-  //       return x.properties.salinity < salinityFilter;
-  //     });
-  //     setData({ [state]: result.data });
-  //   };
-  //   ['NSW', 'QLD', 'SA', 'NT', 'WA', 'VIC', 'TAS'].map(state => {
-  //     fetchData(state);
-  //     console.log(state);
-  //   })
-  // }, [salinityFilter]);
-
+  const [useType, setUseType] = useState('');
+  const [currentPlant, setCurrentPlant] = useState(null);
+  const [currentPlantLong, setCurrentPlantLong] = useState(null);
+  const [currentPlantLat, setCurrentPlantLat] = useState(null);
+  
   const onEnterBore = evt => {
     const { id } = evt.features[0].properties;
     const coordinates = evt.features[0].geometry.coordinates.slice();
@@ -71,22 +57,29 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
     setCurrentBoreLat(coordinates[1]);
     setCurrentSalinity(evt.features[0].properties.salinity + ' ' + evt.features[0].properties.salinity_uom);
     setCurrentLevel(evt.features[0].properties.level);
-    setShowPopup(true);
+    setUseType(evt.features[0].properties.type_of_use);
+    setShowBorePopup(true);
   };
 
   const onLeaveBore = evt => {
     setCurrentBore(null);
-    setShowPopup(false);
+    setShowBorePopup(false);
   };
 
   const onEnterPlant = evt => {
     const { id } = evt.features[0].properties;
-    console.log(`Entered plant with id ${id}`);
+    const coordinates = evt.features[0].geometry.coordinates.slice();
+    setCurrentPlant(id);
+    setCurrentPlantLong(coordinates[0]);
+    setCurrentPlantLat(coordinates[1]);
+    setShowPlantPopup(true);
   }
 
   const onLeavePlant = evt => {
+    setCurrentPlant(null);
+    setShowPlantPopup(false);
     // const { id } = evt.features[0].properties;
-    console.log(`Left plant with id `);
+    // console.log(`Left plant with id `);
   }
 
   const onPlantClick = evt => {
@@ -106,12 +99,16 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={boreModalVisibility}
-        onClose={() => setBoreModalVisibility(false)}
+        onClose={() => {
+          setBoreModalVisibility(false);
+          setShowBorePopup(false);
+        }}
       >
         <BoreTable
           bore={currentBore}
           currentBoreProps={currentBoreProps}
           setBoreModalVisibility={setBoreModalVisibility}
+          setShowPopup={setShowBorePopup}
         />
       </Modal>
     );
@@ -143,26 +140,26 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         zoom={mapZoom}
         center={mapCenter}
       >
-        {showPopup &&
-            <Popup offset={[0, -10]} coordinates={[currentBoreLong, currentBoreLat]}>
-              <div style={{ padding: '15px', borderRadius: '9px', backgroundColor: 'red' }}>
-                <Typography variant="button" display="block" gutterBottom>
-                  {currentBore} 
-                </Typography>
-                 <Typography variant="caption" display="block" gutterBottom>
-                   Salinity: {currentSalinity}
-                </Typography>
-                <Typography variant="caption" display="block" gutterBottom>
-                  Level: {currentLevel || 'No Records'}
-                </Typography>
-                </div>
-            </Popup>
+        {showBorePopup &&
+          <Popup long={currentBoreLong} lat={currentBoreLat} id={currentBore}
+                 fields={[
+                   `Salinity: ${currentSalinity}`,
+                   `Bore Type: ${useType || '...'}`
+                  ]}
+           ></Popup>
+        }
+        {showPlantPopup && 
+          <Popup long={currentPlantLong} lat={currentPlantLat} id={currentPlant}
+                 fields={[
+                  'property 1: blah blah',
+                  'property 2: blah'
+                  ]}
+           ></Popup>
         }
         <GeoJSONLayer
           key={'some_key'}
           id={'desalination_plants_source'}
           data={`${GEOJSON_SERVER}/desalination_plants.geojson`}
-          // data={data ? data : `${GEOJSON_SERVER}/desalination_plants.geojson`}
         />
         <Layer
           id={'desalination_plants'}
