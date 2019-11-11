@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import ReactMapboxGl, { GeoJSONLayer, Layer } from 'react-mapbox-gl';
 import { AQUIFERS } from '../constants';
 import BoreTable from './inland/boreDetailModal';
@@ -6,7 +6,6 @@ import PlantDetail from './coastline/plantDetailModal';
 import Modal from '@material-ui/core/Modal';
 import './map.css';
 import Popup from './popup';
-import { Typography, Chip, Avatar } from '@material-ui/core';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -25,16 +24,28 @@ const styles = {
   },
 };
 
-
 const MapGL = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN || '',
 });
 
-export default function Map({ aquiferVisibility, boreVisibility, plantVisibility, mapZoom,
-  fitBounds, mapCenter, setCurrentBoreProps, currentBoreProps,
-  boreModalVisibility, plantModalVisibility, setBoreModalVisibility,
-  setPlantModalVisibility, states, salinityFilter }) {
+export const PlantModalDetailContext = React.createContext();
+export const BoreModalDetailContext = React.createContext();
 
+export default function Map({
+  aquiferVisibility,
+  boreVisibility,
+  plantVisibility,
+  mapZoom,
+  fitBounds,
+  mapCenter,
+  setCurrentBoreProps,
+  currentBoreProps,
+  boreModalVisibility,
+  plantModalVisibility,
+  setBoreModalVisibility,
+  setPlantModalVisibility,
+  states,
+}) {
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
   const [currentBoreLat, setCurrentBoreLat] = useState(null);
@@ -46,16 +57,21 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
   const [currentPlant, setCurrentPlant] = useState(null);
   const [currentPlantLong, setCurrentPlantLong] = useState(null);
   const [currentPlantLat, setCurrentPlantLat] = useState(null);
-  
+  const [plantProperties, setPlantProperties] = useState(null);
+
   const onEnterBore = evt => {
     const { id } = evt.features[0].properties;
     const coordinates = evt.features[0].geometry.coordinates.slice();
-    // for some reason setting state to an object would 
+    // for some reason setting state to an object would
     // break the mouseLeave ???
     setCurrentBore(id);
     setCurrentBoreLong(coordinates[0]);
     setCurrentBoreLat(coordinates[1]);
-    setCurrentSalinity(evt.features[0].properties.salinity + ' ' + evt.features[0].properties.salinity_uom);
+    setCurrentSalinity(
+      evt.features[0].properties.salinity +
+        ' ' +
+        evt.features[0].properties.salinity_uom,
+    );
     setCurrentLevel(evt.features[0].properties.level);
     setUseType(evt.features[0].properties.type_of_use);
     setShowBorePopup(true);
@@ -73,19 +89,20 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
     setCurrentPlantLong(coordinates[0]);
     setCurrentPlantLat(coordinates[1]);
     setShowPlantPopup(true);
-  }
+  };
 
   const onLeavePlant = evt => {
     setCurrentPlant(null);
     setShowPlantPopup(false);
     // const { id } = evt.features[0].properties;
     // console.log(`Left plant with id `);
-  }
+  };
 
   const onPlantClick = evt => {
     evt.preventDefault();
+    setPlantProperties(evt.features[0].properties);
     setPlantModalVisibility(true);
-  }
+  };
 
   const onClickBore = evt => {
     evt.preventDefault();
@@ -104,12 +121,7 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
           setShowBorePopup(false);
         }}
       >
-        <BoreTable
-          bore={currentBore}
-          currentBoreProps={currentBoreProps}
-          setBoreModalVisibility={setBoreModalVisibility}
-          setShowPopup={setShowBorePopup}
-        />
+        <BoreTable />
       </Modal>
     );
   };
@@ -122,10 +134,7 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         open={plantModalVisibility}
         onClose={() => setPlantModalVisibility(false)}
       >
-        <PlantDetail
-          plantModalVisibility={plantModalVisibility}
-          setPlantModalVisibility={setPlantModalVisibility}
-        />
+        <PlantDetail />
       </Modal>
     );
   };
@@ -140,22 +149,25 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
         zoom={mapZoom}
         center={mapCenter}
       >
-        {showBorePopup &&
-          <Popup long={currentBoreLong} lat={currentBoreLat} id={currentBore}
-                 fields={[
-                   `Salinity: ${currentSalinity}`,
-                   `Bore Type: ${useType || '...'}`
-                  ]}
-           ></Popup>
-        }
-        {showPlantPopup && 
-          <Popup long={currentPlantLong} lat={currentPlantLat} id={currentPlant}
-                 fields={[
-                  'property 1: blah blah',
-                  'property 2: blah'
-                  ]}
-           ></Popup>
-        }
+        {showBorePopup && (
+          <Popup
+            long={currentBoreLong}
+            lat={currentBoreLat}
+            id={currentBore}
+            fields={[
+              `Salinity: ${currentSalinity}`,
+              `Bore Type: ${useType || '...'}`,
+            ]}
+          ></Popup>
+        )}
+        {showPlantPopup && (
+          <Popup
+            long={currentPlantLong}
+            lat={currentPlantLat}
+            id={currentPlant}
+            fields={['property 1: blah blah', 'property 2: blah']}
+          ></Popup>
+        )}
         <GeoJSONLayer
           key={'some_key'}
           id={'desalination_plants_source'}
@@ -247,8 +259,25 @@ export default function Map({ aquiferVisibility, boreVisibility, plantVisibility
           </>
         ))}
       </MapGL>
-      {renderBoreModal()}
-      {renderPlantModal()}
+      <PlantModalDetailContext.Provider
+        value={{
+          plantModalVisibility: plantModalVisibility,
+          setPlantModalVisibility: setPlantModalVisibility,
+          plantProperties: plantProperties
+        }}
+      >
+        {renderPlantModal()}
+      </PlantModalDetailContext.Provider>
+      <BoreModalDetailContext.Provider
+        value={{
+          bore: currentBore,
+          setBoreModalVisibility: setBoreModalVisibility,
+          setShowPopup: setShowBorePopup,
+          currentBoreProps: currentBoreProps,
+        }}
+      >
+        {renderBoreModal()}
+      </BoreModalDetailContext.Provider>
     </>
   );
 }
