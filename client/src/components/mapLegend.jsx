@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Typography, Grid, List, ListItem, ListItemText, Icon, ListItemIcon } from '@material-ui/core';
 import { AQUIFERS } from '../constants';
 import './map.css';
+import { MapContext } from '../pages/Desalination';
 
 function AquiferIcon(props) {
   const { fill, outline } = props;
@@ -30,8 +31,9 @@ const styles = {
   }
 }
 
-export default function MapLegend({ aquiferVisibility }) {
+export default function MapLegend() {
   const aquifers = Object.keys(AQUIFERS);
+  const { aquiferVisibility } = useContext(MapContext);
 
   const mapStyle = {
     marginRight: 9,

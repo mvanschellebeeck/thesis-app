@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { Typography } from '@material-ui/core';
+import { MapContext } from '../pages/Desalination';
 
 const styles = {
   map: {
@@ -47,9 +48,9 @@ function FormLabel({ name, defaultChecked, setAquiferVisibility, setBoreVisibili
   );
 }
 
-export default function MapOptions({ setAquiferVisibility, setBoreVisibility, setPlantVisibility }) {
+export default function MapOptions() {
   const options = ['Show Aquifers', 'Show Bores', 'Show Coastal Plants'];
-
+  const { setAquiferVisibility, setBoreVisibility, setPlantVisibility } = useContext(MapContext);
   return (
     <div id="map_options" style={styles.map}>
       <FormControl component="fieldset" style={styles.form}>

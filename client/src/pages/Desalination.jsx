@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, createContext } from 'react';
 import FilterSection from '../components/inland/filterSection';
 import Map from '../components/map';
 import MapControls from '../components/mapControls';
 import MapLegend from '../components/mapLegend';
 import MapOptions from '../components/mapOptions';
 import '../components/map.css';
+
+export const MapContext = createContext();
 
 export default function Desalination() {
   const [aquiferVisibility, setAquiferVisibility] = useState(true);
@@ -23,35 +25,39 @@ export default function Desalination() {
   const [salinityFilter, setSalinityFilter] = useState(999999);
 
   return (
+    <><MapContext.Provider 
+      value={{
+        mapZoom: mapZoom,
+        fitBounds: fitBounds,
+        aquiferVisibility: aquiferVisibility,
+        boreVisibility: boreVisibility,
+        plantVisibility: plantVisibility,
+        mapCenter: mapCenter,
+        states: states,
+        currentBoreProps: currentBoreProps,
+        setCurrentBoreProps: setCurrentBoreProps,
+        boreModalVisibility: boreModalVisbility,
+        plantModalVisibility: plantModalVisibility,
+        setBoreModalVisibility: setBoreModalVisibility,
+        setPlantModalVisibility: setPlantModalVisibility,
+        salinityFilter: salinityFilter,
+        setAquiferVisibility: setAquiferVisibility,
+        setBoreVisibility: setBoreVisibility,
+        setPlantVisibility: setPlantVisibility,
+        setMapZoom: setMapZoom,
+        setFitBounds: setFitBounds,
+        setMapCenter: setMapCenter,
+        setSalinityFilter: setSalinityFilter,
+        setStates: setStates
+      }}
+      >
     <div className="inland">
-      <Map
-        mapZoom={mapZoom}
-        fitBounds={fitBounds}
-        aquiferVisibility={aquiferVisibility}
-        boreVisibility={boreVisibility}
-        plantVisibility={plantVisibility}
-        mapCenter={mapCenter}
-        states={states}
-        currentBoreProps={currentBoreProps}
-        setCurrentBoreProps={setCurrentBoreProps}
-        boreModalVisibility={boreModalVisbility}
-        plantModalVisibility={plantModalVisibility}
-        setBoreModalVisibility={setBoreModalVisibility}
-        setPlantModalVisibility={setPlantModalVisibility}
-        salinityFilter={salinityFilter}
-      />
-      <MapOptions
-        setAquiferVisibility={setAquiferVisibility}
-        setBoreVisibility={setBoreVisibility}
-        setPlantVisibility={setPlantVisibility}
-      />
-      <MapControls
-        setMapZoom={setMapZoom}
-        setFitBounds={setFitBounds}
-        setMapCenter={setMapCenter}
-      />
-      <MapLegend aquiferVisibility={aquiferVisibility} />
-      <FilterSection states={states} setStates={setStates} setSalinityFilter={setSalinityFilter}/>
+      <Map />
+      <MapOptions />
+      <MapControls />
+      <MapLegend />
+      <FilterSection />
     </div>
+    </MapContext.Provider></>
   );
 }

@@ -6,6 +6,7 @@ import PlantDetail from './coastline/plantDetailModal';
 import Modal from '@material-ui/core/Modal';
 import './map.css';
 import Popup from './popup';
+import { MapContext } from '../pages/Desalination';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -31,21 +32,11 @@ const MapGL = ReactMapboxGl({
 export const PlantModalDetailContext = React.createContext();
 export const BoreModalDetailContext = React.createContext();
 
-export default function Map({
-  aquiferVisibility,
-  boreVisibility,
-  plantVisibility,
-  mapZoom,
-  fitBounds,
-  mapCenter,
-  setCurrentBoreProps,
-  currentBoreProps,
-  boreModalVisibility,
-  plantModalVisibility,
-  setBoreModalVisibility,
-  setPlantModalVisibility,
-  states,
-}) {
+export default function Map() {
+  const { aquiferVisibility, boreVisibility, plantVisibility, mapZoom, fitBounds, mapCenter,
+          setCurrentBoreProps, currentBoreProps, boreModalVisibility, plantModalVisibility,
+          setBoreModalVisibility, setPlantModalVisibility, states } = useContext(MapContext);
+
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
   const [currentBoreLat, setCurrentBoreLat] = useState(null);
@@ -107,6 +98,7 @@ export default function Map({
   const onClickBore = evt => {
     evt.preventDefault();
     setBoreModalVisibility(true);
+    console.log(boreModalVisibility);
     setCurrentBoreProps(evt.features[0].properties);
   };
 

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Fab from '@material-ui/core/Fab';
 import { makeStyles } from '@material-ui/core/styles';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import './map.css';
+import { MapContext } from '../pages/Desalination';
 
 const useStyles = makeStyles(theme => ({
   fab: {
@@ -14,7 +15,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function MapControls({ setMapZoom, setMapCenter, setFitBounds }) {
+export default function MapControls(){
+  const { setMapCenter, setMapZoom, setFitBounds } = useContext(MapContext);
   const classes = useStyles();
   const defaultCenter = [133.7751, -25.2744];
   const defaultFitBounds = [
