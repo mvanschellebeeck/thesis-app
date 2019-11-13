@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import React, { useState, useContext } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import {
   Card,
   CardContent,
@@ -8,40 +8,74 @@ import {
   Button,
   Typography,
   Slider,
-} from '@material-ui/core';
-import NumberFormat from 'react-number-format';
-import CloseIcon from '@material-ui/icons/Close';
-import PlantChart from './plantChart';
-import '../plantModal.css';
-import { PlantModalDetailContext } from '../map';
+  AppBar,
+  Tabs,
+  Tab
+} from "@material-ui/core";
+import NumberFormat from "react-number-format";
+import CloseIcon from "@material-ui/icons/Close";
+import PlantChart from "./plantChart";
+import "../plantModal.css";
+import { PlantModalDetailContext } from "../map";
 
 const useStyles = makeStyles(theme => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap"
   },
   card: {
-    margin: 'auto',
-    marginTop: 5,
-    width: '50vw',
+    margin: "auto",
+    width: "60vw"
   },
   formControl: {
     margin: theme.spacing(0.5),
-    width: 300,
-  },
+    width: 300
+  }
 }));
+
+function TabPanel({ children, value, index, ...other }) {
+  return (
+    <Typography
+      component="div"
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {children}
+    </Typography>
+  );
+}
 
 export default function PlantDetail() {
   const classes = useStyles();
   const [cost, setCost] = useState(null);
   const [energy, setEnergy] = useState(null);
   const [feasibility, setFeasibility] = useState(1.03);
+  const [tab, setTab] = useState(0);
+
+  const handleChange = (e, newTab) => {
+    setTab(newTab);
+  };
 
   const { plantModalVisibility } = useContext(PlantModalDetailContext);
   return (
     plantModalVisibility && (
       <Card className={classes.card}>
-        <CardContent>
+        <AppBar position="static">
+          <Tabs value={tab} onChange={handleChange} variant="fullWidth">
+            <Tab label="Economic Analysis" id="economic-analysis" />
+            <Tab label="Environmental Analysis" id="environmental-analysis" />
+            <Tab label="Social Analysis" id="social-analysis" />
+          </Tabs>
+        </AppBar>
+        <CardContent
+          role="tabpanel"
+          hidden={tab !== 0}
+          id={`simple-tabpanel-${0}`}
+          index={0}
+        >
           <div id="plant_modal">
             <InputFields
               setCost={setCost}
@@ -67,8 +101,8 @@ function NumberFormatCustom({ inputRef, onChange, ...other }) {
       onValueChange={values => {
         onChange({
           target: {
-            value: values.value,
-          },
+            value: values.value
+          }
         });
       }}
       thousandSeparator
@@ -85,7 +119,7 @@ function Close() {
         startIcon={<CloseIcon />}
         variant="contained"
         color="secondary"
-        style={{ margin: 'auto' }}
+        style={{ margin: "auto" }}
         size="medium"
         onClick={() => setPlantModalVisibility(false)}
       >
@@ -98,14 +132,14 @@ function Close() {
 function Feasibility({ feasibility }) {
   return (
     <div id="feasability">
-      <Typography style={{ fontSize: '14px', color: 'gray', margin: 'auto' }}>
+      <Typography style={{ fontSize: "14px", color: "gray", margin: "auto" }}>
         Feasibility Index
       </Typography>
       <Typography
         style={{
-          fontSize: '46px',
-          color: feasibility > 1 ? 'green' : 'red',
-          fontWeight: 'bold',
+          fontSize: "46px",
+          color: feasibility > 1 ? "green" : "red",
+          fontWeight: "bold"
         }}
       >
         {feasibility}
@@ -123,26 +157,28 @@ function DynamicInputField({ label, value, setter, inputProps }) {
         label={label}
         value={value}
         onChange={e => setter(e.target.value)}
-        id={label.toLowerCase().replace(' ', '_')}
+        id={label.toLowerCase().replace(" ", "_")}
         InputProps={{
-          inputComponent: NumberFormatCustom,
+          inputComponent: NumberFormatCustom
         }}
         inputProps={inputProps}
+        maring='dense'
       />
     </div>
   );
 }
 
-function StaticInputField({ label, value }) {
+function StaticField({ label, value }) {
   const classes = useStyles();
   return (
     <div>
       <TextField
-        id={label.toLowerCase().replace(' ', '_')}
+        id={label.toLowerCase().replace(" ", "_")}
         disabled
         className={classes.formControl}
         label={label}
         defaultValue={value}
+        margin='dense'
       />
     </div>
   );
@@ -156,11 +192,10 @@ function InputFields({ setCost, setEnergy, cost, energy }) {
       <Typography id="discrete-slider-always" gutterBottom>
         Water Supply
       </Typography>
-      <div>
+      <div style={{marginBottom: '-10'}}>
         <Slider
           defaultValue={30}
           getAriaValueText={value => `${value}%`}
-          aria-labelledby="discrete-slider"
           valueLabelDisplay="on"
           step={1}
           min={0}
@@ -169,24 +204,42 @@ function InputFields({ setCost, setEnergy, cost, energy }) {
           className={classes.formControl}
         />
       </div>
+      <StaticField
+        label="Current Population"
+        value={plantProperties.population}
+      />
+      <StaticField
+        label="Projected Population"
+        value={plantProperties.projected_population}
+      />
+      <StaticField
+        label="Total Annual Water Use"
+        value={plantProperties.total_annual_water_use + " GL/day"}
+      />
+      <StaticField
+        label="Water Use"
+        value={plantProperties.water_use + " kL/day"}
+      />
+      <StaticField
+        label="Projected Water Use"
+        value={plantProperties.projected_water_use}
+      />
+      <StaticField
+        label="Salinity"
+        value={plantProperties.salinity + " mg/L"}
+      /> 
       <DynamicInputField
         label="Capital Cost"
         value={cost}
         setter={setCost}
-        inputProps={{ prefix: '$' }}
+        inputProps={{ prefix: "$" }}
       />
       <DynamicInputField
         label="SWRO Unit Price"
         value={energy}
         setter={setEnergy}
-        inputProps={{ prefix: '$' }}
+        inputProps={{ prefix: "$" }}
       />
-      <StaticInputField label="Current Population" value={plantProperties.population} />
-      <StaticInputField label="Projected Population" value={plantProperties.projected_population} />
-      <StaticInputField label="Total Annual Water Use" value={plantProperties.total_annual_water_use + ' GL/day'} />
-      <StaticInputField label="Water Use" value={plantProperties.water_use + ' kL/day'} />
-      <StaticInputField label="Projected Water Use" value={plantProperties.projected_water_use} />
-      <StaticInputField label="Salinity" value={plantProperties.salinity + ' mg/L'} />
     </div>
   );
 }

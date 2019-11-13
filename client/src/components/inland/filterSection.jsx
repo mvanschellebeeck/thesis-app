@@ -34,7 +34,7 @@ export default function FilterSection() {
           aria-label="simple tabs example"
           variant="fullWidth"
         >
-          <Tab label="Custom Filter" />
+          <Tab label="Solution" />
           {/* <Tab label="Proposed Solution" /> */}
         </Tabs>
       </AppBar>
@@ -42,7 +42,7 @@ export default function FilterSection() {
         <CustomFilter states={states} setStates={setStates} setSalinityFilter={setSalinityFilter}/>
       </TabPanel> */}
       <TabPanel value={tab} index={0}>
-        <SolutionStepper />
+        {/* <SolutionStepper /> */}
       </TabPanel>
     </div>
   );
