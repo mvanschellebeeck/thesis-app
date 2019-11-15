@@ -57,7 +57,6 @@ export default function Desalination() {
           <MapOptions />
           <MapControls />
           <MapLegend />
-          <FilterSection />
         </div>
       </MapContext.Provider>
     </>

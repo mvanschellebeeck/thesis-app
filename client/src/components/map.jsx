@@ -7,6 +7,7 @@ import Modal from '@material-ui/core/Modal';
 import './map.css';
 import Popup from './popup';
 import { MapContext } from '../pages/Desalination';
+import CustomFilter from '../components/inland/customFilter';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -35,7 +36,7 @@ export const BoreModalDetailContext = React.createContext();
 export default function Map() {
   const { aquiferVisibility, boreVisibility, plantVisibility, mapZoom, fitBounds, mapCenter,
           setCurrentBoreProps, currentBoreProps, boreModalVisibility, plantModalVisibility,
-          setBoreModalVisibility, setPlantModalVisibility, states } = useContext(MapContext);
+          setBoreModalVisibility, setPlantModalVisibility, states, setStates } = useContext(MapContext);
 
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
@@ -255,7 +256,8 @@ export default function Map() {
         value={{
           plantModalVisibility: plantModalVisibility,
           setPlantModalVisibility: setPlantModalVisibility,
-          plantProperties: plantProperties
+          plantProperties: plantProperties,
+          setShowPlantPopup: setShowPlantPopup
         }}
       >
         {renderPlantModal()}
@@ -270,6 +272,10 @@ export default function Map() {
       >
         {renderBoreModal()}
       </BoreModalDetailContext.Provider>
+      <div id="map_controls_bottom">
+        <CustomFilter states={states} setStates={setStates}/>
+      </div>
+      
     </>
   );
 }

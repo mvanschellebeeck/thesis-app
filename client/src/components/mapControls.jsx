@@ -33,7 +33,7 @@ export default function MapControls(){
   }
 
   return (
-    <div id="map_controls" >
+    <div id="map_controls_top" >
       <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={handleClick}>
         <NavigationIcon className={classes.extendedIcon} />
         Reset Map

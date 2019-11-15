@@ -33,21 +33,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function TabPanel({ children, value, index, ...other }) {
-  return (
-    <Typography
-      component="div"
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {children}
-    </Typography>
-  );
-}
-
 export default function PlantDetail() {
   const classes = useStyles();
   const [cost, setCost] = useState(null);
@@ -112,7 +97,7 @@ function NumberFormatCustom({ inputRef, onChange, ...other }) {
 }
 
 function Close() {
-  const { setPlantModalVisibility } = useContext(PlantModalDetailContext);
+  const { setPlantModalVisibility, setShowPlantPopup } = useContext(PlantModalDetailContext);
   return (
     <CardActions>
       <Button
@@ -121,7 +106,10 @@ function Close() {
         color="secondary"
         style={{ margin: "auto" }}
         size="medium"
-        onClick={() => setPlantModalVisibility(false)}
+        onClick={() => {
+          setPlantModalVisibility(false);
+          setShowPlantPopup(false);
+        }}
       >
         Close
       </Button>
@@ -187,6 +175,15 @@ function StaticField({ label, value }) {
 function InputFields({ setCost, setEnergy, cost, energy }) {
   const classes = useStyles();
   const { plantProperties } = useContext(PlantModalDetailContext);
+  const staticFields = [
+    { label: 'Current Population', value: plantProperties.population },
+    { label: 'Projected Population', value: plantProperties.projected_population },
+    { label: 'Total Annual Water Use', value: plantProperties.total_annual_water_use },
+    { label: 'Water Use', value: plantProperties.water_use + ' kL/day' },
+    { label: 'Projected Water Use', value: plantProperties.projected_water_use },
+    { label: 'Salinity', value: plantProperties.salinity + ' mg/L' },
+
+  ]
   return (
     <div id="fields">
       <Typography id="discrete-slider-always" gutterBottom>
@@ -204,31 +201,10 @@ function InputFields({ setCost, setEnergy, cost, energy }) {
           className={classes.formControl}
         />
       </div>
-      <StaticField
-        label="Current Population"
-        value={plantProperties.population}
-      />
-      <StaticField
-        label="Projected Population"
-        value={plantProperties.projected_population}
-      />
-      <StaticField
-        label="Total Annual Water Use"
-        value={plantProperties.total_annual_water_use + " GL/day"}
-      />
-      <StaticField
-        label="Water Use"
-        value={plantProperties.water_use + " kL/day"}
-      />
-      <StaticField
-        label="Projected Water Use"
-        value={plantProperties.projected_water_use}
-      />
-      <StaticField
-        label="Salinity"
-        value={plantProperties.salinity + " mg/L"}
-      /> 
-      <DynamicInputField
+      {staticFields.map(field => 
+        <StaticField label={field.label} value={field.value} />
+      )}
+     <DynamicInputField
         label="Capital Cost"
         value={cost}
         setter={setCost}
