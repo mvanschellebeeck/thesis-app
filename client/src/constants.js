@@ -18,3 +18,8 @@ export const DESALINATION_PLANTS = {
     latitude: -28.1571,
   },
 };
+
+
+export const AUD_TO_USD = 1.46;
+export const TOTAL_INSTALLED_CAPACITY = 1463013.69;
+export const OPERATING_AND_MAINTENANCE = 0.707;

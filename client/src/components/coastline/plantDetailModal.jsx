@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import {
@@ -17,6 +17,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import PlantChart from "./plantChart";
 import "../plantModal.css";
 import { PlantModalDetailContext } from "../map";
+import { AUD_TO_USD, TOTAL_INSTALLED_CAPACITY, OPERATING_AND_MAINTENANCE } from '../../constants';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -62,12 +63,7 @@ export default function PlantDetail() {
           index={0}
         >
           <div id="plant_modal">
-            <InputFields
-              setCost={setCost}
-              setEnergy={setEnergy}
-              cost={cost}
-              energy={energy}
-            />
+            <Fields setFeasibility={setFeasibility}/>
             <PlantChart title="Operational Costs" width={300} height={300} />
             <Feasibility feasibility={feasibility} />
           </div>
@@ -118,6 +114,16 @@ function Close() {
 }
 
 function Feasibility({ feasibility }) {
+  const determineColour = () => {
+    if (feasibility >= 0.9 && feasibility <= 1.1) {
+      return 'orange';
+    } else if (feasibility > 1) {
+      return 'green';
+    } else {
+      return 'red';
+    }
+  }
+
   return (
     <div id="feasability">
       <Typography style={{ fontSize: "14px", color: "gray", margin: "auto" }}>
@@ -126,7 +132,7 @@ function Feasibility({ feasibility }) {
       <Typography
         style={{
           fontSize: "46px",
-          color: feasibility > 1 ? "green" : "red",
+          color: determineColour(),
           fontWeight: "bold"
         }}
       >
@@ -136,62 +142,89 @@ function Feasibility({ feasibility }) {
   );
 }
 
-function DynamicInputField({ label, value, setter, inputProps }) {
+function Field({ label, value, isDynamic, inputProps }) {
   const classes = useStyles();
   return (
     <div>
       <TextField
+        id={label.toLowerCase().replace(" ", "_")}
+        disabled={!isDynamic}
         className={classes.formControl}
         label={label}
         value={value}
-        onChange={e => setter(e.target.value)}
-        id={label.toLowerCase().replace(" ", "_")}
-        InputProps={{
-          inputComponent: NumberFormatCustom
-        }}
+        InputProps={{ inputComponent: NumberFormatCustom }}
         inputProps={inputProps}
-        maring='dense'
-      />
-    </div>
-  );
-}
-
-function StaticField({ label, value }) {
-  const classes = useStyles();
-  return (
-    <div>
-      <TextField
-        id={label.toLowerCase().replace(" ", "_")}
-        disabled
-        className={classes.formControl}
-        label={label}
-        defaultValue={value}
         margin='dense'
       />
     </div>
   );
 }
 
-function InputFields({ setCost, setEnergy, cost, energy }) {
-  const classes = useStyles();
-  const { plantProperties } = useContext(PlantModalDetailContext);
-  const staticFields = [
-    { label: 'Current Population', value: plantProperties.population },
-    { label: 'Projected Population', value: plantProperties.projected_population },
-    { label: 'Total Annual Water Use', value: plantProperties.total_annual_water_use },
-    { label: 'Water Use', value: plantProperties.water_use + ' kL/day' },
-    { label: 'Projected Water Use', value: plantProperties.projected_water_use },
-    { label: 'Salinity', value: plantProperties.salinity + ' mg/L' },
+function getCapitalCost(water_supply, water_use) {
+  return ((2.9 * Math.pow(10, 8) + 1.7 * Math.pow(10,3) * getSWROProduction(water_supply, water_use) - 1.8 * Math.pow(10, 7) * Math.log10(TOTAL_INSTALLED_CAPACITY))
+          * AUD_TO_USD).toFixed(2);
+}
 
+function getSWROProduction(water_supply, water_use) {
+  return (water_supply/100 * water_use).toFixed(2);
+}
+
+// function anualizeCapitalCost(capital_cost) {
+//   capital_cost * (i*(1+i)^n/((1+i)^n-1))
+// }
+
+function getSWROUnitPrice(cc_annualized, water_supply, water_use) {
+  return OPERATING_AND_MAINTENANCE + (cc_annualized / (getSWROProduction(water_supply, water_use)  * 365));
+
+}
+
+function Fields({ setFeasibility }) {
+  const classes = useStyles();
+  const { plantProperties: {
+    total_annual_water_use,
+    projected_water_use,
+    salinity,
+    water_use,
+    cc_annualized,
+    dollar_per_kl
+  }} = useContext(PlantModalDetailContext);
+
+  const [waterSupply, setWaterSupply] = useState(30);
+  const [targetSWRO, setTargetSWRO] = useState(null);
+  const [capitalCost, setCapitalCost] = useState(null);
+  const [unitPrice, setUnitPrice]  = useState(null);
+
+  const staticFields = [
+    { label: 'Annual Water Use', value: total_annual_water_use , dynamic: false, inputProps: { suffix: ' GL/yr', decimalScale: 2} },
+    { label: 'Projected Annual Water Use', value: projected_water_use , dynamic: false, inputProps: { suffix: ' GL/yr', decimalScale: 2} },
+    { label: 'Salinity', value: salinity, dynamic: false, inputProps: { suffix: ' mg/L', decimalScale: 2}},
+    { label: 'Desalination Energy Efficiency', value: 100, dynamic: false, inputProps: { suffix: ' kWh/kL', decimalScale: 2}},
+    { label: 'Water Price', value: 120, dynamic: false, inputProps: { suffix: ' $/kL', decimalScale: 2 }},
+    { label: 'Target SWRO production', value: targetSWRO, dynamic: true, inputProps: { suffix: ' kL/day', decimalScale: 0 }},
+    { label: 'Capital Cost', value: capitalCost, dynamic: true, inputProps: { prefix: '$', decimalScale: 0 }},
+    { label: 'SWRO Unit Price', value: unitPrice, dynamic: true, inputProps: { suffix: ' $/kL', decimalScale: 2 } },
   ]
+
+  useEffect(() => {
+    setUnitPrice(getSWROUnitPrice(cc_annualized, waterSupply, water_use));
+    setCapitalCost(getCapitalCost(waterSupply, water_use));
+    setTargetSWRO(getSWROProduction(waterSupply, water_use));
+    setFeasibility((dollar_per_kl / unitPrice).toFixed(2));
+  }, [waterSupply]);
+
+  useEffect(() => {
+    // ensure feasibility is initially set
+    setFeasibility((dollar_per_kl / unitPrice).toFixed(2));
+  })
+
   return (
     <div id="fields">
       <Typography id="discrete-slider-always" gutterBottom>
-        Water Supply
+        Water Supply {waterSupply + ' %'}
       </Typography>
       <div style={{marginBottom: '-10'}}>
         <Slider
-          defaultValue={30}
+          defaultValue={waterSupply}
           getAriaValueText={value => `${value}%`}
           valueLabelDisplay="on"
           step={1}
@@ -199,23 +232,12 @@ function InputFields({ setCost, setEnergy, cost, energy }) {
           max={100}
           valueLabelFormat={value => `${value}%`}
           className={classes.formControl}
+          onChange={(e, newVal) => setWaterSupply(newVal) }
         />
       </div>
       {staticFields.map(field => 
-        <StaticField label={field.label} value={field.value} />
+        <Field label={field.label} value={field.value} waterSupply={waterSupply} isDynamic={field.dynamic} inputProps={field.inputProps}/>
       )}
-     <DynamicInputField
-        label="Capital Cost"
-        value={cost}
-        setter={setCost}
-        inputProps={{ prefix: "$" }}
-      />
-      <DynamicInputField
-        label="SWRO Unit Price"
-        value={energy}
-        setter={setEnergy}
-        inputProps={{ prefix: "$" }}
-      />
     </div>
   );
 }
