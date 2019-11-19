@@ -22,4 +22,4 @@ export const DESALINATION_PLANTS = {
 
 export const AUD_TO_USD = 1.46;
 export const TOTAL_INSTALLED_CAPACITY = 1463013.69;
-export const OPERATING_AND_MAINTENANCE = 0.707;
+export const ENERGY_COST_PER_KL = 0.228;
