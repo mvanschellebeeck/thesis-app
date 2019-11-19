@@ -46,7 +46,8 @@ export default function PlantDetail() {
   };
 
   const [unitPrice, setUnitPrice] = useState(0);
-  const {plantModalVisibility} = useContext(PlantModalDetailContext);
+  const {plantModalVisibility, plantProperties: {population, projected_population}} = useContext(PlantModalDetailContext);
+
   return (
     plantModalVisibility && (
       <Card className={classes.card}>
@@ -66,6 +67,7 @@ export default function PlantDetail() {
             <EconomicFields setFeasibility={setFeasibility} unitPrice={unitPrice} setUnitPrice={setUnitPrice} />
             <PlantChart title="Capital & Operational Costs" width={300} height={300} unitPrice={unitPrice.toFixed(2)} />
             <Feasibility feasibility={feasibility} />
+            <Population current={population} projected={projected_population} />
           </div>
         </CardContent>
         <CardContent
@@ -153,6 +155,44 @@ function Feasibility({feasibility}) {
   );
 }
 
+
+function Population({current, projected}) {
+
+  return (
+    <div id="population">
+      <div id="population_current">
+        <Typography style={{fontSize: "12px", color: "gray", margin: "auto"}}>
+          Current Population
+      </Typography>
+        <Typography
+          style={{
+            fontSize: "23px",
+            fontWeight: "bold"
+          }}
+        >
+          {current}
+        </Typography>
+      </div>
+      <div id="population_projected">
+        <Typography style={{fontSize: "13px", color: "gray", margin: "auto"}}>
+          Projected Population (2066)
+        </Typography>
+        <Typography
+          style={{
+            fontSize: "23px",
+            fontWeight: "bold"
+          }}
+        >
+          {projected}
+        </Typography>
+      </div>
+    </div>
+  );
+}
+
+
+
+
 function Field({label, value, isDynamic, inputProps}) {
   const classes = useStyles();
   return (
@@ -205,9 +245,6 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
     water_use,
     cc_annualized,
     dollar_per_kl,
-    o_and_m,
-    population,
-    projected_population
   }} = useContext(PlantModalDetailContext);
 
   const annualizeCapitalCost = () => {
@@ -222,7 +259,7 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
   }
 
   const getSWROUnitPrice = () => {
-    return o_and_m + (cc_annualized / (getSWROProduction() * 365));
+    return getOandM() + (cc_annualized / (getSWROProduction() * 365));
   }
 
   const getCapitalCost = () => {
@@ -242,7 +279,7 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
 
   const textFields = [
     {label: 'Annual Water Use', value: total_annual_water_use, dynamic: false, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
-    {label: 'O&M', value: oAndM, dynamic: false, inputProps: {prefix: '$', decimalScale: 2}},
+    //{label: 'O&M', value: oAndM, dynamic: false, inputProps: {prefix: '$', decimalScale: 2}},
     //{label: 'Annualized Capital Cost', value: annualizedCapitalCost, dynamic: true, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
     {label: 'Projected Annual Water Use', value: projected_water_use, dynamic: false, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
     {label: 'Salinity', value: salinity, dynamic: false, inputProps: {suffix: ' ppm TDS', decimalScale: 2}},
