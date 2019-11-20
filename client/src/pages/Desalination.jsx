@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, {useState, createContext} from "react";
 import FilterSection from "../components/inland/filterSection";
 import Map from "../components/map";
 import MapControls from "../components/mapControls";

@@ -36,8 +36,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function PlantDetail() {
   const classes = useStyles();
-  const [cost, setCost] = useState(null);
-  const [energy, setEnergy] = useState(null);
   const [feasibility, setFeasibility] = useState(1.03);
   const [tab, setTab] = useState(0);
 
@@ -243,7 +241,6 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
     projected_water_use,
     salinity,
     water_use,
-    cc_annualized,
     dollar_per_kl,
   }} = useContext(PlantModalDetailContext);
 
@@ -259,7 +256,7 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
   }
 
   const getSWROUnitPrice = () => {
-    return getOandM() + (cc_annualized / (getSWROProduction() * 365));
+    return getOandM() + (annualizeCapitalCost() / (getSWROProduction() * 365));
   }
 
   const getCapitalCost = () => {
@@ -281,7 +278,7 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
     {label: 'Annual Water Use', value: total_annual_water_use, dynamic: false, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
     //{label: 'O&M', value: oAndM, dynamic: false, inputProps: {prefix: '$', decimalScale: 2}},
     //{label: 'Annualized Capital Cost', value: annualizedCapitalCost, dynamic: true, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
-    {label: 'Projected Annual Water Use', value: projected_water_use, dynamic: false, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
+    {label: 'Projected Annual Water Use', value: projected_water_use, dynamic: false, inputProps: {suffix: ' kL/yr', decimalScale: 2}},
     {label: 'Salinity', value: salinity, dynamic: false, inputProps: {suffix: ' ppm TDS', decimalScale: 2}},
     {label: 'Desalination Energy Efficiency', value: 100, dynamic: false, inputProps: {suffix: ' kWh/kL', decimalScale: 2}},
     {label: 'Water Price', value: 120, dynamic: false, inputProps: {suffix: ' $/kL', decimalScale: 2}},

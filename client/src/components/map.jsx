@@ -1,13 +1,16 @@
-import React, { useState, useContext } from 'react';
-import ReactMapboxGl, { GeoJSONLayer, Layer } from 'react-mapbox-gl';
-import { AQUIFERS } from '../constants';
+import React, {useState, useContext, useRef} from 'react';
+import ReactMapboxGl, {GeoJSONLayer, Layer, MapContext as MapContext_x} from 'react-mapbox-gl';
+import {AQUIFERS} from '../constants';
 import BoreTable from './inland/boreDetailModal';
 import PlantDetail from './coastline/plantDetailModal';
 import Modal from '@material-ui/core/Modal';
 import './map.css';
 import Popup from './popup';
-import { MapContext } from '../pages/Desalination';
+import {MapContext} from '../pages/Desalination';
 import CustomFilter from '../components/inland/customFilter';
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
+import DrawControl from 'react-mapbox-gl-draw';
+import * as turf from '@turf/turf'
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -34,9 +37,9 @@ export const PlantModalDetailContext = React.createContext();
 export const BoreModalDetailContext = React.createContext();
 
 export default function Map() {
-  const { aquiferVisibility, boreVisibility, plantVisibility, mapZoom, fitBounds, mapCenter,
-          setCurrentBoreProps, currentBoreProps, boreModalVisibility, plantModalVisibility,
-          setBoreModalVisibility, setPlantModalVisibility, states, setStates } = useContext(MapContext);
+  const {aquiferVisibility, boreVisibility, plantVisibility, mapZoom, fitBounds, mapCenter,
+    setCurrentBoreProps, currentBoreProps, boreModalVisibility, plantModalVisibility,
+    setBoreModalVisibility, setPlantModalVisibility, states, setStates} = useContext(MapContext);
 
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
@@ -50,9 +53,11 @@ export default function Map() {
   const [currentPlantLong, setCurrentPlantLong] = useState(null);
   const [currentPlantLat, setCurrentPlantLat] = useState(null);
   const [plantProperties, setPlantProperties] = useState(null);
+  const [mapAPI, setMapAPI] = useState(null);
 
+  const drawTest = useRef();
   const onEnterBore = evt => {
-    const { id } = evt.features[0].properties;
+    const {id} = evt.features[0].properties;
     const coordinates = evt.features[0].geometry.coordinates.slice();
     // for some reason setting state to an object would
     // break the mouseLeave ???
@@ -60,9 +65,7 @@ export default function Map() {
     setCurrentBoreLong(coordinates[0]);
     setCurrentBoreLat(coordinates[1]);
     setCurrentSalinity(
-      evt.features[0].properties.salinity +
-        ' ' +
-        evt.features[0].properties.salinity_uom,
+      evt.features[0].properties.salinity + ' ppm TDS'
     );
     setCurrentLevel(evt.features[0].properties.level);
     setUseType(evt.features[0].properties.type_of_use);
@@ -75,7 +78,7 @@ export default function Map() {
   };
 
   const onEnterPlant = evt => {
-    const { id } = evt.features[0].properties;
+    const {id} = evt.features[0].properties;
     const coordinates = evt.features[0].geometry.coordinates.slice();
     setCurrentPlant(id);
     setCurrentPlantLong(coordinates[0]);
@@ -132,6 +135,43 @@ export default function Map() {
     );
   };
 
+  const handleDrawComplete = () => {
+    var userPolygon = drawTest.current.draw.getAll().features[0];
+    var polygonBoundingBox = turf.bbox(userPolygon);
+    var southWest = [polygonBoundingBox[0], polygonBoundingBox[1]];
+    var northEast = [polygonBoundingBox[2], polygonBoundingBox[3]];
+    var northEastPointPixel = mapAPI.project(northEast);
+    var southWestPointPixel = mapAPI.project(southWest);
+    var features = mapAPI.queryRenderedFeatures([southWestPointPixel, northEastPointPixel], {layers: ['counties']});
+    console.log(features);
+  }
+
+  const BorePopup = () => {
+    return (
+      showBorePopup &&
+      <Popup
+        long={currentBoreLong}
+        lat={currentBoreLat}
+        id={currentBore}
+        fields={[
+          `Salinity: ${currentSalinity}`,
+          `Bore Type: ${useType || '...'}`,
+        ]}
+      ></Popup>
+    )
+  }
+
+  const PlantPopup = () => {
+    return (showPlantPopup &&
+      <Popup
+        long={currentPlantLong}
+        lat={currentPlantLat}
+        id={currentPlant}
+        fields={['property 1: blah blah', 'property 2: blah']}
+      ></Popup>
+    )
+  }
+
   return (
     <>
       <MapGL
@@ -142,115 +182,106 @@ export default function Map() {
         zoom={mapZoom}
         center={mapCenter}
       >
-        {showBorePopup && (
-          <Popup
-            long={currentBoreLong}
-            lat={currentBoreLat}
-            id={currentBore}
-            fields={[
-              `Salinity: ${currentSalinity}`,
-              `Bore Type: ${useType || '...'}`,
-            ]}
-          ></Popup>
-        )}
-        {showPlantPopup && (
-          <Popup
-            long={currentPlantLong}
-            lat={currentPlantLat}
-            id={currentPlant}
-            fields={['property 1: blah blah', 'property 2: blah']}
-          ></Popup>
-        )}
-        <GeoJSONLayer
-          key={'some_key'}
-          id={'desalination_plants_source'}
-          data={`${GEOJSON_SERVER}/desalination_plants.geojson`}
-        />
-        <Layer
-          id={'desalination_plants'}
-          key={'desalination_plants'}
-          sourceId={'desalination_plants_source'}
-          layout={{
-            'icon-allow-overlap': true,
-            'icon-image': '{icon}',
-            visibility: plantVisibility ? 'visible' : 'none',
-          }}
-          onClick={onPlantClick}
-          onMouseEnter={onEnterPlant} // make this change to pointy hand
-          onMouseLeave={onLeavePlant}
-        />
-
-        {Object.keys(AQUIFERS).map(aquifer => (
+        <BorePopup />
+        <PlantPopup />
+        <>
           <GeoJSONLayer
-            key={aquifer}
-            data={`${GEOJSON_SERVER}/${AQUIFERS[aquifer].id}.geojson`}
-            fillPaint={{
-              'fill-color': AQUIFERS[aquifer].colour_fill,
-              'fill-outline-color': AQUIFERS[aquifer].colour_outline,
-            }}
-            fillLayout={{
-              visibility: aquiferVisibility ? 'visible' : 'none',
-            }}
-            sourceOptions={{
-              tolerance: 1,
-            }}
+            key={'some_key'}
+            id={'desalination_plants_source'}
+            data={`${GEOJSON_SERVER}/desalination_plants.geojson`}
           />
-        ))}
-
-        {states.map(state => (
-          <>
+          <Layer
+            id={'desalination_plants'}
+            key={'desalination_plants'}
+            sourceId={'desalination_plants_source'}
+            layout={{
+              'icon-allow-overlap': true,
+              'icon-image': '{icon}',
+              visibility: plantVisibility ? 'visible' : 'none',
+            }}
+            onClick={onPlantClick}
+            onMouseEnter={onEnterPlant} // make this change to pointy hand
+            onMouseLeave={onLeavePlant}
+          />
+        </>
+        {
+          Object.keys(AQUIFERS).map(aquifer => (
             <GeoJSONLayer
-              key={state}
-              id={`${state}_bores`}
-              data={`${GEOJSON_SERVER}/${state}.geojson`}
-              // data={data[state]}
+              key={aquifer}
+              data={`${GEOJSON_SERVER}/${AQUIFERS[aquifer].id}.geojson`}
+              fillPaint={{
+                'fill-color': AQUIFERS[aquifer].colour_fill,
+                'fill-outline-color': AQUIFERS[aquifer].colour_outline,
+              }}
+              fillLayout={{
+                visibility: aquiferVisibility ? 'visible' : 'none',
+              }}
               sourceOptions={{
-                buffer: 0,
-                cluster: true,
-                clusterMaxZoom: 14,
-                clusterRadius: 50,
-                maxzoom: 12,
+                tolerance: 1,
               }}
             />
-            <Layer
-              id={`${state}_unclustered-point`}
-              key={`${state}_3`}
-              sourceId={`${state}_bores`}
-              filter={['all', ['!has', 'point_count']]}
-              layout={{
-                'icon-allow-overlap': true,
-                'icon-image': '{icon}',
-                visibility: boreVisibility ? 'visible' : 'none',
-              }}
-              onClick={onClickBore}
-              onMouseEnter={onEnterBore}
-              onMouseLeave={onLeaveBore}
-            />
+          ))
+        }
+        {
+          states.map(state => (
+            <>
+              <GeoJSONLayer
+                key={state}
+                id={`${state}_bores`}
+                data={`${GEOJSON_SERVER}/${state}.geojson`}
+                // data={data[state]}
+                sourceOptions={{
+                  buffer: 0,
+                  cluster: true,
+                  clusterMaxZoom: 14,
+                  clusterRadius: 50,
+                  maxzoom: 12,
+                }}
+              />
+              <Layer
+                id={`${state}_unclustered-point`}
+                key={`${state}_3`}
+                sourceId={`${state}_bores`}
+                filter={['all', ['!has', 'point_count']]}
+                layout={{
+                  'icon-allow-overlap': true,
+                  'icon-image': '{icon}',
+                  visibility: boreVisibility ? 'visible' : 'none',
+                }}
+                onClick={onClickBore}
+                onMouseEnter={onEnterBore}
+                onMouseLeave={onLeaveBore}
+              />
 
-            <Layer
-              key={`${state}_1`}
-              id={`${state}_cluster`}
-              sourceId={`${state}_bores`}
-              filter={['all', ['has', 'point_count']]}
-              paint={styles.clusterPaintProps}
-              type="circle"
-              layout={{ visibility: boreVisibility ? 'visible' : 'none' }}
-            />
+              <Layer
+                key={`${state}_1`}
+                id={`${state}_cluster`}
+                sourceId={`${state}_bores`}
+                filter={['all', ['has', 'point_count']]}
+                paint={styles.clusterPaintProps}
+                type="circle"
+                layout={{visibility: boreVisibility ? 'visible' : 'none'}}
+              />
 
-            <Layer
-              key={`${state}_2`}
-              id={`${state}_cluster-count`}
-              sourceId={`${state}_bores`}
-              filter={['all', ['has', 'point_count']]}
-              layout={{
-                'text-field': '{point_count_abbreviated}',
-                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-size': 12,
-                visibility: boreVisibility ? 'visible' : 'none',
-              }}
-            />
-          </>
-        ))}
+              <Layer
+                key={`${state}_2`}
+                id={`${state}_cluster-count`}
+                sourceId={`${state}_bores`}
+                filter={['all', ['has', 'point_count']]}
+                layout={{
+                  'text-field': '{point_count_abbreviated}',
+                  'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                  'text-size': 12,
+                  visibility: boreVisibility ? 'visible' : 'none',
+                }}
+              />
+            </>
+          ))
+        }
+        <DrawControl
+          ref={drawTest}
+          onDrawCreate={handleDrawComplete}
+        />
       </MapGL>
       <PlantModalDetailContext.Provider
         value={{
@@ -273,9 +304,9 @@ export default function Map() {
         {renderBoreModal()}
       </BoreModalDetailContext.Provider>
       <div id="map_controls_bottom">
-        <CustomFilter states={states} setStates={setStates}/>
+        <CustomFilter states={states} setStates={setStates} />
       </div>
-      
+
     </>
   );
 }
