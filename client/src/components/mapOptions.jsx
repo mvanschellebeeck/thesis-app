@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext} from 'react';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import { Typography } from '@material-ui/core';
-import { MapContext } from '../pages/Desalination';
+import {Typography} from '@material-ui/core';
+import {MapContext} from '../pages/Desalination';
 
 const styles = {
   map: {
@@ -19,15 +19,15 @@ const styles = {
   },
 };
 
-function FormLabel({ name, defaultChecked, setAquiferVisibility, setBoreVisibility, setPlantVisibility }) {
+function FormLabel({name, defaultChecked, setAquiferVisibility, setBoreVisibility, setPlantVisibility}) {
   const [checked, setChecked] = useState(defaultChecked);
 
   function handleChecked() {
-    if (name === 'Show Aquifers') {
+    if (name === 'Aquifers') {
       setAquiferVisibility(!checked);
-    } else if (name === 'Show Bores') {
+    } else if (name === 'Bores') {
       setBoreVisibility(!checked);
-    } else if (name === 'Show Coastal Plants') {
+    } else if (name === 'Coastal Plants') {
       setPlantVisibility(!checked);
     }
     setChecked(!checked);
@@ -49,8 +49,8 @@ function FormLabel({ name, defaultChecked, setAquiferVisibility, setBoreVisibili
 }
 
 export default function MapOptions() {
-  const options = ['Show Aquifers', 'Show Bores', 'Show Coastal Plants'];
-  const { setAquiferVisibility, setBoreVisibility, setPlantVisibility } = useContext(MapContext);
+  const options = ['Aquifers', 'Bores', 'Coastal Plants'];
+  const {setAquiferVisibility, setBoreVisibility, setPlantVisibility} = useContext(MapContext);
   return (
     <div id="map_options" style={styles.map}>
       <FormControl component="fieldset" style={styles.form}>
@@ -59,7 +59,7 @@ export default function MapOptions() {
             <FormLabel
               key={option}
               name={option}
-              defaultChecked={option !== 'Show Coastal Plants'}
+              defaultChecked={option !== 'Coastal Plants'}
               setAquiferVisibility={setAquiferVisibility}
               setBoreVisibility={setBoreVisibility}
               setPlantVisibility={setPlantVisibility}

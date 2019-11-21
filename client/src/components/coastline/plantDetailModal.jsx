@@ -44,10 +44,10 @@ export default function PlantDetail() {
   };
 
   const [unitPrice, setUnitPrice] = useState(0);
-  const {plantModalVisibility, plantProperties: {population, projected_population}} = useContext(PlantModalDetailContext);
+  const {selectorMode, plantModalVisibility, plantProperties: {population, projected_population}} = useContext(PlantModalDetailContext);
 
   return (
-    plantModalVisibility && (
+    plantModalVisibility && !selectorMode && (
       <Card className={classes.card}>
         <AppBar position="static">
           <Tabs value={tab} onChange={handleChange} variant="fullWidth">

@@ -1,5 +1,5 @@
 import React, {useState, useContext, useRef} from 'react';
-import ReactMapboxGl, {GeoJSONLayer, Layer, MapContext as MapContext_x} from 'react-mapbox-gl';
+import ReactMapboxGl, {GeoJSONLayer, Layer} from 'react-mapbox-gl';
 import {AQUIFERS} from '../constants';
 import BoreTable from './inland/boreDetailModal';
 import PlantDetail from './coastline/plantDetailModal';
@@ -8,9 +8,6 @@ import './map.css';
 import Popup from './popup';
 import {MapContext} from '../pages/Desalination';
 import CustomFilter from '../components/inland/customFilter';
-import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
-import DrawControl from 'react-mapbox-gl-draw';
-import * as turf from '@turf/turf'
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
 
@@ -39,7 +36,8 @@ export const BoreModalDetailContext = React.createContext();
 export default function Map() {
   const {aquiferVisibility, boreVisibility, plantVisibility, mapZoom, fitBounds, mapCenter,
     setCurrentBoreProps, currentBoreProps, boreModalVisibility, plantModalVisibility,
-    setBoreModalVisibility, setPlantModalVisibility, states, setStates} = useContext(MapContext);
+    setBoreModalVisibility, setPlantModalVisibility, states, setStates, selectorMode,
+    selectedBores, setSelectedBores} = useContext(MapContext);
 
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
@@ -53,9 +51,7 @@ export default function Map() {
   const [currentPlantLong, setCurrentPlantLong] = useState(null);
   const [currentPlantLat, setCurrentPlantLat] = useState(null);
   const [plantProperties, setPlantProperties] = useState(null);
-  const [mapAPI, setMapAPI] = useState(null);
 
-  const drawTest = useRef();
   const onEnterBore = evt => {
     const {id} = evt.features[0].properties;
     const coordinates = evt.features[0].geometry.coordinates.slice();
@@ -102,13 +98,16 @@ export default function Map() {
   const onClickBore = evt => {
     evt.preventDefault();
     setBoreModalVisibility(true);
-    console.log(boreModalVisibility);
     setCurrentBoreProps(evt.features[0].properties);
+    if (selectorMode) {
+      setSelectedBores([...selectedBores, evt.features[0].properties])
+      console.log(selectedBores);
+    }
   };
 
   const renderBoreModal = () => {
     return (
-      <Modal
+      !selectorMode && <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={boreModalVisibility}
@@ -124,7 +123,7 @@ export default function Map() {
 
   const renderPlantModal = () => {
     return (
-      <Modal
+      !selectorMode && <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={plantModalVisibility}
@@ -135,20 +134,9 @@ export default function Map() {
     );
   };
 
-  const handleDrawComplete = () => {
-    var userPolygon = drawTest.current.draw.getAll().features[0];
-    var polygonBoundingBox = turf.bbox(userPolygon);
-    var southWest = [polygonBoundingBox[0], polygonBoundingBox[1]];
-    var northEast = [polygonBoundingBox[2], polygonBoundingBox[3]];
-    var northEastPointPixel = mapAPI.project(northEast);
-    var southWestPointPixel = mapAPI.project(southWest);
-    var features = mapAPI.queryRenderedFeatures([southWestPointPixel, northEastPointPixel], {layers: ['counties']});
-    console.log(features);
-  }
-
   const BorePopup = () => {
     return (
-      showBorePopup &&
+      !selectorMode && showBorePopup &&
       <Popup
         long={currentBoreLong}
         lat={currentBoreLat}
@@ -162,7 +150,8 @@ export default function Map() {
   }
 
   const PlantPopup = () => {
-    return (showPlantPopup &&
+    return (
+      !selectorMode && showPlantPopup &&
       <Popup
         long={currentPlantLong}
         lat={currentPlantLat}
@@ -278,17 +267,14 @@ export default function Map() {
             </>
           ))
         }
-        <DrawControl
-          ref={drawTest}
-          onDrawCreate={handleDrawComplete}
-        />
       </MapGL>
       <PlantModalDetailContext.Provider
         value={{
           plantModalVisibility: plantModalVisibility,
           setPlantModalVisibility: setPlantModalVisibility,
           plantProperties: plantProperties,
-          setShowPlantPopup: setShowPlantPopup
+          setShowPlantPopup: setShowPlantPopup,
+          selectorMode: selectorMode
         }}
       >
         {renderPlantModal()}
@@ -299,6 +285,7 @@ export default function Map() {
           setBoreModalVisibility: setBoreModalVisibility,
           setShowPopup: setShowBorePopup,
           currentBoreProps: currentBoreProps,
+          selectorMode: selectorMode
         }}
       >
         {renderBoreModal()}

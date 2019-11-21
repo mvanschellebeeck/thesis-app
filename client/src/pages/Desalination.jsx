@@ -4,6 +4,7 @@ import Map from "../components/map";
 import MapControls from "../components/mapControls";
 import MapLegend from "../components/mapLegend";
 import MapOptions from "../components/mapOptions";
+import PlantCompute from "../components/plantCompute";
 import "../components/map.css";
 
 export const MapContext = createContext();
@@ -23,6 +24,8 @@ export default function Desalination() {
   const [boreModalVisbility, setBoreModalVisibility] = useState(false);
   const [plantModalVisibility, setPlantModalVisibility] = useState(false);
   const [salinityFilter, setSalinityFilter] = useState(999999);
+  const [selectorMode, setSelectorMode] = useState(false);
+  const [selectedBores, setSelectedBores] = useState([]);
 
   return (
     <>
@@ -49,7 +52,11 @@ export default function Desalination() {
           setFitBounds: setFitBounds,
           setMapCenter: setMapCenter,
           setSalinityFilter: setSalinityFilter,
-          setStates: setStates
+          setStates: setStates,
+          selectorMode: selectorMode,
+          setSelectorMode: setSelectorMode,
+          selectedBores: selectedBores,
+          setSelectedBores: setSelectedBores
         }}
       >
         <div className="inland">
@@ -57,6 +64,7 @@ export default function Desalination() {
           <MapOptions />
           <MapControls />
           <MapLegend />
+          <PlantCompute />
         </div>
       </MapContext.Provider>
     </>
