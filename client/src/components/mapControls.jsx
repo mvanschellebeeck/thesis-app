@@ -51,10 +51,6 @@ export default function MapControls() {
         <NavigationIcon className={classes.extendedIcon} />
         Selector
       </Fab>
-      <Fab variant="extended" size="medium" aria-label="like" className={classes.fab} onClick={computeClick}>
-        <NavigationIcon className={classes.extendedIcon} />
-        Compute
-      </Fab>
     </div>
   );
 }

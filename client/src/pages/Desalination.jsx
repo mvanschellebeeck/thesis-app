@@ -26,6 +26,7 @@ export default function Desalination() {
   const [salinityFilter, setSalinityFilter] = useState(999999);
   const [selectorMode, setSelectorMode] = useState(false);
   const [selectedBores, setSelectedBores] = useState([]);
+  const [populationVisibility, setPopulationVisibility] = useState(false);
 
   return (
     <>
@@ -56,7 +57,9 @@ export default function Desalination() {
           selectorMode: selectorMode,
           setSelectorMode: setSelectorMode,
           selectedBores: selectedBores,
-          setSelectedBores: setSelectedBores
+          setSelectedBores: setSelectedBores,
+          populationVisibility: populationVisibility,
+          setPopulationVisibility: setPopulationVisibility
         }}
       >
         <div className="inland">

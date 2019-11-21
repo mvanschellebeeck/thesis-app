@@ -95,6 +95,11 @@ export default function Map() {
     setPlantModalVisibility(true);
   };
 
+  const onPopulationClick = evt => {
+    evt.preventDefault();
+    console.log(evt.features[0].properties);
+  }
+
   const onClickBore = evt => {
     evt.preventDefault();
     setBoreModalVisibility(true);
@@ -193,80 +198,104 @@ export default function Map() {
             onMouseLeave={onLeavePlant}
           />
         </>
-        {
-          Object.keys(AQUIFERS).map(aquifer => (
+
+        <GeoJSONLayer
+          key="population"
+          id="population"
+          data={`${GEOJSON_SERVER}/population.geojson`}
+        />
+        <Layer
+          id="polpulation_layer"
+          key="polpulation_layer"
+          sourceId="population"
+          type="fill"
+          paint={{
+            'fill-color': [
+              'interpolate',
+              ['linear'],
+              ['get', 'density'],
+              0, 'rgba(255,0,0, 0.3)', // blue-green
+              10, 'rgba(0,255,0,0.3)', // yellow
+            ],
+            //'fill-outline-color': 'rgba(0,0,0,0)'
+            'fill-outline-color': 'black'
+          }}
+          //paint={{'fill-color': 'rgb(255,255,255)', 'fill-outline-color': 'black'}}
+          onClick={onPopulationClick}
+        />
+
+        {Object.keys(AQUIFERS).map(aquifer => (
+          <GeoJSONLayer
+            key={aquifer}
+            data={`${GEOJSON_SERVER}/${AQUIFERS[aquifer].id}.geojson`}
+            fillPaint={{
+              'fill-color': AQUIFERS[aquifer].colour_fill,
+              'fill-outline-color': AQUIFERS[aquifer].colour_outline,
+            }}
+            fillLayout={{
+              visibility: aquiferVisibility ? 'visible' : 'none',
+            }}
+            sourceOptions={{
+              tolerance: 1,
+            }}
+          />
+        ))}
+
+        {states.map(state => (
+          <>
             <GeoJSONLayer
-              key={aquifer}
-              data={`${GEOJSON_SERVER}/${AQUIFERS[aquifer].id}.geojson`}
-              fillPaint={{
-                'fill-color': AQUIFERS[aquifer].colour_fill,
-                'fill-outline-color': AQUIFERS[aquifer].colour_outline,
-              }}
-              fillLayout={{
-                visibility: aquiferVisibility ? 'visible' : 'none',
-              }}
+              key={state}
+              id={`${state}_bores`}
+              data={`${GEOJSON_SERVER}/${state}.geojson`}
+              // data={data[state]}
               sourceOptions={{
-                tolerance: 1,
+                buffer: 0,
+                cluster: true,
+                clusterMaxZoom: 14,
+                clusterRadius: 50,
+                maxzoom: 12,
               }}
             />
-          ))
-        }
-        {
-          states.map(state => (
-            <>
-              <GeoJSONLayer
-                key={state}
-                id={`${state}_bores`}
-                data={`${GEOJSON_SERVER}/${state}.geojson`}
-                // data={data[state]}
-                sourceOptions={{
-                  buffer: 0,
-                  cluster: true,
-                  clusterMaxZoom: 14,
-                  clusterRadius: 50,
-                  maxzoom: 12,
-                }}
-              />
-              <Layer
-                id={`${state}_unclustered-point`}
-                key={`${state}_3`}
-                sourceId={`${state}_bores`}
-                filter={['all', ['!has', 'point_count']]}
-                layout={{
-                  'icon-allow-overlap': true,
-                  'icon-image': '{icon}',
-                  visibility: boreVisibility ? 'visible' : 'none',
-                }}
-                onClick={onClickBore}
-                onMouseEnter={onEnterBore}
-                onMouseLeave={onLeaveBore}
-              />
+            <Layer
+              id={`${state}_unclustered-point`}
+              key={`${state}_3`}
+              sourceId={`${state}_bores`}
+              filter={['all', ['!has', 'point_count']]}
+              layout={{
+                'icon-allow-overlap': true,
+                'icon-image': '{icon}',
+                visibility: boreVisibility ? 'visible' : 'none',
+              }}
+              onClick={onClickBore}
+              onMouseEnter={onEnterBore}
+              onMouseLeave={onLeaveBore}
+            />
 
-              <Layer
-                key={`${state}_1`}
-                id={`${state}_cluster`}
-                sourceId={`${state}_bores`}
-                filter={['all', ['has', 'point_count']]}
-                paint={styles.clusterPaintProps}
-                type="circle"
-                layout={{visibility: boreVisibility ? 'visible' : 'none'}}
-              />
+            <Layer
+              key={`${state}_1`}
+              id={`${state}_cluster`}
+              sourceId={`${state}_bores`}
+              filter={['all', ['has', 'point_count']]}
+              paint={styles.clusterPaintProps}
+              type="circle"
+              layout={{visibility: boreVisibility ? 'visible' : 'none'}}
+            />
 
-              <Layer
-                key={`${state}_2`}
-                id={`${state}_cluster-count`}
-                sourceId={`${state}_bores`}
-                filter={['all', ['has', 'point_count']]}
-                layout={{
-                  'text-field': '{point_count_abbreviated}',
-                  'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                  'text-size': 12,
-                  visibility: boreVisibility ? 'visible' : 'none',
-                }}
-              />
-            </>
-          ))
-        }
+            <Layer
+              key={`${state}_2`}
+              id={`${state}_cluster-count`}
+              sourceId={`${state}_bores`}
+              filter={['all', ['has', 'point_count']]}
+              layout={{
+                'text-field': '{point_count_abbreviated}',
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-size': 12,
+                visibility: boreVisibility ? 'visible' : 'none',
+              }}
+            />
+          </>
+        ))}
+
       </MapGL>
       <PlantModalDetailContext.Provider
         value={{

@@ -49,8 +49,8 @@ function FormLabel({name, defaultChecked, setAquiferVisibility, setBoreVisibilit
 }
 
 export default function MapOptions() {
-  const options = ['Aquifers', 'Bores', 'Coastal Plants'];
-  const {setAquiferVisibility, setBoreVisibility, setPlantVisibility} = useContext(MapContext);
+  const options = ['Aquifers', 'Bores', 'Coastal Plants', 'Population Demographics'];
+  const {setAquiferVisibility, setBoreVisibility, setPlantVisibility, setPopulationVisibility} = useContext(MapContext);
   return (
     <div id="map_options" style={styles.map}>
       <FormControl component="fieldset" style={styles.form}>
