@@ -19,6 +19,18 @@ export const DESALINATION_PLANTS = {
   },
 };
 
+export const EMPTY_GEOJSON = {
+  "type": "FeatureCollection",
+  "features": [{
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": []
+    }
+  }]
+}
+
+
 
 export const AUD_TO_USD = 1.46;
 export const TOTAL_INSTALLED_CAPACITY = 1463013.69;

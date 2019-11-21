@@ -19,7 +19,7 @@ const styles = {
   },
 };
 
-function FormLabel({name, defaultChecked, setAquiferVisibility, setBoreVisibility, setPlantVisibility}) {
+function FormLabel({name, defaultChecked, setAquiferVisibility, setBoreVisibility, setPlantVisibility, setPopulationVisibility}) {
   const [checked, setChecked] = useState(defaultChecked);
 
   function handleChecked() {
@@ -29,6 +29,8 @@ function FormLabel({name, defaultChecked, setAquiferVisibility, setBoreVisibilit
       setBoreVisibility(!checked);
     } else if (name === 'Coastal Plants') {
       setPlantVisibility(!checked);
+    } else if (name == 'Population Demographics') {
+      setPopulationVisibility(!checked);
     }
     setChecked(!checked);
   }
@@ -59,10 +61,11 @@ export default function MapOptions() {
             <FormLabel
               key={option}
               name={option}
-              defaultChecked={option !== 'Coastal Plants'}
+              defaultChecked={option !== 'Coastal Plants' && option != 'Population Demographics'}
               setAquiferVisibility={setAquiferVisibility}
               setBoreVisibility={setBoreVisibility}
               setPlantVisibility={setPlantVisibility}
+              setPopulationVisibility={setPopulationVisibility}
             />
           ))}
         </FormGroup>

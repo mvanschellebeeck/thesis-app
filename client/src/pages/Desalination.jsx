@@ -6,6 +6,7 @@ import MapLegend from "../components/mapLegend";
 import MapOptions from "../components/mapOptions";
 import PlantCompute from "../components/plantCompute";
 import "../components/map.css";
+import {EMPTY_GEOJSON} from '../constants';
 
 export const MapContext = createContext();
 
@@ -27,6 +28,10 @@ export default function Desalination() {
   const [selectorMode, setSelectorMode] = useState(false);
   const [selectedBores, setSelectedBores] = useState([]);
   const [populationVisibility, setPopulationVisibility] = useState(false);
+  const [inlandPlant, setInlandPlant] = useState(null);
+  const [computedPlantVisibility, setComputedPlantVisibility] = useState(false);
+  const [computedPlant, setComputedPlant] = useState(EMPTY_GEOJSON);
+  const [computedPlantModalVisibility, setComputedPlantModalVisibility] = useState(false);
 
   return (
     <>
@@ -59,7 +64,13 @@ export default function Desalination() {
           selectedBores: selectedBores,
           setSelectedBores: setSelectedBores,
           populationVisibility: populationVisibility,
-          setPopulationVisibility: setPopulationVisibility
+          setPopulationVisibility: setPopulationVisibility,
+          computedPlant: computedPlant,
+          setComputedPlant: setComputedPlant,
+          computedPlantVisibility: computedPlantVisibility,
+          setComputedPlantVisibility: setComputedPlantVisibility,
+          computedPlantModalVisibility: computedPlantModalVisibility,
+          setComputedPlantModalVisibility: setComputedPlantModalVisibility
         }}
       >
         <div className="inland">

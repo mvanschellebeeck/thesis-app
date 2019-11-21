@@ -7,6 +7,8 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
+import * as turf from '@turf/turf'
+import {EMPTY_GEOJSON} from '../constants';
 
 
 const styles = {
@@ -52,7 +54,7 @@ function Header({icon, title, bottomPadding, onClick}) {
 
 
 export default function PlantCompute() {
-  const {selectedBores, setSelectedBores} = useContext(MapContext);
+  const {selectedBores, setSelectedBores, setMapCenter, setComputedPlantVisibility, setComputedPlant} = useContext(MapContext);
 
   const removeBore = (bore) => {
     const newBores = selectedBores.filter(x => x.id != bore);
@@ -61,10 +63,28 @@ export default function PlantCompute() {
 
   const clearAllBores = () => {
     setSelectedBores([]);
+    setComputedPlant(EMPTY_GEOJSON);
   }
 
   const computeBores = () => {
-    console.log('Compute bores');
+    if (selectedBores.length != 0) {
+      const features = turf.featureCollection(selectedBores.map(bore => turf.point([bore.lng, bore.lat])));
+      const centre = turf.center(features).geometry.coordinates;
+      setMapCenter(centre);
+      const sample_point = {
+        "type": "FeatureCollection",
+        "features": [{
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": centre
+          }
+        }]
+      };
+
+      setComputedPlant(sample_point);
+      setComputedPlantVisibility(true);
+    }
   }
 
   return (
@@ -80,7 +100,8 @@ export default function PlantCompute() {
                   variant="outlined"
                   onClick={() => removeBore(bore.id)} // make this show details?
                   onDelete={() => removeBore(bore.id)}
-                /></div>)}
+                />
+              </div>)}
           </div>
         </Grid>
       </Grid>)}

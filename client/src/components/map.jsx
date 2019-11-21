@@ -8,8 +8,21 @@ import './map.css';
 import Popup from './popup';
 import {MapContext} from '../pages/Desalination';
 import CustomFilter from '../components/inland/customFilter';
+import InlandPlantModal from '../components/inland/inlandPlantModal';
 
 const GEOJSON_SERVER = 'https://mvanschellebeeck.github.io/geojson-server';
+
+const sample_point = {
+  "type": "FeatureCollection",
+  "features": [{
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [143.03, -29.23]
+    }
+  }]
+};
+
 
 const styles = {
   clusterPaintProps: {
@@ -37,7 +50,9 @@ export default function Map() {
   const {aquiferVisibility, boreVisibility, plantVisibility, mapZoom, fitBounds, mapCenter,
     setCurrentBoreProps, currentBoreProps, boreModalVisibility, plantModalVisibility,
     setBoreModalVisibility, setPlantModalVisibility, states, setStates, selectorMode,
-    selectedBores, setSelectedBores} = useContext(MapContext);
+    selectedBores, setSelectedBores, populationVisibility,
+    setPopulationVisibility, inlandPlant, setInlandPlant, computedPlantVisibility, computedPlantModalVisibility, setComputedPlantModalVisibility,
+    computedPlant, setComputedPlant} = useContext(MapContext);
 
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
@@ -51,6 +66,7 @@ export default function Map() {
   const [currentPlantLong, setCurrentPlantLong] = useState(null);
   const [currentPlantLat, setCurrentPlantLat] = useState(null);
   const [plantProperties, setPlantProperties] = useState(null);
+  const [density, setDensity] = useState({});
 
   const onEnterBore = evt => {
     const {id} = evt.features[0].properties;
@@ -97,7 +113,8 @@ export default function Map() {
 
   const onPopulationClick = evt => {
     evt.preventDefault();
-    console.log(evt.features[0].properties);
+    //const { density, Name, population, area } = evt.features[0].properties;
+    setDensity(evt.features[0].properties);
   }
 
   const onClickBore = evt => {
@@ -105,7 +122,8 @@ export default function Map() {
     setBoreModalVisibility(true);
     setCurrentBoreProps(evt.features[0].properties);
     if (selectorMode) {
-      setSelectedBores([...selectedBores, evt.features[0].properties])
+      const bore = {...evt.features[0].properties, ...evt.lngLat}
+      setSelectedBores([...selectedBores, bore]);
       console.log(selectedBores);
     }
   };
@@ -139,6 +157,17 @@ export default function Map() {
     );
   };
 
+  const renderInlandPlantModal = () => {
+
+    return (
+      selectorMode && <Modal
+        open={computedPlantModalVisibility}
+      >
+        <InlandPlantModal density={density} />
+      </Modal>
+    )
+  }
+
   const BorePopup = () => {
     return (
       !selectorMode && showBorePopup &&
@@ -164,6 +193,10 @@ export default function Map() {
         fields={['property 1: blah blah', 'property 2: blah']}
       ></Popup>
     )
+  }
+
+  const colors = () => {
+    return populationVisibility ? ['rgba(255,0,0,0.3)', 'rgba(0,255,0,0.3)'] : ['rgba(255,255,255,0)', 'rgba(255,255,255,0)']
   }
 
   return (
@@ -214,15 +247,34 @@ export default function Map() {
               'interpolate',
               ['linear'],
               ['get', 'density'],
-              0, 'rgba(255,0,0, 0.3)', // blue-green
-              10, 'rgba(0,255,0,0.3)', // yellow
+              0, colors()[0],
+              10, colors()[1],
             ],
-            //'fill-outline-color': 'rgba(0,0,0,0)'
-            'fill-outline-color': 'black'
+            'fill-outline-color': populationVisibility ? 'black' : 'rgba(0,0,0,0)'
           }}
-          //paint={{'fill-color': 'rgb(255,255,255)', 'fill-outline-color': 'black'}}
           onClick={onPopulationClick}
         />
+
+        {
+          <>
+            <GeoJSONLayer
+              key="inland-plant"
+              id="inland-plant"
+              data={computedPlant}
+            />
+            <Layer
+              id="inland_plant_layer"
+              key="inland_plant_layer"
+              sourceId="inland-plant"
+              type="circle"
+              paint={{'circle-radius': 10, 'circle-color': 'black'}}
+              layout={{
+                visibility: computedPlantVisibility ? 'visible' : 'none',
+              }}
+              onClick={() => setComputedPlantModalVisibility(true)}
+            />
+          </>
+        }
 
         {Object.keys(AQUIFERS).map(aquifer => (
           <GeoJSONLayer
@@ -319,6 +371,7 @@ export default function Map() {
       >
         {renderBoreModal()}
       </BoreModalDetailContext.Provider>
+      {renderInlandPlantModal()}
       <div id="map_controls_bottom">
         <CustomFilter states={states} setStates={setStates} />
       </div>
