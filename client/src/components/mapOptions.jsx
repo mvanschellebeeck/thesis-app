@@ -19,55 +19,56 @@ const styles = {
   },
 };
 
-function FormLabel({name, defaultChecked, setAquiferVisibility, setBoreVisibility, setPlantVisibility, setPopulationVisibility}) {
-  const [checked, setChecked] = useState(defaultChecked);
-
-  function handleChecked() {
-    if (name === 'Aquifers') {
-      setAquiferVisibility(!checked);
-    } else if (name === 'Bores') {
-      setBoreVisibility(!checked);
-    } else if (name === 'Coastal Plants') {
-      setPlantVisibility(!checked);
-    } else if (name == 'Population Demographics') {
-      setPopulationVisibility(!checked);
-    }
-    setChecked(!checked);
-  }
-
-  return (
-    <FormControlLabel
-      control={
-        <Switch
-          checked={checked}
-          onChange={() => handleChecked()}
-          value={name}
-        />
-      }
-      label={<Typography style={styles.form}>{name}</Typography>}
-      style={styles.formLabel}
-    />
-  );
-}
 
 export default function MapOptions() {
-  const options = ['Aquifers', 'Bores', 'Coastal Plants', 'Population Demographics'];
-  const {setAquiferVisibility, setBoreVisibility, setPlantVisibility, setPopulationVisibility} = useContext(MapContext);
+  const options = ['Aquifers', 'Bores', 'Coastal Plants', 'Population Density'];
+
+  const {setAquiferVisibility, setBoreVisibility, setPlantVisibility, setPopulationVisibility,
+    aquiferVisibility, boreVisibility, plantVisibility, populationVisibility} = useContext(MapContext);
+
+  const setters = {
+    'Aquifers': setAquiferVisibility,
+    'Bores': setBoreVisibility,
+    'Coastal Plants': setPlantVisibility,
+    'Population Density': setPopulationVisibility
+  }
+
+  const getters = {
+    'Aquifers': aquiferVisibility,
+    'Bores': boreVisibility,
+    'Coastal Plants': plantVisibility,
+    'Population Density': populationVisibility
+  }
+
+
+  const handleChecked = (option) => {
+    if (option === 'Aquifers') {
+      setAquiferVisibility(!aquiferVisibility);
+    } else if (option === 'Bores') {
+      setBoreVisibility(!boreVisibility);
+    } else if (option === 'Coastal Plants') {
+      setPlantVisibility(!plantVisibility);
+    } else if (option == 'Population Density') {
+      setPopulationVisibility(!populationVisibility);
+    }
+  }
+
   return (
     <div id="map_options" style={styles.map}>
       <FormControl component="fieldset" style={styles.form}>
         <FormGroup>
           {options.map(option => (
-            <FormLabel
-              key={option}
-              name={option}
-              defaultChecked={option !== 'Coastal Plants' && option != 'Population Demographics'}
-              setAquiferVisibility={setAquiferVisibility}
-              setBoreVisibility={setBoreVisibility}
-              setPlantVisibility={setPlantVisibility}
-              setPopulationVisibility={setPopulationVisibility}
-            />
-          ))}
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={getters[option]}
+                  onChange={() => handleChecked(option)}
+                  value={option}
+                />
+              }
+              label={<Typography style={styles.form}>{option}</Typography>}
+              style={styles.formLabel}
+            />))}
         </FormGroup>
       </FormControl>
     </div>

@@ -1,4 +1,4 @@
-import React, {useState, useContext, useRef} from 'react';
+import React, {useState, useContext, useRef, useEffect} from 'react';
 import ReactMapboxGl, {GeoJSONLayer, Layer} from 'react-mapbox-gl';
 import {AQUIFERS} from '../constants';
 import BoreTable from './inland/boreDetailModal';
@@ -52,7 +52,7 @@ export default function Map() {
     setBoreModalVisibility, setPlantModalVisibility, states, setStates, selectorMode,
     selectedBores, setSelectedBores, populationVisibility,
     setPopulationVisibility, inlandPlant, setInlandPlant, computedPlantVisibility, computedPlantModalVisibility, setComputedPlantModalVisibility,
-    computedPlant, setComputedPlant} = useContext(MapContext);
+    computedPlant, setComputedPlant, boreLines} = useContext(MapContext);
 
   const [currentBore, setCurrentBore] = useState(null);
   const [currentBoreLong, setCurrentBoreLong] = useState(null);
@@ -130,7 +130,8 @@ export default function Map() {
 
   const renderBoreModal = () => {
     return (
-      !selectorMode && <Modal
+      !selectorMode &&
+      <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={boreModalVisibility}
@@ -146,7 +147,8 @@ export default function Map() {
 
   const renderPlantModal = () => {
     return (
-      !selectorMode && <Modal
+      !selectorMode &&
+      <Modal
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={plantModalVisibility}
@@ -160,7 +162,8 @@ export default function Map() {
   const renderInlandPlantModal = () => {
 
     return (
-      selectorMode && <Modal
+      selectorMode &&
+      <Modal
         open={computedPlantModalVisibility}
         onClose={() => setComputedPlantModalVisibility(false)}
       >
@@ -264,90 +267,117 @@ export default function Map() {
               data={computedPlant}
             />
             <Layer
-              id="inland_plant_layer"
-              key="inland_plant_layer"
+              id="inland-plant-layer"
+              key="inland-plant-layer"
               sourceId="inland-plant"
-              type="circle"
-              paint={{'circle-radius': 10, 'circle-color': 'black'}}
+              type="symbol"
               layout={{
                 visibility: computedPlantVisibility ? 'visible' : 'none',
+                'icon-image': 'monument-15',
+                'icon-size': 1
               }}
               onClick={() => setComputedPlantModalVisibility(true)}
             />
           </>
         }
 
-        {Object.keys(AQUIFERS).map(aquifer => (
-          <GeoJSONLayer
-            key={aquifer}
-            data={`${GEOJSON_SERVER}/${AQUIFERS[aquifer].id}.geojson`}
-            fillPaint={{
-              'fill-color': AQUIFERS[aquifer].colour_fill,
-              'fill-outline-color': AQUIFERS[aquifer].colour_outline,
-            }}
-            fillLayout={{
-              visibility: aquiferVisibility ? 'visible' : 'none',
-            }}
-            sourceOptions={{
-              tolerance: 1,
-            }}
-          />
-        ))}
-
-        {states.map(state => (
+        {
           <>
             <GeoJSONLayer
-              key={state}
-              id={`${state}_bores`}
-              data={`${GEOJSON_SERVER}/${state}.geojson`}
-              // data={data[state]}
-              sourceOptions={{
-                buffer: 0,
-                cluster: true,
-                clusterMaxZoom: 14,
-                clusterRadius: 50,
-                maxzoom: 12,
-              }}
+              key="bore-lines"
+              id="bore-lines"
+              data={boreLines}
             />
             <Layer
-              id={`${state}_unclustered-point`}
-              key={`${state}_3`}
-              sourceId={`${state}_bores`}
-              filter={['all', ['!has', 'point_count']]}
+              id="bore-lines-layer"
+              key="bore-lines-layer"
+              sourceId="bore-lines"
+              type="line"
+              paint={{'line-color': 'blue', 'line-width': 2}}
               layout={{
-                'icon-allow-overlap': true,
-                'icon-image': '{icon}',
-                visibility: boreVisibility ? 'visible' : 'none',
+                visibility: computedPlantVisibility ? 'visible' : 'none',
               }}
-              onClick={onClickBore}
-              onMouseEnter={onEnterBore}
-              onMouseLeave={onLeaveBore}
-            />
-
-            <Layer
-              key={`${state}_1`}
-              id={`${state}_cluster`}
-              sourceId={`${state}_bores`}
-              filter={['all', ['has', 'point_count']]}
-              paint={styles.clusterPaintProps}
-              type="circle"
-              layout={{visibility: boreVisibility ? 'visible' : 'none'}}
-            />
-
-            <Layer
-              key={`${state}_2`}
-              id={`${state}_cluster-count`}
-              sourceId={`${state}_bores`}
-              filter={['all', ['has', 'point_count']]}
-              layout={{
-                'text-field': '{point_count_abbreviated}',
-                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-size': 12,
-                visibility: boreVisibility ? 'visible' : 'none',
-              }}
+              onClick={() => setComputedPlantModalVisibility(true)}
+              before="inland-plant-layer"
             />
           </>
-        ))}
+        }
+
+        {
+          Object.keys(AQUIFERS).map(aquifer => (
+            <GeoJSONLayer
+              key={aquifer}
+              data={`${GEOJSON_SERVER}/${AQUIFERS[aquifer].id}.geojson`}
+              fillPaint={{
+                'fill-color': AQUIFERS[aquifer].colour_fill,
+                'fill-outline-color': AQUIFERS[aquifer].colour_outline,
+              }}
+              fillLayout={{
+                visibility: aquiferVisibility ? 'visible' : 'none',
+              }}
+              sourceOptions={{
+                tolerance: 1,
+              }}
+            />
+          ))
+        }
+
+        {
+          states.map(state => (
+            <>
+              <GeoJSONLayer
+                key={state}
+                id={`${state}_bores`}
+                data={`${GEOJSON_SERVER}/${state}.geojson`}
+                // data={data[state]}
+                sourceOptions={{
+                  buffer: 0,
+                  cluster: true,
+                  clusterMaxZoom: 14,
+                  clusterRadius: 50,
+                  maxzoom: 12,
+                }}
+              />
+              <Layer
+                id={`${state}_unclustered-point`}
+                key={`${state}_3`}
+                sourceId={`${state}_bores`}
+                filter={['all', ['!has', 'point_count']]}
+                layout={{
+                  'icon-allow-overlap': true,
+                  'icon-image': '{icon}',
+                  visibility: boreVisibility ? 'visible' : 'none',
+                }}
+                onClick={onClickBore}
+                onMouseEnter={onEnterBore}
+                onMouseLeave={onLeaveBore}
+              />
+
+              <Layer
+                key={`${state}_1`}
+                id={`${state}_cluster`}
+                sourceId={`${state}_bores`}
+                filter={['all', ['has', 'point_count']]}
+                paint={styles.clusterPaintProps}
+                type="circle"
+                layout={{visibility: boreVisibility ? 'visible' : 'none'}}
+              />
+
+              <Layer
+                key={`${state}_2`}
+                id={`${state}_cluster-count`}
+                sourceId={`${state}_bores`}
+                filter={['all', ['has', 'point_count']]}
+                layout={{
+                  'text-field': '{point_count_abbreviated}',
+                  'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                  'text-size': 12,
+                  visibility: boreVisibility ? 'visible' : 'none',
+                }}
+              />
+            </>
+          ))
+        }
 
       </MapGL>
       <PlantModalDetailContext.Provider

@@ -117,10 +117,10 @@ export default function InlandPlantModal({density}) {
                         <Icon>
                           <img src="./manometer.svg" />
                         </Icon>
-                        <Typography style={{fontSize: 12, marginBottom: 3}}> {'Bore ' + (index + 1)} </Typography>
-                        <Typography style={{fontSize: 9, color: 'gray'}}>Salinity</Typography>
+                        <Typography style={{fontSize: 15, marginBottom: 3}}> {'Bore ' + (index + 1)} </Typography>
+                        <Typography style={{fontSize: 12, color: 'gray'}}>Salinity</Typography>
                         <MeasureBar salinity={bore.salinity} />
-                        <Typography style={{fontSize: 9, color: 'gray'}}>Water Level</Typography>
+                        <Typography style={{fontSize: 12, color: 'gray'}}>Water Level</Typography>
                         <MeasureBar salinity={bore.salinity} />
                       </div>
                     </Grid>

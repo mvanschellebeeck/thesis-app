@@ -31,6 +31,7 @@ export default function Desalination() {
   const [computedPlantVisibility, setComputedPlantVisibility] = useState(false);
   const [computedPlant, setComputedPlant] = useState(EMPTY_GEOJSON);
   const [computedPlantModalVisibility, setComputedPlantModalVisibility] = useState(false);
+  const [boreLines, setBoreLines] = useState(EMPTY_GEOJSON);
 
   return (
     <>
@@ -69,7 +70,9 @@ export default function Desalination() {
           computedPlantVisibility: computedPlantVisibility,
           setComputedPlantVisibility: setComputedPlantVisibility,
           computedPlantModalVisibility: computedPlantModalVisibility,
-          setComputedPlantModalVisibility: setComputedPlantModalVisibility
+          setComputedPlantModalVisibility: setComputedPlantModalVisibility,
+          boreLines: boreLines,
+          setBoreLines: setBoreLines
         }}
       >
         <div className="inland">

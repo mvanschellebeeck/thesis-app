@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
-import { Typography, Grid, List, ListItem, ListItemText, Icon, ListItemIcon } from '@material-ui/core';
-import { AQUIFERS } from '../constants';
+import React, {useContext} from 'react';
+import {Typography, Grid, List, ListItem, ListItemText, Icon, ListItemIcon} from '@material-ui/core';
+import {AQUIFERS} from '../constants';
 import './map.css';
-import { MapContext } from '../pages/Desalination';
+import {MapContext} from '../pages/Desalination';
 
 function AquiferIcon(props) {
-  const { fill, outline } = props;
+  const {fill, outline} = props;
   return (
     <Icon>
       <svg version="1.1" width="30" height="20" viewBox="0 0 16 9">
@@ -15,8 +15,8 @@ function AquiferIcon(props) {
   );
 }
 
-function AquiferText({ fontSize, text }) {
-  return <Typography style={{ fontSize: fontSize }}>{text}</Typography>;
+function AquiferText({fontSize, text}) {
+  return <Typography style={{fontSize: fontSize}}>{text}</Typography>;
 }
 
 const styles = {
@@ -33,7 +33,7 @@ const styles = {
 
 export default function MapLegend() {
   const aquifers = Object.keys(AQUIFERS);
-  const { aquiferVisibility } = useContext(MapContext);
+  const {aquiferVisibility} = useContext(MapContext);
 
   const mapStyle = {
     marginRight: 9,
@@ -52,7 +52,7 @@ export default function MapLegend() {
                   <ListItemIcon style={styles.listItemIcon}>
                     <AquiferIcon fill={AQUIFERS[aquifer].colour_fill} outline={AQUIFERS[aquifer].colour_outline} />
                   </ListItemIcon>
-                  <ListItemText primary={<AquiferText fontSize="14px" text={aquifer} />} />
+                  <ListItemText primary={<AquiferText fontSize={12} text={aquifer} />} />
                 </ListItem>)}
             </List>
           </div>

@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 export default function MapControls() {
   const classes = useStyles();
 
-  const {setMapCenter, setMapZoom, setFitBounds, selectorMode, setSelectorMode, setSelectedBores, setComputedPlant} = useContext(MapContext);
+  const {setMapCenter, setMapZoom, setFitBounds, selectorMode, setSelectorMode, setSelectedBores, setComputedPlant, setAquiferVisibility, setBoreLines} = useContext(MapContext);
   const defaultCenter = [133.7751, -25.2744];
   const defaultZoom = [3.5];
   const defaultFitBounds = [
@@ -39,6 +39,11 @@ export default function MapControls() {
   }
 
   const selectorClick = () => {
+    if (!selectorMode) {
+      setAquiferVisibility(false);
+    } else {
+      setBoreLines(EMPTY_GEOJSON);
+    }
     setSelectorMode(!selectorMode);
     setSelectorButton(!selectorButton);
     setSelectedBores([]);

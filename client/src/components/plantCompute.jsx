@@ -33,7 +33,7 @@ const styles = {
 
 
 
-function AquiferText({fontSize, text}) {
+function Text({fontSize, text}) {
   return <Typography style={{fontSize: fontSize}}>{text}</Typography>;
 }
 
@@ -54,7 +54,8 @@ function Header({icon, title, bottomPadding, onClick}) {
 
 
 export default function PlantCompute() {
-  const {selectedBores, setSelectedBores, setMapCenter, setComputedPlantVisibility, setComputedPlant} = useContext(MapContext);
+  const {selectedBores, setSelectedBores, setMapCenter, setComputedPlantVisibility, setComputedPlant,
+    boreLines, setBoreLines} = useContext(MapContext);
 
   const removeBore = (bore) => {
     const newBores = selectedBores.filter(x => x.id != bore);
@@ -64,27 +65,40 @@ export default function PlantCompute() {
   const clearAllBores = () => {
     setSelectedBores([]);
     setComputedPlant(EMPTY_GEOJSON);
+    setComputedPlantVisibility(false);
   }
 
   const computeBores = () => {
-    if (selectedBores.length != 0) {
-      const features = turf.featureCollection(selectedBores.map(bore => turf.point([bore.lng, bore.lat])));
-      const centre = turf.center(features).geometry.coordinates;
-      setMapCenter(centre);
-      const sample_point = {
-        "type": "FeatureCollection",
-        "features": [{
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": centre
-          }
-        }]
-      };
+    if (selectedBores.length == 0) return;
+    const features = turf.featureCollection(selectedBores.map(bore => turf.point([bore.lng, bore.lat])));
+    const centre = turf.center(features).geometry.coordinates;
+    setMapCenter(centre);
+    const centre_geojson = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": centre
+        }
+      }]
+    };
 
-      setComputedPlant(sample_point);
-      setComputedPlantVisibility(true);
-    }
+    setComputedPlant(centre_geojson);
+
+    const multiLine = selectedBores.map(bore => [centre, [bore.lng, bore.lat]]);
+    const multi = turf.multiLineString(multiLine);
+
+    const formattedMulti = {
+      "type": "FeatureCollection",
+      "features": [
+        multi
+      ]
+    };
+    //console.log(JSON.stringify(formattedMulti));
+    setBoreLines(formattedMulti);
+
+    setComputedPlantVisibility(true);
   }
 
   return (
