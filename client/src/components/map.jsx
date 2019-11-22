@@ -66,7 +66,7 @@ export default function Map() {
   const [currentPlantLong, setCurrentPlantLong] = useState(null);
   const [currentPlantLat, setCurrentPlantLat] = useState(null);
   const [plantProperties, setPlantProperties] = useState(null);
-  const [density, setDensity] = useState({});
+  const [density, setDensity] = useState(null);
 
   const onEnterBore = evt => {
     const {id} = evt.features[0].properties;
@@ -81,7 +81,7 @@ export default function Map() {
     );
     setCurrentLevel(evt.features[0].properties.level);
     setUseType(evt.features[0].properties.type_of_use);
-    setShowBorePopup(true);
+    setShowBorePopup(true && !selectorMode);
   };
 
   const onLeaveBore = evt => {
@@ -95,7 +95,7 @@ export default function Map() {
     setCurrentPlant(id);
     setCurrentPlantLong(coordinates[0]);
     setCurrentPlantLat(coordinates[1]);
-    setShowPlantPopup(true);
+    setShowPlantPopup(true && !selectorMode);
   };
 
   const onLeavePlant = evt => {
@@ -108,7 +108,7 @@ export default function Map() {
   const onPlantClick = evt => {
     evt.preventDefault();
     setPlantProperties(evt.features[0].properties);
-    setPlantModalVisibility(true);
+    setPlantModalVisibility(true && !selectorMode);
   };
 
   const onPopulationClick = evt => {
@@ -119,7 +119,7 @@ export default function Map() {
 
   const onClickBore = evt => {
     evt.preventDefault();
-    setBoreModalVisibility(true);
+    setBoreModalVisibility(true && !selectorMode);
     setCurrentBoreProps(evt.features[0].properties);
     if (selectorMode) {
       const bore = {...evt.features[0].properties, ...evt.lngLat}
@@ -162,6 +162,7 @@ export default function Map() {
     return (
       selectorMode && <Modal
         open={computedPlantModalVisibility}
+        onClose={() => setComputedPlantModalVisibility(false)}
       >
         <InlandPlantModal density={density} />
       </Modal>

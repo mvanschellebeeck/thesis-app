@@ -1,27 +1,28 @@
 import {
-  Paper,
   CardActions,
   CardContent,
   Button,
   Typography,
   Card
 } from '@material-ui/core';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import '../map.css';
 import {MapContext} from '../../pages/Desalination';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import FolderIcon from '@material-ui/icons/Folder';
+import Grid from '@material-ui/core/Grid';
+import Icon from '@material-ui/core/Icon';
+import MeasureBar from './measureBar';
+
 
 const useStyles = makeStyles({
   root: {
     // width: '30vw',
     height: '60vh',
+    flexGrow: 1,
   },
   tableWrapper: {
     maxHeight: '60vh',
@@ -29,7 +30,7 @@ const useStyles = makeStyles({
   },
   card: {
     margin: 'auto',
-    marginTop: '5%',
+    marginBottom: '5%',
     width: '50vw',
   },
   bullet: {
@@ -47,6 +48,9 @@ const useStyles = makeStyles({
     color: 'gray',
     margin: 10,
   },
+  paper: {
+    width: '80%',
+  },
 });
 
 
@@ -58,20 +62,18 @@ const mapKeys = {
 }
 
 const Heading = ({text}) => {
-  return (<div><Typography style={{fontSize: 13}}> {text} </Typography></div>);
 }
 
 const Value = ({text}) => {
-  return (<div><Typography style={{fontSize: 20}}> {text} </Typography></div>);
 }
 
 const MyListItem = ({heading, value}) => {
-  return (<><ListItem>
+  return (<ListItem>
     <ListItemText
-      primary={<Heading text={heading} />}
-      secondary={<Value text={value} />} />
+      primary={<Typography style={{fontSize: 13}}> {heading} </Typography>}
+      secondary={<Typography style={{fontSize: 20, color: 'gray'}}> {value} </Typography>} />
   </ListItem>
-  </>);
+  );
 }
 
 export default function InlandPlantModal({density}) {
@@ -104,15 +106,35 @@ export default function InlandPlantModal({density}) {
         <Typography className={classes.header}>
           Plant Cost Model
         </Typography>
-        <div >
-          <div >
+        <div>
+          <div>
+            <Grid container>
+              <Grid item xs={12}>
+                <Grid container justify="center" spacing={2}>
+                  {selectedBores.map((bore, index) => (
+                    <Grid key={bore.id} item>
+                      <div style={{textAlign: 'center', margin: 'auto', width: '100px'}}>
+                        <Icon>
+                          <img src="./manometer.svg" />
+                        </Icon>
+                        <Typography style={{fontSize: 12, marginBottom: 3}}> {'Bore ' + (index + 1)} </Typography>
+                        <Typography style={{fontSize: 9, color: 'gray'}}>Salinity</Typography>
+                        <MeasureBar salinity={bore.salinity} />
+                        <Typography style={{fontSize: 9, color: 'gray'}}>Water Level</Typography>
+                        <MeasureBar salinity={bore.salinity} />
+                      </div>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+            </Grid>
+          </div>
+          <div>
             <List dense={true}>
               <MyListItem heading="Average Salinity" value={getAverageSalinity() + ' ppm TDS'} />
               <MyListItem heading="Recovery Rate" value={getRecoveryRate() + '%'} />
-              <MyListItem heading="Cost" value={'$' + getCost(0.3) + ' per kL'} />
-              {/*              {Object.keys(density).map(key => (
-                <MyListItem heading={mapKeys[key]} value={density[key]} />
-              ))} */}
+              <MyListItem heading="Water Cost" value={'$' + getCost(0.3) + ' per kL'} />
+              <MyListItem heading="Capital Cost" value='$1,200,000' />
             </List>
           </div>
           <CardActions>
