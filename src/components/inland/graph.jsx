@@ -8,12 +8,14 @@ export default function Graph() {
   const [hoverValue, setHoverValue] = useState(null);
 
   var x = 0;
+  var y;
   var data = [];
 
-  while (x <= 3.5) {
-    var y = 7.976898 + (2.678239 - 7.976898) / (1 + Math.pow((x / 1.942785), 9.268));
+  while (x <= 500) {
+    y = ((Math.pow(10, 3.52 + 0.82 * Math.log10(x))) / 1000000) * 7;
+    console.log(`x: ${x}, y: ${y}`);
     data.push({x: x, y: y});
-    x += 0.1;
+    x += 1;
   }
 
   const testData = [
@@ -26,28 +28,21 @@ export default function Graph() {
 
   return (
     <>
-      <div style={{fontSize: 15}}> Capacity vs. Capital Cost</div>
-      <div style={{fontSize: 12, color: 'gray'}}> 2500 mg/L - 3800 mg/L</div>
-      <XYPlot height={250} width={300} yDomain={[1, 9]}>
+      <div style={{fontSize: 15, marginLeft: 5}}> Design Capacity vs. Capital Cost</div>
+      <XYPlot height={250} width={300} yDomain={[0, 4]}>
         <VerticalGridLines />
         <HorizontalGridLines />
-        <XAxis title="Capacity (ML)" />
+        <XAxis title="Design Capacity (kL)" />
         <LineSeries
           color='blue'
           data={data}
         />
         <MarkSeries
           color='red'
-          onNearestX={(value, {index}) => setHoverValue(value)}
-          data={testData}
+          //onNearestX={(value, {index}) => setHoverValue(value)}
+          data={[{x: 200, y: 2.1}]}
         />
         <YAxis title="Cost (million AUD)" />
-        {hoverValue &&
-          <Hint value={hoverValue}>
-            <div style={{fontSize: 10, color: 'gray', transform: 'translate(0px, -20px)'}}> {hoverValue.x || ''} </div>
-          </Hint>
-
-        }
       </XYPlot>
     </>
 
