@@ -125,3 +125,17 @@
     outline: none !important;
 }
 
+
+#inland_modal{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 15px;
+}
+
+#inland_modal_text{
+  grid-column: 1/2;
+}
+
+#inland_modal_graph{
+  grid-column: 2/4;
+}

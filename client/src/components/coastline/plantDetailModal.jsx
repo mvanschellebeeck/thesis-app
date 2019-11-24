@@ -279,7 +279,7 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
     //{label: 'O&M', value: oAndM, dynamic: false, inputProps: {prefix: '$', decimalScale: 2}},
     //{label: 'Annualized Capital Cost', value: annualizedCapitalCost, dynamic: true, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
     {label: 'Projected Annual Water Use', value: projected_water_use, dynamic: false, inputProps: {suffix: ' kL/yr', decimalScale: 2}},
-    {label: 'Salinity', value: salinity, dynamic: false, inputProps: {suffix: ' ppm TDS', decimalScale: 2}},
+    {label: 'Salinity', value: salinity, dynamic: false, inputProps: {suffix: ' mg/L', decimalScale: 2}},
     {label: 'Desalination Energy Efficiency', value: 100, dynamic: false, inputProps: {suffix: ' kWh/kL', decimalScale: 2}},
     {label: 'Water Price', value: 120, dynamic: false, inputProps: {suffix: ' $/kL', decimalScale: 2}},
     {label: 'Target SWRO production', value: targetSWRO, dynamic: true, inputProps: {suffix: ' kL/day', decimalScale: 0}},

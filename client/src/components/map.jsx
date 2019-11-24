@@ -77,7 +77,7 @@ export default function Map() {
     setCurrentBoreLong(coordinates[0]);
     setCurrentBoreLat(coordinates[1]);
     setCurrentSalinity(
-      evt.features[0].properties.salinity + ' ppm TDS'
+      evt.features[0].properties.salinity + ' mg/L'
     );
     setCurrentLevel(evt.features[0].properties.level);
     setUseType(evt.features[0].properties.type_of_use);

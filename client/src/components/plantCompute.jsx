@@ -1,9 +1,8 @@
 import React, {useContext} from 'react';
-import {Typography, Grid, List, ListItem, ListItemText, ListItemIcon} from '@material-ui/core';
+import {Typography, Grid} from '@material-ui/core';
 import './map.css';
 import {MapContext} from '../pages/Desalination';
 import ClearAllIcon from '@material-ui/icons/ClearAll';
-import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
@@ -54,8 +53,7 @@ function Header({icon, title, bottomPadding, onClick}) {
 
 
 export default function PlantCompute() {
-  const {selectedBores, setSelectedBores, setMapCenter, setComputedPlantVisibility, setComputedPlant,
-    boreLines, setBoreLines} = useContext(MapContext);
+  const {selectedBores, setSelectedBores, setMapCenter, setComputedPlantVisibility, setComputedPlant, setBoreLines} = useContext(MapContext);
 
   const removeBore = (bore) => {
     const newBores = selectedBores.filter(x => x.id != bore);
@@ -97,7 +95,6 @@ export default function PlantCompute() {
     };
     //console.log(JSON.stringify(formattedMulti));
     setBoreLines(formattedMulti);
-
     setComputedPlantVisibility(true);
   }
 

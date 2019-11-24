@@ -13,6 +13,7 @@ const styles = {
   },
   form: {
     margin: 10,
+    fontSize: 12
   },
   formLabel: {
     marginBottom: 0,
