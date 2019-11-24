@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+button[id*='mydropdown'] {
+  margin: 5px;
+}
+
+#x {
+  width: 100%;
+  height: 820px;
+}
+
+/* Common titles across website */
+.detailTitle {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 14px;
+}
+
+/* Technology Page*/
+.technologyContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50px 400px 50px 400px;
+  grid-gap: 20px;
+}
+
+.technologyTable {
+  margin: 10px;
+  text-align: center;
+}
+
+.buttonToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.technologyChart {
+  margin : 0 auto;
+}
+
+.flowDiagramContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+}
+
+/* Australia Page*/
+
+.mapContainer {
+  width: 60%;
+  float: left;
+  margin-top: 4%;
+  height: 620px;
+}
+
+.australiaContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50px 500px;
+}
+
+
+.detailContainer {
+  padding: 5px;
+  margin-top: 0px;
+}
+
+.homeContainer {
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-rows: 90vw;
+  height: 100vw;
+  background: #f0f6ff;
+}
+
+.homeMainContentContainer {
+  display: flex;
+  justify-content: center;
+  border-radius: 30px;
+  margin-top: 1%;
+  background: white;
+  box-shadow: 0 8px 6px -6px black;
+  border: 2px solid grey;
+}
+
+.homeMainContent {
+  margin-top: 2%;
+}
+
+
+
+html * {
+  /* font-family: 'Roboto', sans-serif !important; */
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji,
+    Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji !important;
+}
