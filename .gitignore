@@ -5,6 +5,7 @@ node_modules/
 
 # production
 /built
+/build
 
 # misc
 .DS_Store
@@ -26,3 +27,6 @@ data/*
 !data/main_function.ipynb
 
 client/public/geojson/bores/*
+
+# Local Netlify folder
+.netlify

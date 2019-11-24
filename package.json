@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/mvanschellebeeck/thesis-app/issues"
   },
-  "homepage": "https://github.com/mvanschellebeeck/thesis-app#readme",
+  "homepage": ".",
   "devDependencies": {
     "nodemon": "^1.19.2"
   },
