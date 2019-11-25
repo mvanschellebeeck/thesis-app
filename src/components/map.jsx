@@ -256,8 +256,8 @@ export default function Map() {
                             'interpolate',
                             ['linear'],
                             ['get', 'density'],
-                            0, colors()[0],
-                            10, colors()[1],
+                            0, colors()[1],
+                            10, colors()[0],
                         ],
                         'fill-outline-color': populationVisibility ? 'black' : 'rgba(0,0,0,0)'
                     }}
