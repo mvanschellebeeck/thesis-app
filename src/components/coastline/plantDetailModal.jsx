@@ -229,8 +229,8 @@ function EnvironmentalFields({targetSWRO, embodied_emissions}) {
     {label: 'HCI pre-treatment', value: 0.0375 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
     {label: 'Na0H second-pass treatment', value: 0.227 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
     {label: 'Nylon Membranes', value: 0.0255 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'Current City Water Supply Embodied Emissions', value: embodied_emissions, dynamic: false, inputProps: {suffix: ' kg C02e/kL', decimalScale: 2}},
-    {label: 'Emission total', value: 0.3641, dynamic: true, inputProps: {suffix: unit + '/kL', decimalScale: 2}},
+    {label: 'Water Supply Embodied Emissions', value: embodied_emissions, dynamic: false, inputProps: {suffix: ' kg C02e/kL', decimalScale: 2}},
+    {label: 'Desalination Emission total', value: 0.3641, dynamic: true, inputProps: {suffix: unit + '/kL', decimalScale: 2}},
   ]
   return (
     <div id="fields" style={{margin: 'auto'}}>
