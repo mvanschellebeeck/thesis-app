@@ -92,14 +92,14 @@ export default function InlandPlantModal({ density }) {
     }
 
     const getCapitalCost = () => {
-        const x = ((population * 340 * (waterSupply / 100)) / 1000) / (getRecoveryRate() / 100);
+        const x = ((population * 300 * (waterSupply / 100)) / 1000) / (getRecoveryRate() / 100);
         return ((Math.pow(10, 3.52 + 0.82 * Math.log10(x))) / 1000000) * 7;
     }
 
     const getCost = () => {
         const energyMultiplier = 2.72; // assumes 30c /kwH
         const EURO_TO_AUD = 1.63;
-        const waterPerPerson = 340;
+        const waterPerPerson = 300;
         const salinity = getAverageSalinity();
         return (energyMultiplier * EURO_TO_AUD * (Math.pow(10, -5) * salinity + 0.7413 - 0.0436 * Math.log10((waterSupply / 100) * population * waterPerPerson))).toFixed(2);
     }
@@ -109,7 +109,7 @@ export default function InlandPlantModal({ density }) {
     }
 
     const getDesignCapacity = () => {
-        return (((340 * population * (waterSupply / 100)) / 1000) / ((getRecoveryRate() / 100))).toFixed(2);
+        return (((300 * population * (waterSupply / 100)) / 1000) / ((getRecoveryRate() / 100))).toFixed(2);
     }
 
     return (
@@ -145,8 +145,8 @@ export default function InlandPlantModal({ density }) {
                                 <MyListItem heading="Average Salinity" value={getAverageSalinity() + ' mg/L'} />
                                 <MyListItem heading="Recovery Rate" value={getRecoveryRate() + '%'} />
                                 <MyListItem heading="Desalinated Water Cost" value={'$' + getCost() + ' per kL'} />
-                                <MyListItem heading="Daily Water Usage Per Person" value={'340 L'} />
-                                <MyListItem heading="Total Daily Water Usage" value={`${((340 * population * (waterSupply / 100)) / 1000).toFixed(1)} kL`} />
+                                <MyListItem heading="Daily Water Usage Per Person" value={'300 L'} />
+                                <MyListItem heading="Total Daily Water Usage" value={`${((300 * population * (waterSupply / 100)) / 1000).toFixed(1)} kL`} />
                                 <MyListItem heading="Required Design Capacity" value={getDesignCapacity() + ' kL'} />
                                 <MyListItem heading="Capital Cost" value={'$' + getCapitalCost().toFixed(3) + 'M'} />
                             </List>
