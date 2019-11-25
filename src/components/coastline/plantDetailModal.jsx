@@ -229,7 +229,7 @@ function EnvironmentalFields({targetSWRO, embodied_emissions}) {
     {label: 'HCI pre-treatment', value: 0.0375 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
     {label: 'Na0H second-pass treatment', value: 0.227 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
     {label: 'Nylon Membranes', value: 0.0255 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'Embodied Emissions', value: embodied_emissions, dynamic: false, inputProps: {suffix: ' kg C02e/kL', decimalScale: 2}},
+    {label: 'Current City Water Supply Embodied Emissions', value: embodied_emissions, dynamic: false, inputProps: {suffix: ' kg C02e/kL', decimalScale: 2}},
     {label: 'Emission total', value: 0.3641, dynamic: true, inputProps: {suffix: unit + '/kL', decimalScale: 2}},
   ]
   return (
@@ -250,6 +250,7 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility, targetSWRO, se
     salinity,
     water_use,
     dollar_per_kl,
+    desal_eff
   }} = useContext(PlantModalDetailContext);
 
   const annualizeCapitalCost = () => {
@@ -287,8 +288,8 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility, targetSWRO, se
     //{label: 'Annualized Capital Cost', value: annualizedCapitalCost, dynamic: true, inputProps: {suffix: ' GL/yr', decimalScale: 2}},
     {label: 'Projected Annual Water Use', value: projected_water_use, dynamic: false, inputProps: {suffix: ' kL/yr', decimalScale: 2}},
     {label: 'Salinity', value: salinity, dynamic: false, inputProps: {suffix: ' mg/L', decimalScale: 2}},
-    {label: 'Desalination Energy Efficiency', value: 100, dynamic: false, inputProps: {suffix: ' kWh/kL', decimalScale: 2}},
-    {label: 'Water Price', value: 120, dynamic: false, inputProps: {suffix: ' $/kL', decimalScale: 2}},
+    {label: 'Desalination Energy Efficiency', value: desal_eff, dynamic: false, inputProps: {suffix: ' kWh/kL', decimalScale: 2}},
+    {label: 'Water Price', value: dollar_per_kl, dynamic: false, inputProps: {suffix: ' $/kL', decimalScale: 2}},
     {label: 'Target SWRO production', value: targetSWRO, dynamic: true, inputProps: {suffix: ' kL/day', decimalScale: 0}},
     {label: 'Capital Cost', value: capitalCost, dynamic: true, inputProps: {prefix: '$', decimalScale: 0}},
     {label: 'SWRO Unit Price', value: unitPrice, dynamic: true, inputProps: {suffix: ' $/kL', decimalScale: 2}},
