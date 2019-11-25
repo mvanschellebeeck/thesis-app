@@ -67,6 +67,8 @@ export default function Map() {
   const [currentPlantLat, setCurrentPlantLat] = useState(null);
   const [plantProperties, setPlantProperties] = useState(null);
   const [density, setDensity] = useState(null);
+  const [plantProp1, setPlantProp1] = useState(null);
+  const [plantProp2, setPlantProp2] = useState(null);
 
   const onEnterBore = evt => {
     const {id} = evt.features[0].properties;
@@ -90,12 +92,15 @@ export default function Map() {
   };
 
   const onEnterPlant = evt => {
-    const {id} = evt.features[0].properties;
+    const properties = evt.features[0].properties;
+    const {id, total_annual_water_use, population} = evt.features[0].properties;
     const coordinates = evt.features[0].geometry.coordinates.slice();
     setCurrentPlant(id);
     setCurrentPlantLong(coordinates[0]);
     setCurrentPlantLat(coordinates[1]);
-    setShowPlantPopup(true && !selectorMode);
+    setShowPlantPopup(!selectorMode);
+    setPlantProp1(total_annual_water_use);
+    setPlantProp2(population);
   };
 
   const onLeavePlant = evt => {
@@ -194,7 +199,7 @@ export default function Map() {
         long={currentPlantLong}
         lat={currentPlantLat}
         id={currentPlant}
-        fields={['property 1: blah blah', 'property 2: blah']}
+        fields={[`Population: ${plantProp2}`, `Total Annual Water Use: ${plantProp1} GL/yr`]}
       ></Popup>
     )
   }

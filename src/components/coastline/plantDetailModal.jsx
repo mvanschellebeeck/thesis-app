@@ -124,6 +124,11 @@ function Close() {
   );
 }
 
+const myStyle = {
+  fontSize: 'calc(14px + (20 - 14) * ((100vw - 300px) / (1600 - 300)))',
+  lineHeight: 'calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)))',
+};
+
 function Feasibility({feasibility}) {
   const determineColour = () => {
     if (feasibility >= 0.9 && feasibility <= 1.1) {
@@ -137,7 +142,7 @@ function Feasibility({feasibility}) {
 
   return (
     <div id="feasability">
-      <Typography style={{fontSize: "14px", color: "gray", margin: "auto"}}>
+      <Typography style={{...myStyle, margin: "auto"}}>
         Feasibility Index
       </Typography>
       <Typography
@@ -159,7 +164,7 @@ function Population({current, projected}) {
   return (
     <div id="population">
       <div id="population_current">
-        <Typography style={{fontSize: "12px", color: "gray", margin: "auto"}}>
+        <Typography style={{fontSize: "12px", margin: "auto"}}>
           Current Population
       </Typography>
         <Typography
@@ -172,7 +177,7 @@ function Population({current, projected}) {
         </Typography>
       </div>
       <div id="population_projected">
-        <Typography style={{fontSize: "13px", color: "gray", margin: "auto"}}>
+        <Typography style={{fontSize: "13px", margin: "auto"}}>
           Projected Population (2066)
         </Typography>
         <Typography
@@ -197,7 +202,6 @@ function Field({label, value, isDynamic, inputProps}) {
     <div >
       <TextField
         id={label.toLowerCase().replace(" ", "_")}
-        disabled={!isDynamic}
         className={classes.formControl}
         label={label}
         value={value}

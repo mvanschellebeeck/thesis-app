@@ -1,5 +1,4 @@
-import {
-  CardActions,
+import { CardActions,
   CardContent,
   Button,
   Typography,
@@ -46,7 +45,6 @@ const useStyles = makeStyles({
     marginBottom: 12,
   },
   header: {
-    color: 'gray',
     margin: 10,
   },
   paper: {
@@ -72,7 +70,7 @@ const MyListItem = ({heading, value}) => {
   return (<ListItem>
     <ListItemText
       primary={<Typography style={{fontSize: 13}}> {heading} </Typography>}
-      secondary={<Typography style={{fontSize: 20, color: 'gray'}}> {value} </Typography>} />
+      secondary={<Typography style={{fontSize: 20}}> {value} </Typography>} />
   </ListItem>
   );
 }
@@ -119,7 +117,7 @@ export default function InlandPlantModal({density}) {
                           <img src="./manometer.svg" />
                         </Icon>
                         <Typography style={{fontSize: 15, marginBottom: 3}}> {'Bore ' + (index + 1)} </Typography>
-                        <Typography style={{fontSize: 12, color: 'gray'}}>Salinity</Typography>
+                        <Typography style={{fontSize: 12, }}>Salinity</Typography>
                         <MeasureBar salinity={bore.salinity} unit=' mg/L' />
                       </div>
                     </Grid>
