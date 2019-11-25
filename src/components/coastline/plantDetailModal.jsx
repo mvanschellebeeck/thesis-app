@@ -15,6 +15,7 @@ import {
 import NumberFormat from "react-number-format";
 import CloseIcon from "@material-ui/icons/Close";
 import PlantChart from "./plantChart";
+import PlantChart2 from "./plantChart2"
 import "../plantModal.css";
 import {PlantModalDetailContext} from "../map";
 import {AUD_TO_USD, TOTAL_INSTALLED_CAPACITY, ENERGY_COST_PER_KL} from '../../constants';
@@ -44,7 +45,8 @@ export default function PlantDetail() {
   };
 
   const [unitPrice, setUnitPrice] = useState(0);
-  const {selectorMode, plantModalVisibility, plantProperties: {population, projected_population}} = useContext(PlantModalDetailContext);
+  const [targetSWRO, setTargetSWRO] = useState(null);
+  const {selectorMode, plantModalVisibility, plantProperties: {population, projected_population, embodied_emissions}} = useContext(PlantModalDetailContext);
 
   return (
     plantModalVisibility && !selectorMode && (
@@ -62,7 +64,7 @@ export default function PlantDetail() {
           index={0}
         >
           <div id="plant_modal">
-            <EconomicFields setFeasibility={setFeasibility} unitPrice={unitPrice} setUnitPrice={setUnitPrice} />
+            <EconomicFields targetSWRO={targetSWRO} setTargetSWRO={setTargetSWRO} setFeasibility={setFeasibility} unitPrice={unitPrice} setUnitPrice={setUnitPrice} />
             <PlantChart title="Capital & Operational Costs" width={300} height={300} unitPrice={unitPrice.toFixed(2)} />
             <Feasibility feasibility={feasibility} />
             <Population current={population} projected={projected_population} />
@@ -74,13 +76,14 @@ export default function PlantDetail() {
           id={`simple-tabpanel-${1}`}
           index={1}
         >
-          <div id="plant_modal">
-            <EnvironmentalFields />
-            <PlantChart title="Operational Costs" width={300} height={300} />
+          <div id="plant_modal2">
+            <EnvironmentalFields targetSWRO={targetSWRO} embodied_emissions={embodied_emissions} />
+            {tab === 1 && <PlantChart2 title="Embodied Emissions" width={400} height={400} targetSWRO={targetSWRO}
+              embodied_emissions={embodied_emissions} />}
           </div>
         </CardContent>
         <Close />
-      </Card>
+      </Card >
     )
   );
 }
@@ -214,19 +217,20 @@ function Field({label, value, isDynamic, inputProps}) {
 }
 
 
-function EnvironmentalFields() {
+function EnvironmentalFields({targetSWRO, embodied_emissions}) {
   const [waterSupply, setWaterSupply] = useState(30);
-  const unit = ' kg C02e/kL'
+  const unit = ' kg C02e';
 
   const staticFields = [
-    {label: 'Power (pumps)', value: 0.0357, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'CL2 pre-treatment', value: 0.1481, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'FeCI3 pre-treatment', value: 0.0398, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'Anti-Scalant', value: 0.0548, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'HCI pre-treatment', value: 0.0375, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'Na0H second-pass treatment', value: 0.227, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'Nylon Membranes', value: 0.0255, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
-    {label: 'Emission total', value: 0.3641, dynamic: true, inputProps: {suffix: ' tonne C02e', decimalScale: 2}},
+    {label: 'Power (pumps)', value: 0.0357 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
+    {label: 'CL2 pre-treatment', value: 0.1481 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
+    {label: 'FeCI3 pre-treatment', value: 0.0398 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
+    {label: 'Anti-Scalant', value: 0.0548 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
+    {label: 'HCI pre-treatment', value: 0.0375 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
+    {label: 'Na0H second-pass treatment', value: 0.227 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
+    {label: 'Nylon Membranes', value: 0.0255 * targetSWRO, dynamic: false, inputProps: {suffix: unit, decimalScale: 2}},
+    {label: 'Embodied Emissions', value: embodied_emissions, dynamic: false, inputProps: {suffix: ' kg C02e/kL', decimalScale: 2}},
+    {label: 'Emission total', value: 0.3641, dynamic: true, inputProps: {suffix: unit, decimalScale: 2}},
   ]
   return (
     <div id="fields" style={{margin: 'auto'}}>
@@ -238,7 +242,7 @@ function EnvironmentalFields() {
 }
 
 
-function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
+function EconomicFields({unitPrice, setUnitPrice, setFeasibility, targetSWRO, setTargetSWRO}) {
   const classes = useStyles();
   const {plantProperties: {
     total_annual_water_use,
@@ -273,7 +277,6 @@ function EconomicFields({unitPrice, setUnitPrice, setFeasibility}) {
   }
 
   const [waterSupply, setWaterSupply] = useState(30);
-  const [targetSWRO, setTargetSWRO] = useState(null);
   const [capitalCost, setCapitalCost] = useState(getCapitalCost());
   const [annualizedCapitalCost, setAnnualizedCapitalCost] = useState(annualizeCapitalCost());
   const [oAndM, setOAndM] = useState(getOandM());
